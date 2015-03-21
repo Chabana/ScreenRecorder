@@ -174,7 +174,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="2" >
-            <Button x:Name="btnQuit" Content="X" Margin="0,0,9,0px" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="40" Background="#FFB64040" BorderBrush="#FF333331" Foreground="White" />
+            <Button x:Name="btnQuit" Content="X" Margin="0,0,9,0px" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="40" Background="#FFB64040" BorderBrush="#FF333331" Foreground="White" Click="btnMinimize_Click"/>
         </Grid>
         <Expander Header="" ExpandDirection="Right" Margin="0,0,0,10" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0">
             <TreeView x:Name="TrvStructure" Foreground="#ffffffff" BorderBrush="#FF3d3d3b" Background="#FF3d3d3b" Width="200px" Margin="10px 2px 10px 0px">
@@ -211,12 +211,12 @@
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu
       Background="DarkBlue">
-                    <MenuItem Header="Ouvrir" />
+                    <MenuItem Header="_Ouvrir" Click="menuOpen_Click"/>
                     <Separator />
-                    <MenuItem Header="Screenshots" />
-                    <MenuItem Header="Video Capture" />
+                    <MenuItem Header="Screenshots" Command="Cut"/>
+                    <MenuItem Header="Video Capture" Command="Copy"/>
                     <Separator />
-                    <MenuItem Header="Quitter" />
+                    <MenuItem Header="Quitter" Click="menuQuit_Click"/>
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>

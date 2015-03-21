@@ -29,8 +29,8 @@ namespace ScreenRecorder
             InitializeComponent();
             
             //Minimize the window and don't put in the taskbar
-            /*WindowState = WindowState.Minimized;
-            ShowInTaskbar = false;*/
+            WindowState = WindowState.Minimized;
+            ShowInTaskbar = false;
 
             /*TaskbarIcon tbi = new TaskbarIcon();
             tbi.Icon = Properties.Resources.Error;
@@ -42,6 +42,31 @@ namespace ScreenRecorder
 
         private void Window_StateChanged(object sender, EventArgs e)
         {
+            
+        }
+
+        private void menuOpen_Click(object sender, RoutedEventArgs e)
+        {
+            if(WindowState == WindowState.Minimized)
+            {
+                WindowState = WindowState.Normal;
+                ShowInTaskbar = true;
+            }
+            
+        }
+
+        private void btnMinimize_Click(object sender, RoutedEventArgs e)
+        {
+            if (WindowState == WindowState.Normal || WindowState == WindowState.Maximized)
+            {
+                WindowState = WindowState.Minimized;
+                ShowInTaskbar = false;
+            }
+        }
+
+        private void menuQuit_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
         }
 
        
