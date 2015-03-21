@@ -31,6 +31,7 @@ namespace ScreenRecorder
             //Minimize the window and don't put in the taskbar
             WindowState = WindowState.Minimized;
             ShowInTaskbar = false;
+            ShowStandardBalloon();
 
             /*TaskbarIcon tbi = new TaskbarIcon();
             tbi.Icon = Properties.Resources.Error;
@@ -51,6 +52,8 @@ namespace ScreenRecorder
             {
                 WindowState = WindowState.Normal;
                 ShowInTaskbar = true;
+                //hide balloon
+                MyNotifyIcon.HideBalloonTip();
             }
             
         }
@@ -61,6 +64,8 @@ namespace ScreenRecorder
             {
                 WindowState = WindowState.Minimized;
                 ShowInTaskbar = false;
+                ShowStandardBalloon();
+                
             }
         }
 
@@ -68,6 +73,22 @@ namespace ScreenRecorder
         {
             System.Windows.Application.Current.Shutdown();
         }
+
+        private void ShowStandardBalloon()
+        {
+            string title = "ScreenRecorder";
+            string text = "L'application est minimisée";
+
+            //show balloon with built-in icon
+            MyNotifyIcon.ShowBalloonTip(title, text, BalloonIcon.Error);
+
+            //show balloon with custom icon
+            MyNotifyIcon.ShowBalloonTip(title, text, MyNotifyIcon.Icon);
+        }
+
+        
+
+        
 
        
 

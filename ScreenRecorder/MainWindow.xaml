@@ -203,9 +203,10 @@
             <!--<cbox:MarkDownBox IsLineNumbersMarginVisible="True" x:Name="Box" />-->
         </Grid>
 
-        <tb:TaskbarIcon
+        <tb:TaskbarIcon x:Name="MyNotifyIcon"
   IconSource="/res/Error.ico"
-  ToolTipText="hello world">
+  ToolTipText="ScreenRecorder" PopupActivation="DoubleClick">
+            
 
             <!-- Set a simple context menu  -->
             <tb:TaskbarIcon.ContextMenu>
@@ -213,8 +214,8 @@
       Background="DarkBlue">
                     <MenuItem Header="_Ouvrir" Click="menuOpen_Click"/>
                     <Separator />
-                    <MenuItem Header="Screenshots" Command="Cut"/>
-                    <MenuItem Header="Video Capture" Command="Copy"/>
+                    <MenuItem Header="Screenshots"/>
+                    <MenuItem Header="Video Capture"/>
                     <Separator />
                     <MenuItem Header="Quitter" Click="menuQuit_Click"/>
                 </ContextMenu>
