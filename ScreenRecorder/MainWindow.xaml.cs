@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Runtime.Remoting.Messaging;
 using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using AForge.Video;
 using AForge.Video.FFMPEG;
 using Hardcodet.Wpf.TaskbarNotification;
 using Application = System.Windows.Application;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace ScreenRecorder
 {
@@ -43,10 +40,6 @@ namespace ScreenRecorder
             InitializeComponent();
 
             MouseDown += MainWindow_MouseDown;
-
-            
-
-            
             
             //Minimize the window and don't put in the taskbar
             WindowState = WindowState.Minimized;
@@ -56,7 +49,12 @@ namespace ScreenRecorder
             writer = new VideoFileWriter();
         }
 
-        private void MainWindow_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        /// <summary>
+        /// Can move the window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
             {
@@ -137,7 +135,7 @@ namespace ScreenRecorder
 
                 var time = DateTime.Now.ToString("yy-mmm-dd ddd");
                 var compName = Environment.UserName;
-                var fullName = compName.ToUpper() + "_" + time;
+                var fullName = "c:\\ScreenRecorder" + "\\" + compName.ToUpper() + "_" + time;
 
                 try
                 {
@@ -212,7 +210,7 @@ namespace ScreenRecorder
             
         }
 
-        private void MainWindow_OnPreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void MainWindow_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
 
         }

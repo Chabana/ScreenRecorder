@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Collections.ObjectModel;
+using System.Windows.Controls;
 
 namespace ScreenRecorder
 {
@@ -15,7 +16,9 @@ namespace ScreenRecorder
 
         public Folder()
         {
-            this.FullPath = @"c:\";
+            
+
+
         }
 
         public string Name
@@ -35,6 +38,7 @@ namespace ScreenRecorder
                 }
                 else
                 {
+                    Directory.CreateDirectory(value);
                     throw new ArgumentException("must exist", "fullPath");
                 }
             }
