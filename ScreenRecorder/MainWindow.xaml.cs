@@ -8,6 +8,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Input;
 using AForge.Video;
 using AForge.Video.FFMPEG;
 using Hardcodet.Wpf.TaskbarNotification;
@@ -35,11 +36,13 @@ namespace ScreenRecorder
 
         readonly Stopwatch stopwatch = new Stopwatch();
 
+        private string _currentOpenedFile;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            
+            MouseDown += MainWindow_MouseDown;
 
             
 
@@ -51,6 +54,14 @@ namespace ScreenRecorder
             ShowStandardBalloon();
 
             writer = new VideoFileWriter();
+        }
+
+        private void MainWindow_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                DragMove();
+            }
         }
 
         private void Window_StateChanged(object sender, EventArgs e)
@@ -199,6 +210,11 @@ namespace ScreenRecorder
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             
+        }
+
+        private void MainWindow_OnPreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+
         }
 
         
