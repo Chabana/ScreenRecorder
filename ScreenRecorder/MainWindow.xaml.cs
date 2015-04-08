@@ -78,6 +78,16 @@ namespace ScreenRecorder
         private void menuQuit_Click(object sender, RoutedEventArgs e)
         {
             rec = false;
+            try
+            {
+                rec = false;
+
+                Console.WriteLine("FILE SAVED !!!!");
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
             Application.Current.Shutdown();
         }
 
@@ -179,16 +189,7 @@ namespace ScreenRecorder
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                rec = false;
-
-                Console.WriteLine("FILE SAVED !!!!");
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
+            
         }
 
         
