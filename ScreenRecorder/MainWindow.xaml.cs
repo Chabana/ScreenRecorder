@@ -19,19 +19,19 @@ namespace ScreenRecorder
     public partial class MainWindow : Window
     {
 
-        private VideoFileWriter writer;
+        private readonly VideoFileWriter writer;
         private bool rec = false;
 
         private Rectangle screenSize = Screen.PrimaryScreen.Bounds;
 
         private UInt32 frameCount = 0;
 
-        private int width = SystemInformation.VirtualScreen.Width;
-        private int height = SystemInformation.VirtualScreen.Height;
+        private readonly int width = SystemInformation.VirtualScreen.Width;
+        private readonly int height = SystemInformation.VirtualScreen.Height;
 
         private ScreenCaptureStream streamVideo;
 
-        Stopwatch stopwatch = new Stopwatch();
+        readonly Stopwatch stopwatch = new Stopwatch();
 
         public MainWindow()
         {
@@ -77,25 +77,28 @@ namespace ScreenRecorder
 
         private void menuQuit_Click(object sender, RoutedEventArgs e)
         {
+            //Save the video screen in a file
             rec = false;
             try
             {
                 rec = false;
 
-                Console.WriteLine("FILE SAVED !!!!");
+                Console.WriteLine(@"FILE SAVED !!!!");
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception.Message);
             }
+
+            //Quit the application
             Application.Current.Shutdown();
         }
 
         
         private void ShowStandardBalloon()
         {
-            var title = "ScreenRecorder";
-            var text = "L'application est minimisée";
+            const string title = "ScreenRecorder";
+            const string text = "L'application est minimisée";
 
             //show balloon with built-in icon
             MyNotifyIcon.ShowBalloonTip(title, text, BalloonIcon.Error);
@@ -108,22 +111,24 @@ namespace ScreenRecorder
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            Console.WriteLine(@"Recording has started");
             if (rec == false)
             {
                 rec = true;
 
                 frameCount = 0;
 
-                string time = DateTime.Now.ToString("yy-mmm-dd ddd");
-                string compName = Environment.UserName;
-                string fullName = compName.ToUpper() + "_" + time;
+                var time = DateTime.Now.ToString("yy-mmm-dd ddd");
+                var compName = Environment.UserName;
+                var fullName = compName.ToUpper() + "_" + time;
 
                 try
                 {
+                    //Change FPS and the codec for video
                     writer.Open(fullName + ".avi",
                         width,
                         height,
-                        25,
+                        20,
                         VideoCodec.MPEG4);
                 }
                 catch (Exception exception)
@@ -132,16 +137,16 @@ namespace ScreenRecorder
                     Console.WriteLine(exception.Message);
                 }
                 //Start the main process to capture
-                process();
+                Process();
             }
         }
 
-        private void process()
+        private void Process()
         {
             try
             {
-                Rectangle screenArea = Rectangle.Empty;
-                foreach (Screen screen in Screen.AllScreens)
+                var screenArea = Rectangle.Empty;
+                foreach (var screen in Screen.AllScreens)
                 {
                     screenArea = Rectangle.Union(screenArea, screen.Bounds);
                 }
@@ -166,9 +171,7 @@ namespace ScreenRecorder
             {
                 if (rec)
                 {
-                    frameCount++;
                     writer.WriteVideoFrame(eventArgs.Frame);
-                    Console.WriteLine("Frames: " + frameCount.ToString());
                 }
 
                 else
