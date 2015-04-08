@@ -3,8 +3,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Runtime.Remoting.Messaging;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using AForge.Video;
 using AForge.Video.FFMPEG;
@@ -36,6 +38,10 @@ namespace ScreenRecorder
         public MainWindow()
         {
             InitializeComponent();
+
+            
+
+            
 
             
             

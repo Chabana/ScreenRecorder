@@ -71,3 +71,4 @@ C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenR
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\bin\Debug\SharpDX.D3DCompiler.xml
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\bin\Debug\SharpDX.Direct2D1.xml
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\bin\Debug\AssimpNet.xml
+C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\obj\Debug\GeneratedInternalTypeHelper.g.cs

@@ -69,5 +69,14 @@ namespace ScreenRecorder.Properties {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à \Documents\ScreenRecorder.
+        /// </summary>
+        internal static string MainFolder {
+            get {
+                return ResourceManager.GetString("MainFolder", resourceCulture);
+            }
+        }
     }
 }
