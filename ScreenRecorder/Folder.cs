@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 using System.Windows.Controls;
 
 namespace ScreenRecorder
@@ -39,7 +40,7 @@ namespace ScreenRecorder
                 else
                 {
                     Directory.CreateDirectory(value);
-                    throw new ArgumentException("must exist", "fullPath");
+                    throw new ArgumentException(@"must exist", "fullPath");
                 }
             }
         }
@@ -50,13 +51,18 @@ namespace ScreenRecorder
             {
                 if (this._files == null)
                 {
+                    
                     this._files = new ObservableCollection<FileInfo>();
+                    string[] extensions = { "*.jpg", "*.txt", "*.asp", "*.css", "*.avi", "*.xml" };
 
-                    FileInfo[] fi = this._folder.GetFiles();
-
-                    for (int i = 0; i < fi.Length; i++)
+                    foreach (String extension in extensions)
                     {
-                        this._files.Add(fi[i]);
+                        FileInfo[] fi = this._folder.GetFiles(extension, SearchOption.AllDirectories);
+
+                        for (int i = 0; i < fi.Length; i++)
+                        {
+                            this._files.Add(fi[i]);
+                        }
                     }
                 }
 
