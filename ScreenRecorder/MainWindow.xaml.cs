@@ -264,14 +264,15 @@ namespace ScreenRecorder
                 menuCaptureVideo.Header = "Stop Video Capture";
                 ShowStandardBalloon(title, text);
 
-                Console.WriteLine(@"Recording has started");
+                
                 if (rec == false)
                 {
+                    Console.WriteLine(@"Recording has started");
                     rec = true;
 
                     frameCount = 0;
 
-                    var time = DateTime.Now.ToString("yy-mmm-dd ddd");
+                    var time = DateTime.Now.ToString("d_MMM_yyyy_HH_mm_ssff");
                     var compName = Environment.UserName;
                     var fullName = "c:\\ScreenRecorder" + "\\" + compName.ToUpper() + "_" + time;
 
@@ -306,9 +307,11 @@ namespace ScreenRecorder
             
         }
 
+        //##########################################################################################################################
+        //######################################## Part for the files update (Create, Delete, Rename) ##############################
+
         private void Update()
         {
-            Console.WriteLine("In Update()");
             string folderPath = "c:\\ScreenRecorder";
 
             if (string.IsNullOrWhiteSpace(folderPath))
@@ -332,7 +335,6 @@ namespace ScreenRecorder
 
         void fileSystemWatcher_Created(object sender, System.IO.FileSystemEventArgs e)
         {
-            Console.WriteLine("File created");
             DisplayFileSystemWatcherInfo(e.ChangeType, e.Name);
         }
 
@@ -346,112 +348,36 @@ namespace ScreenRecorder
             DisplayFileSystemWatcherInfo(e.ChangeType, e.Name);
         }
 
-        void fileSystemWatcher_Renamed(object sender, System.IO.RenamedEventArgs e)
+        void fileSystemWatcher_Renamed(object sender, RenamedEventArgs e)
         {
             DisplayFileSystemWatcherInfo(e.ChangeType, e.Name, e.OldName);
         }
 
-        void DisplayFileSystemWatcherInfo(System.IO.WatcherChangeTypes watcherChangeTypes, string name, string oldName = null)
+        void DisplayFileSystemWatcherInfo(WatcherChangeTypes watcherChangeTypes, string name, string oldName = null)
         {
-            if (watcherChangeTypes == System.IO.WatcherChangeTypes.Renamed)
+            if (watcherChangeTypes == WatcherChangeTypes.Renamed)
             {
-                // When using FileSystemWatcher event's be aware that these events will be called on a separate thread automatically!!!
-                // If you call method AddListLine() in a normal way, it will throw following exception: 
-                // "The calling thread cannot access this object because a different thread owns it"
-                // To fix this, you must call this method using Dispatcher.BeginInvoke(...)!
-                Dispatcher.BeginInvoke(new Action(() => { AddListLine(string.Format("{0} -> {1} to {2} - {3}", watcherChangeTypes.ToString(), oldName, name, DateTime.Now)); }));
+                Dispatcher.BeginInvoke(new Action(() => { DeleteListLine(oldName); }));
+                Dispatcher.BeginInvoke(new Action(() => { AddListLine(name); }));
+            }
+            else if (watcherChangeTypes == System.IO.WatcherChangeTypes.Deleted)
+            {
+                Dispatcher.BeginInvoke(new Action(() => { DeleteListLine(name); }));
             }
             else
             {
                 Dispatcher.BeginInvoke(new Action(() => { AddListLine(name); }));
             }
         }
+
+        public void DeleteListLine(string text)
+        {
+            this.tvi.Items.Remove(text);
+        }
  
         public void AddListLine(string text)
         {
-            Console.WriteLine("Enter in addListLine");
-            
             this.tvi.Items.Add(text);
         }
-    
-
-        
-        private void btnUpdate_Click_1(object sender, RoutedEventArgs e)
-        {
-            //var newestFile = Folder.GetNewestFile(directory: new DirectoryInfo(@"c:\ScreenRecorder"));
-            /*var item = new TreeViewItem {Header = newestFile};
-            this.tvi = null;
-            TrvStructure.Items.Refresh();
-            tvi.Items.Add(item);
-            tvi.Items.Refresh();
-            this.tvi.ItemsSource.AsParallel();
-            Folder folder = new Folder();
-            var files = folder.Files;
-            files.Add(newestFile);
-            Console.WriteLine(files.Count);
-            this.tvi.Items.Insert(0, files.ToString());*/
-
-            Update();
-
-
-
-
-
-        }
-
-        private void OnChanged(object source, FileSystemEventArgs e)
-    {
-        // Specify what is done when a file is changed, created, or deleted.
-       Console.WriteLine("File: " +  e.FullPath + " " + e.ChangeType);
-        Console.WriteLine(e.ChangeType.ToString());
-        
-            String nomFichier = e.FullPath;
-
-            if (e.ChangeType.ToString() == "Deleted")
-            {
-                Console.WriteLine("Deleted");
-                TrvStructure.Items.Remove(e.FullPath);
-
-            }
-            else if (e.ChangeType.ToString() == "Created")
-            {
-                Console.WriteLine("Created");
-                TrvStructure.Items.Add(e.FullPath);
-            }
-            else if (e.ChangeType.ToString() == "Changed")
-            {
-                Console.WriteLine("Changed");
-
-                changed();
-
-
-            }
-
-
-            
-    }
-
-        private void changed()
-        {
-            //FileInfo newestFile = Folder.GetNewestFile(new DirectoryInfo(@"C:\ScreenRecorder\"));
-            //TrvStructure.Items.Add(newestFile);
-
-        }
-
-    private void OnRenamed(object source, RenamedEventArgs e)
-    {
-        // Specify what is done when a file is renamed.
-        Console.WriteLine("File: {0} renamed to {1}", e.OldFullPath, e.FullPath);
-    }
-
-
-
-
-
-
-
-
-
-    public event PropertyChangedEventHandler PropertyChanged;
     }
 }
