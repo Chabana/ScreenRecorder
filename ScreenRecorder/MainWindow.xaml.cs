@@ -7,11 +7,13 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows.Data;
 using AForge.Video;
 using AForge.Video.FFMPEG;
 using AForge.Video.DirectShow;
 using Hardcodet.Wpf.TaskbarNotification;
 using Application = System.Windows.Application;
+using System.Security.Permissions;
 
 namespace ScreenRecorder
 {
@@ -281,6 +283,44 @@ namespace ScreenRecorder
             }
             
         }
+
+        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            //(FindResource("RootFolderDataProvider") as ObjectDataProvider).Refresh();
+            
+        }
+
+        [PermissionSet(SecurityAction.Demand, Name="FullTrust")]
+        private void btnUpdate_Click_1(object sender, RoutedEventArgs e)
+        {
+            FileSystemWatcher watcher = new FileSystemWatcher();
+            watcher.Path = "c:\\ScreenRecorder";
+
+            watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite
+           | NotifyFilters.FileName | NotifyFilters.DirectoryName;
+
+            watcher.Filter = "*.avi";
+
+            watcher.Changed += new FileSystemEventHandler(OnChanged);
+            watcher.Created += new FileSystemEventHandler(OnChanged);
+            watcher.Deleted += new FileSystemEventHandler(OnChanged);
+            watcher.Renamed += new RenamedEventHandler(OnRenamed);
+
+            watcher.EnableRaisingEvents = true;
+        }
+
+        private void OnChanged(object source, FileSystemEventArgs e)
+    {
+        // Specify what is done when a file is changed, created, or deleted.
+       Console.WriteLine("File: " +  e.FullPath + " " + e.ChangeType);
+            
+    }
+
+    private void OnRenamed(object source, RenamedEventArgs e)
+    {
+        // Specify what is done when a file is renamed.
+        Console.WriteLine("File: {0} renamed to {1}", e.OldFullPath, e.FullPath);
+    }
 
         
 

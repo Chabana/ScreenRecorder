@@ -12,7 +12,8 @@
         Foreground="#FFFFFFFF" 
         BorderThickness="0 0px 0 0"  WindowStyle="None"
     AllowsTransparency="True"
-    ResizeMode="CanResizeWithGrip" StateChanged="Window_StateChanged" ><!-- PreviewKeyDown="MainWindow_OnPreviewKeyDown">-->
+    ResizeMode="CanResizeWithGrip" StateChanged="Window_StateChanged" >
+    <!-- PreviewKeyDown="MainWindow_OnPreviewKeyDown">-->
 
     <Window.Resources>
 
@@ -219,7 +220,7 @@
         <tb:TaskbarIcon x:Name="MyNotifyIcon"
   IconSource="/res/Error.ico"
   ToolTipText="ScreenRecorder" PopupActivation="DoubleClick">
-            
+
 
             <!-- Set a simple context menu  -->
             <tb:TaskbarIcon.ContextMenu>
@@ -234,5 +235,6 @@
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>
+        <Button x:Name="btnUpdate" Grid.ColumnSpan="3" Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="btnUpdate_Click_1" />
     </Grid>
 </Window>
