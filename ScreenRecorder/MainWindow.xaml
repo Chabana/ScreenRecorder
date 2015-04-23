@@ -191,7 +191,7 @@
         </Grid>
         <Expander Header="" ExpandDirection="Right" Margin="0,0,0,10" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0">
             <TreeView x:Name="TrvStructure" Foreground="#ffffffff" BorderBrush="#FF3d3d3b" Background="#FF3d3d3b" Width="200px" Margin="10px 2px 10px 0px">
-                <TreeViewItem ItemsSource="{Binding Path=Files, Source={StaticResource RootFolderDataProvider}}" Header="ScreenRecorder" />
+                <TreeViewItem x:Name="tvi" Header="ScreenRecorder" />
                 <TreeView.Resources>
                     <ContextMenu x:Key="MenuContext"  StaysOpen="true">
                         <!--<MenuItem Header="Nouveau ficher" Click="AddFilesToFolder_Click"/>

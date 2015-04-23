@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 
 namespace ScreenRecorder
 {
-    public class Folder
+    public class Folder 
     {
         private DirectoryInfo _folder;
         private ObservableCollection<Folder> _subFolders;
@@ -17,9 +18,7 @@ namespace ScreenRecorder
 
         public Folder()
         {
-            
-
-
+            this.FullPath = @"c:\ScreenRecorder";
         }
 
         public string Name
@@ -42,17 +41,12 @@ namespace ScreenRecorder
                     Directory.CreateDirectory(value);
                     throw new ArgumentException(@"must exist", "fullPath");
                 }
+
+                
+
             }
         }
 
-        public static FileInfo GetNewestFile(DirectoryInfo directory)
-        {
-            return
-                directory.GetFiles()
-                    .Union(directory.GetDirectories().Select(d => GetNewestFile(d)))
-                    .OrderByDescending(f => (f == null ? DateTime.MinValue : f.LastWriteTime))
-                    .FirstOrDefault();
-        }
 
         public ObservableCollection<FileInfo> Files
         {
