@@ -5,11 +5,13 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Collections.Generic;
+using System.IO;
 using AForge.Video;
 using AForge.Video.FFMPEG;
+using AForge.Video.DirectShow;
 using Hardcodet.Wpf.TaskbarNotification;
 using Application = System.Windows.Application;
-using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace ScreenRecorder
 {
@@ -34,6 +36,10 @@ namespace ScreenRecorder
         readonly Stopwatch stopwatch = new Stopwatch();
 
         private string _currentOpenedFile;
+
+        private string snapShot = "";
+        private string snapDir = "";
+        public int waitLimit = 4000; //ms
 
         public MainWindow()
         {
@@ -169,19 +175,47 @@ namespace ScreenRecorder
             }
         }
 
-        private void btnSave_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
-        private void MainWindow_OnPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-
-        }
 
         private void menuScreenshot_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("Screenshot");
+            Rectangle screenArea = Rectangle.Empty;
+
+            foreach (Screen screen in Screen.AllScreens)
+            {
+                screenArea = Rectangle.Union(screenArea, screen.Bounds);
+            }
+
+            ScreenCaptureStream stream = new ScreenCaptureStream(screenArea);
+            
+            Thread.Sleep(1800);
+
+            stream.NewFrame += new NewFrameEventHandler(dev_NewFrame);
+
+            
+
+            stream.Start();
+
+            Console.WriteLine("Screenshot taken");
+           
+            
+        }
+
+        private void dev_NewFrame(object sender, AForge.Video.NewFrameEventArgs eventArgs)
+        {
+            try
+            {
+                Bitmap bitmap = eventArgs.Frame.Clone() as Bitmap;
+                ((ScreenCaptureStream)sender).SignalToStop();
+                Image img = (Image) bitmap;
+                string flName = "test" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".png";
+                img.Save(flName, System.Drawing.Imaging.ImageFormat.Png);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            
+
         }
 
         private void stopVideoRecording()
