@@ -228,8 +228,8 @@
       Background="AliceBlue">
                     <MenuItem Header="_Ouvrir" Click="menuOpen_Click"/>
                     <Separator />
-                    <MenuItem Header="Screenshots"/>
-                    <MenuItem Header="Video Capture"/>
+                    <MenuItem x:Name="menuScreenshot" Header="Take Screenshot" Click="menuScreenshot_Click" />
+                    <MenuItem x:Name="menuCaptureVideo" Header="Start Video Capture" Click="menuCaptureVideo_Click"/>
                     <Separator />
                     <MenuItem Header="Quitter" Click="menuQuit_Click"/>
                 </ContextMenu>

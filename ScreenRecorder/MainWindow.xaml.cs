@@ -44,7 +44,9 @@ namespace ScreenRecorder
             //Minimize the window and don't put in the taskbar
             WindowState = WindowState.Minimized;
             ShowInTaskbar = false;
-            ShowStandardBalloon();
+            const string title = "ScreenRecorder";
+            const string text = "L'application est minimisée";
+            ShowStandardBalloon(title, text);
 
             writer = new VideoFileWriter();
         }
@@ -85,7 +87,9 @@ namespace ScreenRecorder
             {
                 WindowState = WindowState.Minimized;
                 ShowInTaskbar = false;
-                ShowStandardBalloon();
+                const string title = "ScreenRecorder";
+                const string text = "L'application est minimisée";
+                ShowStandardBalloon(title, text);
                 
             }
         }
@@ -93,28 +97,15 @@ namespace ScreenRecorder
         private void menuQuit_Click(object sender, RoutedEventArgs e)
         {
             //Save the video screen in a file
-            rec = false;
-            try
-            {
-                rec = false;
-
-                Console.WriteLine(@"FILE SAVED !!!!");
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
+            stopVideoRecording();
 
             //Quit the application
             Application.Current.Shutdown();
         }
 
         
-        private void ShowStandardBalloon()
+        private void ShowStandardBalloon(string title, string text)
         {
-            const string title = "ScreenRecorder";
-            const string text = "L'application est minimisée";
-
             //show balloon with built-in icon
             MyNotifyIcon.ShowBalloonTip(title, text, BalloonIcon.Error);
 
@@ -126,34 +117,7 @@ namespace ScreenRecorder
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine(@"Recording has started");
-            if (rec == false)
-            {
-                rec = true;
-
-                frameCount = 0;
-
-                var time = DateTime.Now.ToString("yy-mmm-dd ddd");
-                var compName = Environment.UserName;
-                var fullName = "c:\\ScreenRecorder" + "\\" + compName.ToUpper() + "_" + time;
-
-                try
-                {
-                    //Change FPS and the codec for video
-                    writer.Open(fullName + ".avi",
-                        width,
-                        height,
-                        20,
-                        VideoCodec.MPEG4);
-                }
-                catch (Exception exception)
-                {
-
-                    Console.WriteLine(exception.Message);
-                }
-                //Start the main process to capture
-                Process();
-            }
+            
         }
 
         private void Process()
@@ -213,6 +177,77 @@ namespace ScreenRecorder
         private void MainWindow_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
 
+        }
+
+        private void menuScreenshot_Click(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine("Screenshot");
+        }
+
+        private void stopVideoRecording()
+        {
+            rec = false;
+            try
+            {
+                rec = false;
+
+                Console.WriteLine(@"FILE SAVED !!!!");
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
+        }
+
+        private void menuCaptureVideo_Click(object sender, RoutedEventArgs e)
+        {
+            if ((string) menuCaptureVideo.Header == "Start Video Capture")
+            {
+                var title = "Video has started recording";
+                var text = "Don't forget to stop the video recording";
+                menuCaptureVideo.Header = "Stop Video Capture";
+                ShowStandardBalloon(title, text);
+
+                Console.WriteLine(@"Recording has started");
+                if (rec == false)
+                {
+                    rec = true;
+
+                    frameCount = 0;
+
+                    var time = DateTime.Now.ToString("yy-mmm-dd ddd");
+                    var compName = Environment.UserName;
+                    var fullName = "c:\\ScreenRecorder" + "\\" + compName.ToUpper() + "_" + time;
+
+                    try
+                    {
+                        //Change FPS and the codec for video
+                        writer.Open(fullName + ".avi",
+                            width,
+                            height,
+                            20,
+                            VideoCodec.MPEG4);
+                    }
+                    catch (Exception exception)
+                    {
+
+                        Console.WriteLine(exception.Message);
+                    }
+                    //Start the main process to capture
+                    Process();
+                }
+
+            }
+            else
+            {
+                var title = "Video has stopped recording";
+                var text = "You are not being recorded";
+                ShowStandardBalloon(title, text);
+                stopVideoRecording();
+                menuCaptureVideo.Header = "Start Video Capture";
+                Console.WriteLine(@"Recording has stopped");
+            }
+            
         }
 
         
