@@ -119,13 +119,6 @@ namespace ScreenRecorder
             MyNotifyIcon.ShowBalloonTip(title, text, MyNotifyIcon.Icon);
         }
 
-        
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
         private void Process()
         {
             try
@@ -176,6 +169,11 @@ namespace ScreenRecorder
         }
 
 
+        /// <summary>
+        /// Fonction pour prendre des screenshots
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void menuScreenshot_Click(object sender, RoutedEventArgs e)
         {
             Rectangle screenArea = Rectangle.Empty;
@@ -191,8 +189,6 @@ namespace ScreenRecorder
 
             stream.NewFrame += new NewFrameEventHandler(dev_NewFrame);
 
-            
-
             stream.Start();
 
             Console.WriteLine("Screenshot taken");
@@ -207,7 +203,9 @@ namespace ScreenRecorder
                 Bitmap bitmap = eventArgs.Frame.Clone() as Bitmap;
                 ((ScreenCaptureStream)sender).SignalToStop();
                 Image img = (Image) bitmap;
-                string flName = "test" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".png";
+                string dirName = "c:\\ScreenRecorder";
+                string flName = "videoCapture" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".png";
+                flName = Path.Combine(dirName, flName);
                 img.Save(flName, System.Drawing.Imaging.ImageFormat.Png);
             }
             catch (Exception e)

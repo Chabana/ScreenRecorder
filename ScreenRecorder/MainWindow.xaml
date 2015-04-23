@@ -213,7 +213,6 @@
         </Expander>
 
         <Grid  Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Margin="10px,5px,10px,10px">
-            <Button Content="Button" HorizontalAlignment="Left" Margin="171,0,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
             <!--<cbox:MarkDownBox IsLineNumbersMarginVisible="True" x:Name="Box" />-->
         </Grid>
 
