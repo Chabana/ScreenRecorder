@@ -290,12 +290,12 @@
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu
       Background="AliceBlue">
-                    <MenuItem Header="_Ouvrir" Click="menuOpen_Click"/>
+                    <MenuItem Header="_Ouvrir" Click="menuOpen_Click" InputGestureText="Ctrl+Alt+O"/>
                     <Separator />
-                    <MenuItem x:Name="menuScreenshot" Header="Take Screenshot" Click="menuScreenshot_Click" />
-                    <MenuItem x:Name="menuCaptureVideo" Header="Start Video Capture" Click="menuCaptureVideo_Click" />
+                    <MenuItem x:Name="menuScreenshot" Header="Take Screenshot" Click="menuScreenshot_Click" InputGestureText="Ctrl+Alt+S" />
+                    <MenuItem x:Name="menuCaptureVideo" Header="Start Video Capture" Click="menuCaptureVideo_Click" InputGestureText="Ctrl+Alt+V" />
                     <Separator />
-                    <MenuItem Header="Quitter" Click="menuQuit_Click"/>
+                    <MenuItem Header="Quitter" Click="menuQuit_Click" InputGestureText="Ctrl+Alt+E"/>
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>

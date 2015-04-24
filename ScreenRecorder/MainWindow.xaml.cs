@@ -49,7 +49,9 @@ namespace ScreenRecorder
         private string snapDir = "";
         public int waitLimit = 4000; //ms
 
-        
+        //##########################################################################################################################
+        //######################################## Constructor -> Initialize the application ##############################
+
 
         public MainWindow()
         {
@@ -89,6 +91,10 @@ namespace ScreenRecorder
             Update();
         }
 
+        //##########################################################################################################################
+        //######################################## Exit application from menu or shortcut ##############################
+
+
         private void onExitApplication(object sender, HotkeyEventArgs e)
         {
             exitApplication();
@@ -102,6 +108,15 @@ namespace ScreenRecorder
             //Quit the application
             Application.Current.Shutdown();
         }
+
+        private void menuQuit_Click(object sender, RoutedEventArgs e)
+        {
+            exitApplication();
+        }
+
+        //##########################################################################################################################
+        //######################################## Start video capture from menu or shortcut ##############################
+
 
         private void onStartVideocapture(object sender, HotkeyEventArgs e)
         {
@@ -159,93 +174,6 @@ namespace ScreenRecorder
             }
         }
 
-        private void onStartScreenshots(object sender, HotkeyEventArgs e)
-        {
-            startScreenshots();
-        }
-
-        private void startScreenshots()
-        {
-            Rectangle screenArea = Rectangle.Empty;
-
-            foreach (Screen screen in Screen.AllScreens)
-            {
-                screenArea = Rectangle.Union(screenArea, screen.Bounds);
-            }
-
-            ScreenCaptureStream stream = new ScreenCaptureStream(screenArea);
-
-            Thread.Sleep(1800);
-
-            stream.NewFrame += new NewFrameEventHandler(dev_NewFrame);
-
-            stream.Start();
-
-            Console.WriteLine("Screenshot taken");
-        }
-
-        /// <summary>
-        /// Can move the window
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MainWindow_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                DragMove();
-            }
-        }
-
-        private void onOpenApplication(object sender, HotkeyEventArgs e)
-        {
-            openApplication();
-        }
-
-        private void openApplication()
-        {
-            if (WindowState == WindowState.Minimized)
-            {
-                WindowState = WindowState.Normal;
-                ShowInTaskbar = true;
-                //hide balloon
-                MyNotifyIcon.HideBalloonTip();
-            }
-        }
-
-        private void menuOpen_Click(object sender, RoutedEventArgs e)
-        {
-            openApplication();
-        }
-
-        private void btnMinimize_Click(object sender, RoutedEventArgs e)
-        {
-            if (WindowState == WindowState.Normal || WindowState == WindowState.Maximized)
-            {
-                WindowState = WindowState.Minimized;
-                ShowInTaskbar = false;
-                const string title = "ScreenRecorder";
-                const string text = "L'application est minimisée";
-                ShowStandardBalloon(title, text);
-                
-            }
-        }
-
-        private void menuQuit_Click(object sender, RoutedEventArgs e)
-        {
-            exitApplication();
-        }
-
-        
-        private void ShowStandardBalloon(string title, string text)
-        {
-            //show balloon with built-in icon
-            MyNotifyIcon.ShowBalloonTip(title, text, BalloonIcon.Error);
-
-            //show balloon with custom icon
-            MyNotifyIcon.ShowBalloonTip(title, text, MyNotifyIcon.Icon);
-        }
-
         private void Process()
         {
             try
@@ -295,6 +223,56 @@ namespace ScreenRecorder
             }
         }
 
+        private void stopVideoRecording()
+        {
+            rec = false;
+            try
+            {
+                rec = false;
+
+
+                Console.WriteLine(@"FILE SAVED !!!!");
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
+        }
+
+        private void menuCaptureVideo_Click(object sender, RoutedEventArgs e)
+        {
+            startVideocapture();
+        }
+
+
+        //##########################################################################################################################
+        //######################################## Start screenshots from menu or shortcut ##############################
+
+
+        private void onStartScreenshots(object sender, HotkeyEventArgs e)
+        {
+            startScreenshots();
+        }
+
+        private void startScreenshots()
+        {
+            Rectangle screenArea = Rectangle.Empty;
+
+            foreach (Screen screen in Screen.AllScreens)
+            {
+                screenArea = Rectangle.Union(screenArea, screen.Bounds);
+            }
+
+            ScreenCaptureStream stream = new ScreenCaptureStream(screenArea);
+
+            Thread.Sleep(1800);
+
+            stream.NewFrame += new NewFrameEventHandler(dev_NewFrame);
+
+            stream.Start();
+
+            Console.WriteLine("Screenshot taken");
+        }
 
         /// <summary>
         /// Fonction pour prendre des screenshots
@@ -314,7 +292,7 @@ namespace ScreenRecorder
             {
                 Bitmap bitmap = eventArgs.Frame.Clone() as Bitmap;
                 ((ScreenCaptureStream)sender).SignalToStop();
-                Image img = (Image) bitmap;
+                Image img = (Image)bitmap;
                 string dirName = "c:\\ScreenRecorder";
                 string flName = "videoCapture" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".png";
                 flName = Path.Combine(dirName, flName);
@@ -324,33 +302,73 @@ namespace ScreenRecorder
             {
                 Console.WriteLine(e.Message);
             }
-            
+
 
         }
 
-        private void stopVideoRecording()
+
+        //##########################################################################################################################
+        //######################################## Start open application from menu or shortcut ##############################
+
+        private void onOpenApplication(object sender, HotkeyEventArgs e)
         {
-            rec = false;
-            try
-            {
-                rec = false;
+            openApplication();
+        }
 
-
-                Console.WriteLine(@"FILE SAVED !!!!");
-            }
-            catch (Exception exception)
+        private void openApplication()
+        {
+            if (WindowState == WindowState.Minimized)
             {
-                Console.WriteLine(exception.Message);
+                WindowState = WindowState.Normal;
+                ShowInTaskbar = true;
+                //hide balloon
+                MyNotifyIcon.HideBalloonTip();
             }
         }
 
+        private void menuOpen_Click(object sender, RoutedEventArgs e)
+        {
+            openApplication();
+        }
+
+        //##########################################################################################################################
+        //######################################## Can drag the main application ##############################
+
+        private void MainWindow_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                DragMove();
+            }
+        }
+
+        //##########################################################################################################################
+        //######################################## Can minimize the main application ##############################
+
+
+        private void btnMinimize_Click(object sender, RoutedEventArgs e)
+        {
+            if (WindowState == WindowState.Normal || WindowState == WindowState.Maximized)
+            {
+                WindowState = WindowState.Minimized;
+                ShowInTaskbar = false;
+                const string title = "ScreenRecorder";
+                const string text = "L'application est minimisée";
+                ShowStandardBalloon(title, text);
+                
+            }
+        }
+
+        //##########################################################################################################################
+        //######################################## Show balloons to warn the user ##############################
         
-
-        private void menuCaptureVideo_Click(object sender, RoutedEventArgs e)
+        private void ShowStandardBalloon(string title, string text)
         {
-            startVideocapture();
-            
-            
+            //show balloon with built-in icon
+            MyNotifyIcon.ShowBalloonTip(title, text, BalloonIcon.Error);
+
+            //show balloon with custom icon
+            MyNotifyIcon.ShowBalloonTip(title, text, MyNotifyIcon.Icon);
         }
 
         //##########################################################################################################################
@@ -439,12 +457,7 @@ namespace ScreenRecorder
         }
 
         //##########################################################################################################################
-        //######################################## Part for the video player ##############################
-
-        //############### FOR MUSIC PLAYER ###############
-        /// <summary>
-        /// This Part of the gameBoard class, is for the music player
-        /// </summary>
+        //######################################## Part for the video player and image viewer ##############################
 
         private bool mediaPlayerIsPlaying = false;
         private bool userIsDraggingSlider = false;
@@ -466,11 +479,6 @@ namespace ScreenRecorder
 
         private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            /*var openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Media files (*.mp3;*.mpg;*.mpeg)|*.mp3;*.mpg;*.mpeg|All files (*.*)|*.*";
-            // ReSharper disable once SuspiciousTypeConversion.Global
-           // if (openFileDialog.ShowDialog().Equals(obj: true))
-                //mePlayer.Source = new Uri();*/
         }
 
         private void Play_CanExecute(object sender, CanExecuteRoutedEventArgs e)
