@@ -147,6 +147,12 @@
   <ItemGroup>
     <None Include="Resources\ErrorImg.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\Control_pause_blue.png" />
+    <Resource Include="img\Control_play_blue.png" />
+    <Resource Include="img\control_stop_blue.png" />
+    <Resource Include="img\folder.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SharpDX.2.6.3\build\SharpDX.targets" Condition="Exists('..\packages\SharpDX.2.6.3\build\SharpDX.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

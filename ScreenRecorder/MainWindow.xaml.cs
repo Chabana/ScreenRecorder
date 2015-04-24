@@ -6,12 +6,18 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using AForge.Video;
 using AForge.Video.FFMPEG;
 using Hardcodet.Wpf.TaskbarNotification;
 using Application = System.Windows.Application;
+using Image = System.Drawing.Image;
 
 namespace ScreenRecorder
 {
@@ -328,8 +334,6 @@ namespace ScreenRecorder
                 w.Filter = extension;
                 w.Changed += new FileSystemEventHandler(fileSystemWatcher_Changed);
                 watchersExtension.Add(w);
-                
-                
             }
 
             watcher.Created += new FileSystemEventHandler(fileSystemWatcher_Created);
@@ -386,5 +390,132 @@ namespace ScreenRecorder
         {
             this.tvi.Items.Add(text);
         }
+
+        //##########################################################################################################################
+        //######################################## Part for the video player ##############################
+
+        //############### FOR MUSIC PLAYER ###############
+        /// <summary>
+        /// This Part of the gameBoard class, is for the music player
+        /// </summary>
+
+        private bool mediaPlayerIsPlaying = false;
+        private bool userIsDraggingSlider = false;
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            if ((mePlayer.Source != null) && (mePlayer.NaturalDuration.HasTimeSpan) && (!userIsDraggingSlider))
+            {
+                sliProgress.Minimum = 0;
+                sliProgress.Maximum = mePlayer.NaturalDuration.TimeSpan.TotalSeconds;
+                sliProgress.Value = mePlayer.Position.TotalSeconds;
+            }
+        }
+
+        private void Open_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            /*var openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Media files (*.mp3;*.mpg;*.mpeg)|*.mp3;*.mpg;*.mpeg|All files (*.*)|*.*";
+            // ReSharper disable once SuspiciousTypeConversion.Global
+           // if (openFileDialog.ShowDialog().Equals(obj: true))
+                //mePlayer.Source = new Uri();*/
+        }
+
+        private void Play_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = (mePlayer != null) && (mePlayer.Source != null);
+        }
+
+        private void Play_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            mePlayer.Play();
+            mediaPlayerIsPlaying = true;
+        }
+
+        private void Pause_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = mediaPlayerIsPlaying;
+        }
+
+        private void Pause_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            mePlayer.Pause();
+        }
+
+        private void Stop_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = mediaPlayerIsPlaying;
+        }
+
+        private void Stop_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            mePlayer.Stop();
+            mediaPlayerIsPlaying = false;
+        }
+
+        private void sliProgress_DragStarted(object sender, DragStartedEventArgs e)
+        {
+            userIsDraggingSlider = true;
+        }
+
+        private void sliProgress_DragCompleted(object sender, DragCompletedEventArgs e)
+        {
+            userIsDraggingSlider = false;
+            mePlayer.Position = TimeSpan.FromSeconds(sliProgress.Value);
+        }
+
+        private void sliProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            lblProgressStatus.Text = TimeSpan.FromSeconds(sliProgress.Value).ToString(@"hh\:mm\:ss");
+        }
+
+        private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            mePlayer.Volume += (e.Delta > 0) ? 0.1 : -0.1;
+        }
+
+        private void TrvStructure_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            string[] extensionsVideos = {".mp4", ".wmv", ".avi"};
+            string[] extensionsPictures = { ".jpg", ".png", ".bmp" };
+            if (!tvi.IsSelected)
+            {
+                foreach (string extension in extensionsVideos)
+                {
+                    if (e.NewValue.ToString().Contains(extension))
+                    {
+                        DispatcherTimer timerMedia = new DispatcherTimer();
+                        mePlayer.Source = new Uri("c:\\ScreenRecorder\\" + e.NewValue.ToString());
+                        timerMedia.Interval = TimeSpan.FromSeconds(1);
+                        timerMedia.Tick += timer_Tick;
+                        timerMedia.Start();
+                    }
+                }
+
+                foreach (string extension in extensionsPictures)
+                {
+                    if (e.NewValue.ToString().Contains(extension))
+                    {
+                        PictureBox pbx1 = new AForge.Controls.PictureBox();
+
+                        
+
+                        pbx1.Image = Image.FromFile("c:\\ScreenRecorder\\" + e.NewValue.ToString());
+                        pbx1.SizeMode = PictureBoxSizeMode.StretchImage;
+
+                        pbx1.Show();
+
+                        Console.WriteLine("PICTEUUUUUURE");
+                    }
+                }
+                
+            }       
+        }
+
     }
 }

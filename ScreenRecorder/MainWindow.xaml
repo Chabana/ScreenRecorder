@@ -15,6 +15,15 @@
     ResizeMode="CanResizeWithGrip" StateChanged="Window_StateChanged" >
     <!-- PreviewKeyDown="MainWindow_OnPreviewKeyDown">-->
 
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Open" CanExecute="Open_CanExecute" Executed="Open_Executed" />
+        <CommandBinding Command="MediaCommands.Play" CanExecute="Play_CanExecute" Executed="Play_Executed" />
+        <CommandBinding Command="MediaCommands.Pause" CanExecute="Pause_CanExecute" Executed="Pause_Executed" />
+        <CommandBinding Command="MediaCommands.Stop" CanExecute="Stop_CanExecute" Executed="Stop_Executed" />
+    </Window.CommandBindings>
+
+
+
     <Window.Resources>
 
         <ObjectDataProvider x:Key="RootFolderDataProvider" >
@@ -49,7 +58,8 @@
         <!-- SCROLL VIEW  -->
         <!-- ************************************  -->
         <ControlTemplate x:Key="ScrollViewerControlTemplate" TargetType="{x:Type ScrollViewer}">
-            <Grid x:Name="Grid" Background="{TemplateBinding Background}">
+            <Grid x:Name="Grid" Background="Black">
+                <!--Background="{TemplateBinding Background}">-->
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
@@ -186,14 +196,15 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
+
         <Grid Grid.Column="2" >
             <Button x:Name="btnQuit" Content="-" Margin="0,0,9,0px" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="40" Background="#FFB64040" BorderBrush="#FF333331" Foreground="White" Click="btnMinimize_Click"/>
         </Grid>
         <Expander Header="" ExpandDirection="Right" Margin="0,0,0,10" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0">
-            <TreeView x:Name="TrvStructure" Foreground="#ffffffff" BorderBrush="#FF3d3d3b" Background="#FF3d3d3b" Width="200px" Margin="10px 2px 10px 0px">
+            <TreeView x:Name="TrvStructure" Foreground="#ffffffff" BorderBrush="#FF3d3d3b" Background="#FF3d3d3b" Width="200px" Margin="10px 2px 10px 0px" SelectedItemChanged="TrvStructure_SelectedItemChanged">
                 <TreeViewItem x:Name="tvi" Header="ScreenRecorder" />
                 <TreeView.Resources>
-                    <ContextMenu x:Key="MenuContext"  StaysOpen="true">
+                    <ContextMenu x:Key="MenuContext"  StaysOpen="true" x:Name="yeah">
                         <!--<MenuItem Header="Nouveau ficher" Click="AddFilesToFolder_Click"/>
                         <MenuItem Header="Nouveau dossier" Click="AddFolder_Click"/>
                         <MenuItem Header="Renommer"/>-->
@@ -212,9 +223,63 @@
             </TreeView>
 
         </Expander>
+        <Grid  Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Margin="10px,5px,10px,10px" Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            
+            <TabControl Grid.RowSpan="2">
+                <TabItem Header="Video">
+                    <StackPanel Orientation="Vertical">
+                    <ToolBar>
+                        <Button Command="ApplicationCommands.Open">
+                            <Image Source="img/folder.png" />
+                        </Button>
+                        <Separator />
+                        <Button Command="MediaCommands.Play">
+                            <Image Source="img/Control_play_blue.png" />
+                        </Button>
+                        <Button Command="MediaCommands.Pause">
+                            <Image Source="img/Control_pause_blue.png" />
+                        </Button>
+                        <Button Command="MediaCommands.Stop">
+                            <Image Source="img/control_stop_blue.png" />
+                        </Button>
 
-        <Grid  Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Margin="10px,5px,10px,10px">
-            <!--<cbox:MarkDownBox IsLineNumbersMarginVisible="True" x:Name="Box" />-->
+                    </ToolBar>
+
+                        
+                        <StatusBar>
+                            <StatusBar.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                    </Grid>
+                                </ItemsPanelTemplate>
+                            </StatusBar.ItemsPanel>
+                            <StatusBarItem>
+                                <TextBlock x:Name="lblProgressStatus"><Run Text="00:00:00"/></TextBlock>
+                            </StatusBarItem>
+                            <StatusBarItem Grid.Column="1" HorizontalContentAlignment="Stretch">
+                                <Slider x:Name="sliProgress" Thumb.DragStarted="sliProgress_DragStarted"  Thumb.DragCompleted="sliProgress_DragCompleted" ValueChanged="sliProgress_ValueChanged" />
+                            </StatusBarItem>
+                        </StatusBar>
+
+                        <MediaElement Name="mePlayer" Grid.Row="1"  LoadedBehavior="Manual" Stretch="None" />
+
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="Image">
+                    <Image VerticalAlignment="Center" Source="img/Control_pause_blue.png"></Image>
+                    </TabItem>
+            </TabControl>
+            
         </Grid>
 
         <tb:TaskbarIcon x:Name="MyNotifyIcon"
@@ -235,6 +300,6 @@
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>
-        
+
     </Grid>
 </Window>
