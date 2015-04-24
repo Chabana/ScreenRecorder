@@ -1,0 +1,34 @@
+﻿<Window x:Class="ScreenRecorder.PropertyWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="PropertyWindow" Height="300" Width="500" WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize">
+    
+    <StackPanel Margin="10" Orientation="Vertical">
+        <Label Content="Select properties for the application" FontSize="22" FontWeight="Bold"></Label>
+        <StackPanel Orientation="Horizontal">
+        <StackPanel Margin="0,0,0,0" Width="250">
+            <Label FontWeight="Bold">Image extension :</Label>
+        <RadioButton GroupName="image">Bmp</RadioButton>
+        <RadioButton GroupName="image">Emf</RadioButton>
+        <RadioButton GroupName="image">Gif</RadioButton>
+        <RadioButton GroupName="image">Jpeg</RadioButton>
+        <RadioButton GroupName="image" IsChecked="True">Png</RadioButton>
+        <RadioButton GroupName="image">Tiff</RadioButton>
+        <RadioButton GroupName="image">Exif</RadioButton>
+        </StackPanel>
+        <StackPanel>
+        <Label FontWeight="Bold">Video extension : </Label>
+        <RadioButton GroupName="video" IsChecked="True">MPEG4</RadioButton>
+        <RadioButton GroupName="video">WMV1</RadioButton>
+        <RadioButton GroupName="video" >WMV2</RadioButton>
+        <RadioButton GroupName="video" >MPEG2</RadioButton>
+        <RadioButton GroupName="video" >FLV1</RadioButton>
+        <RadioButton GroupName="video" >H263P</RadioButton>
+
+
+            </StackPanel>
+            
+        </StackPanel>
+        <Button x:Name="btnValidate" Content="Validate" Margin="370,50,27,0" Click="btnValidate_Click"></Button>
+    </StackPanel>
+</Window>

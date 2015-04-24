@@ -65,6 +65,7 @@ namespace ScreenRecorder
             HotkeyManager.Current.AddOrReplace("VideoCapture", Key.V, ModifierKeys.Control | ModifierKeys.Alt, onStartVideocapture);
             HotkeyManager.Current.AddOrReplace("ExitApplication", Key.E, ModifierKeys.Control | ModifierKeys.Alt, onExitApplication);
             HotkeyManager.Current.AddOrReplace("OpenApplication", Key.O, ModifierKeys.Control | ModifierKeys.Alt, onOpenApplication);
+            HotkeyManager.Current.AddOrReplace("OpenProperties", Key.P, ModifierKeys.Control | ModifierKeys.Alt, onOpenProperties);
 
             listFilters = new List<string>();
             listFilters.Add("By date descending");
@@ -103,6 +104,8 @@ namespace ScreenRecorder
 
             Update();
         }
+
+        
 
         //##########################################################################################################################
         //######################################## Exit application from menu or shortcut ##############################
@@ -576,6 +579,10 @@ namespace ScreenRecorder
             }       
         }
 
+        //##########################################################################################################################
+        //######################################## Part for filters by name, by size or by date ascending and descending ##############################
+
+
         private void filterCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string dir = "c:\\ScreenRecorder";
@@ -651,6 +658,27 @@ namespace ScreenRecorder
             
 
             
+        }
+
+        //##########################################################################################################################
+        //######################################## Part for the properties view ##############################
+
+
+        private void menuProperties_Click(object sender, RoutedEventArgs e)
+        {
+            openProperties();
+        }
+
+        private void onOpenProperties(object sender, HotkeyEventArgs e)
+        {
+            openProperties();
+        }
+
+        private void openProperties()
+        {
+            PropertyWindow propertyWindow = new PropertyWindow();
+            propertyWindow.Show();
+            this.Close();
         }
 
         

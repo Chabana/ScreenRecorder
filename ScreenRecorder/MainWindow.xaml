@@ -184,7 +184,7 @@
     </Window.Resources>
 
     <Grid Margin="10 10 0 0">
-       
+
         <Grid.RowDefinitions>
             <RowDefinition Height="20px" />
             <RowDefinition Height="auto" />
@@ -229,28 +229,28 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            
+
             <TabControl Grid.RowSpan="2">
                 <TabItem Header="Video">
                     <StackPanel Orientation="Vertical">
-                    <ToolBar>
-                        <Button Command="ApplicationCommands.Open">
-                            <Image Source="img/folder.png" />
-                        </Button>
-                        <Separator />
-                        <Button Command="MediaCommands.Play">
-                            <Image Source="img/Control_play_blue.png" />
-                        </Button>
-                        <Button Command="MediaCommands.Pause">
-                            <Image Source="img/Control_pause_blue.png" />
-                        </Button>
-                        <Button Command="MediaCommands.Stop">
-                            <Image Source="img/control_stop_blue.png" />
-                        </Button>
+                        <ToolBar>
+                            <Button Command="ApplicationCommands.Open">
+                                <Image Source="img/folder.png" />
+                            </Button>
+                            <Separator />
+                            <Button Command="MediaCommands.Play">
+                                <Image Source="img/Control_play_blue.png" />
+                            </Button>
+                            <Button Command="MediaCommands.Pause">
+                                <Image Source="img/Control_pause_blue.png" />
+                            </Button>
+                            <Button Command="MediaCommands.Stop">
+                                <Image Source="img/control_stop_blue.png" />
+                            </Button>
 
-                    </ToolBar>
+                        </ToolBar>
 
-                        
+
                         <StatusBar>
                             <StatusBar.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -277,9 +277,48 @@
                 </TabItem>
                 <TabItem Header="Image">
                     <Image x:Name="tabImage" VerticalAlignment="Center" Source="img/Control_pause_blue.png"></Image>
-                    </TabItem>
+                </TabItem>
+                <TabItem Header="Properties">
+                    <StackPanel Margin="10" Orientation="Vertical">
+                        <Label Content="Select properties for the application" FontSize="22" FontWeight="Bold"></Label>
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Margin="0,0,0,0" Width="450">
+                                <Label FontWeight="Bold">Image extension :</Label>
+                                <RadioButton GroupName="image">Bmp</RadioButton>
+                                <RadioButton GroupName="image">Emf</RadioButton>
+                                <RadioButton GroupName="image">Gif</RadioButton>
+                                <RadioButton GroupName="image">Jpeg</RadioButton>
+                                <RadioButton GroupName="image" IsChecked="True">Png</RadioButton>
+                                <RadioButton GroupName="image">Tiff</RadioButton>
+                                <RadioButton GroupName="image">Exif</RadioButton>
+                            </StackPanel>
+                            <StackPanel>
+                                <Label FontWeight="Bold">Video extension :</Label>
+                                <RadioButton GroupName="video" IsChecked="True">MPEG4</RadioButton>
+                                <RadioButton GroupName="video">WMV1</RadioButton>
+                                <RadioButton GroupName="video" >WMV2</RadioButton>
+                                <RadioButton GroupName="video" >MPEG2</RadioButton>
+                                <RadioButton GroupName="video" >FLV1</RadioButton>
+                                <RadioButton GroupName="video" >H263P</RadioButton>
+
+
+                            </StackPanel>
+
+                        </StackPanel>
+                        <Button x:Name="btnValidate" Content="Validate" Margin="496,50,135,200" RenderTransformOrigin="0.5,0.5">
+                            <Button.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="0.003"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Button.RenderTransform>
+                        </Button>
+                    </StackPanel>
+                </TabItem>
             </TabControl>
-            
+
         </Grid>
 
         <tb:TaskbarIcon x:Name="MyNotifyIcon"
@@ -296,6 +335,8 @@
                     <MenuItem x:Name="menuScreenshot" Header="Take Screenshot" Click="menuScreenshot_Click" InputGestureText="Ctrl+Alt+S" />
                     <MenuItem x:Name="menuCaptureVideo" Header="Start Video Capture" Click="menuCaptureVideo_Click" InputGestureText="Ctrl+Alt+V" />
                     <Separator />
+                    <MenuItem x:Name="menuProperties" Header="Properties" InputGestureText="Ctrl+Alt+P" Click="menuProperties_Click"/>
+                    <Separator />
                     <MenuItem Header="Quitter" Click="menuQuit_Click" InputGestureText="Ctrl+Alt+E"/>
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
@@ -304,7 +345,7 @@
 
     </Grid>
 
-    
+
 
 
 </Window>
