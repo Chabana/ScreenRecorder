@@ -1,24 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Windows.Data;
 using AForge.Video;
 using AForge.Video.FFMPEG;
-using AForge.Video.DirectShow;
 using Hardcodet.Wpf.TaskbarNotification;
 using Application = System.Windows.Application;
-using System.Security.Permissions;
-using System.Windows.Controls;
-using Image = System.Drawing.Image;
 
 namespace ScreenRecorder
 {
@@ -219,7 +212,7 @@ namespace ScreenRecorder
             
         }
 
-        private void dev_NewFrame(object sender, AForge.Video.NewFrameEventArgs eventArgs)
+        private void dev_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
             try
             {
@@ -229,7 +222,7 @@ namespace ScreenRecorder
                 string dirName = "c:\\ScreenRecorder";
                 string flName = "videoCapture" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".png";
                 flName = Path.Combine(dirName, flName);
-                img.Save(flName, System.Drawing.Imaging.ImageFormat.Png);
+                img.Save(flName, ImageFormat.Png);
             }
             catch (Exception e)
             {
@@ -323,27 +316,41 @@ namespace ScreenRecorder
 
             watcher.NotifyFilter = NotifyFilters.LastAccess |  NotifyFilters.FileName | NotifyFilters.DirectoryName;
 
-            watcher.Filter = "*.avi";
+            //watcher.Filter = "*.avi";
+
+            string[] extensions = { "*.jpg", "*.mp4", "*.wmv", "*.png", "*.avi", "*.bmp" };
+
+            List<FileSystemWatcher> watchersExtension = new List<FileSystemWatcher>();
+
+            foreach (String extension in extensions)
+            {
+                FileSystemWatcher w = new FileSystemWatcher();
+                w.Filter = extension;
+                w.Changed += new FileSystemEventHandler(fileSystemWatcher_Changed);
+                watchersExtension.Add(w);
+                
+                
+            }
 
             watcher.Created += new FileSystemEventHandler(fileSystemWatcher_Created);
-            watcher.Changed += new FileSystemEventHandler(fileSystemWatcher_Changed);
+            
             watcher.Deleted += new FileSystemEventHandler(fileSystemWatcher_Deleted);
             watcher.Renamed += new RenamedEventHandler(fileSystemWatcher_Renamed);
 
             watcher.EnableRaisingEvents = true;
         }
 
-        void fileSystemWatcher_Created(object sender, System.IO.FileSystemEventArgs e)
+        void fileSystemWatcher_Created(object sender, FileSystemEventArgs e)
         {
             DisplayFileSystemWatcherInfo(e.ChangeType, e.Name);
         }
 
-        void fileSystemWatcher_Changed(object sender, System.IO.FileSystemEventArgs e)
+        void fileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
         {
             DisplayFileSystemWatcherInfo(e.ChangeType, e.Name);
         }
 
-        void fileSystemWatcher_Deleted(object sender, System.IO.FileSystemEventArgs e)
+        void fileSystemWatcher_Deleted(object sender, FileSystemEventArgs e)
         {
             DisplayFileSystemWatcherInfo(e.ChangeType, e.Name);
         }
@@ -360,7 +367,7 @@ namespace ScreenRecorder
                 Dispatcher.BeginInvoke(new Action(() => { DeleteListLine(oldName); }));
                 Dispatcher.BeginInvoke(new Action(() => { AddListLine(name); }));
             }
-            else if (watcherChangeTypes == System.IO.WatcherChangeTypes.Deleted)
+            else if (watcherChangeTypes == WatcherChangeTypes.Deleted)
             {
                 Dispatcher.BeginInvoke(new Action(() => { DeleteListLine(name); }));
             }

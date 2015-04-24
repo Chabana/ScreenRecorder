@@ -235,6 +235,6 @@
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>
-        <Button x:Name="btnUpdate" Grid.ColumnSpan="3" Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="btnUpdate_Click_1" />
+        
     </Grid>
 </Window>
