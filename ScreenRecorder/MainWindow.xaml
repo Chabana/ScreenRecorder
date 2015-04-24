@@ -284,37 +284,22 @@
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Margin="0,0,0,0" Width="450">
                                 <Label FontWeight="Bold">Image extension :</Label>
-                                <RadioButton GroupName="image">Bmp</RadioButton>
-                                <RadioButton GroupName="image">Emf</RadioButton>
-                                <RadioButton GroupName="image">Gif</RadioButton>
-                                <RadioButton GroupName="image">Jpeg</RadioButton>
-                                <RadioButton GroupName="image" IsChecked="True">Png</RadioButton>
-                                <RadioButton GroupName="image">Tiff</RadioButton>
-                                <RadioButton GroupName="image">Exif</RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButton_Checked" >Bmp</RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButton_Checked">Emf</RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButton_Checked">Gif</RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButton_Checked">Jpeg</RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButton_Checked">Png</RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButton_Checked">Tiff</RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButton_Checked">Exif</RadioButton>
                             </StackPanel>
                             <StackPanel>
                                 <Label FontWeight="Bold">Video extension :</Label>
-                                <RadioButton GroupName="video" IsChecked="True">MPEG4</RadioButton>
-                                <RadioButton GroupName="video">WMV1</RadioButton>
-                                <RadioButton GroupName="video" >WMV2</RadioButton>
-                                <RadioButton GroupName="video" >MPEG2</RadioButton>
-                                <RadioButton GroupName="video" >FLV1</RadioButton>
-                                <RadioButton GroupName="video" >H263P</RadioButton>
-
-
+                                <RadioButton GroupName="video" Checked="RadioButton_Checked_1" >MPEG4</RadioButton>
+                                <RadioButton GroupName="video" Checked="RadioButton_Checked_1">WMV</RadioButton>
                             </StackPanel>
 
                         </StackPanel>
-                        <Button x:Name="btnValidate" Content="Validate" Margin="496,50,135,200" RenderTransformOrigin="0.5,0.5">
-                            <Button.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform/>
-                                    <SkewTransform/>
-                                    <RotateTransform Angle="0.003"/>
-                                    <TranslateTransform/>
-                                </TransformGroup>
-                            </Button.RenderTransform>
-                        </Button>
+                        
                     </StackPanel>
                 </TabItem>
             </TabControl>
@@ -334,8 +319,6 @@
                     <Separator />
                     <MenuItem x:Name="menuScreenshot" Header="Take Screenshot" Click="menuScreenshot_Click" InputGestureText="Ctrl+Alt+S" />
                     <MenuItem x:Name="menuCaptureVideo" Header="Start Video Capture" Click="menuCaptureVideo_Click" InputGestureText="Ctrl+Alt+V" />
-                    <Separator />
-                    <MenuItem x:Name="menuProperties" Header="Properties" InputGestureText="Ctrl+Alt+P" Click="menuProperties_Click"/>
                     <Separator />
                     <MenuItem Header="Quitter" Click="menuQuit_Click" InputGestureText="Ctrl+Alt+E"/>
                 </ContextMenu>

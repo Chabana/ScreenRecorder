@@ -62,9 +62,7 @@ C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenR
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\bin\Debug\AssimpNet.xml
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\bin\Debug\SharpDX.DXGI.xml
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.csprojResolveAssemblyReference.cache
-C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\obj\Debug\PropertyWindow.baml
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\obj\Debug\MainWindow.g.cs
-C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\obj\Debug\PropertyWindow.g.cs
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\obj\Debug\App.g.cs
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder_Content.g.cs
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\obj\Debug\GeneratedInternalTypeHelper.g.cs

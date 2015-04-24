@@ -50,7 +50,7 @@ namespace ScreenRecorder
                 {
                     
                     this._files = new ObservableCollection<FileInfo>();
-                    string[] extensions = { "*.jpg", "*.mp4", "*.wmv", "*.png", "*.avi", "*.bmp" };
+                    string[] extensions = { "*.jpeg", "*.mp4", "*.wmv", "*.png", "*.avi", "*.bmp", "*.emf", "*.gif", "*.tiff", "*.exif" };
 
                     foreach (String extension in extensions)
                     {

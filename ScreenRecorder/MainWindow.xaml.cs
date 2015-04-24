@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -50,8 +51,12 @@ namespace ScreenRecorder
         private string snapDir = "";
         public int waitLimit = 4000; //ms
         private List<string> listFilters;
-        readonly string[] extensionsVideos = { ".mp4", ".wmv", ".avi" };
-        readonly string[] extensionsPictures = { ".jpg", ".png", ".bmp" };
+        private readonly string[] extensionsVideos = { ".mp4", ".wmv", ".avi" };
+        private readonly string[] extensionsPictures = { ".jpeg", ".png", ".bmp", ".emf", ".gif", ".tiff", ".exif" };
+        private ImageFormat imageFormat = ImageFormat.Png;
+        private string imageExtension = ".png";
+        private VideoCodec videoFormat = VideoCodec.MPEG4;
+        private string videoExtension = ".mp4";
 
         //##########################################################################################################################
         //######################################## Constructor -> Initialize the application ##############################
@@ -65,7 +70,6 @@ namespace ScreenRecorder
             HotkeyManager.Current.AddOrReplace("VideoCapture", Key.V, ModifierKeys.Control | ModifierKeys.Alt, onStartVideocapture);
             HotkeyManager.Current.AddOrReplace("ExitApplication", Key.E, ModifierKeys.Control | ModifierKeys.Alt, onExitApplication);
             HotkeyManager.Current.AddOrReplace("OpenApplication", Key.O, ModifierKeys.Control | ModifierKeys.Alt, onOpenApplication);
-            HotkeyManager.Current.AddOrReplace("OpenProperties", Key.P, ModifierKeys.Control | ModifierKeys.Alt, onOpenProperties);
 
             listFilters = new List<string>();
             listFilters.Add("By date descending");
@@ -163,11 +167,11 @@ namespace ScreenRecorder
                     try
                     {
                         //Change FPS and the codec for video
-                        writer.Open(fullName + ".avi",
+                        writer.Open(fullName + videoExtension,
                             width,
                             height,
                             20,
-                            VideoCodec.MPEG4);
+                            videoFormat);
                     }
                     catch (Exception exception)
                     {
@@ -311,9 +315,9 @@ namespace ScreenRecorder
                 ((ScreenCaptureStream)sender).SignalToStop();
                 Image img = (Image)bitmap;
                 string dirName = "c:\\ScreenRecorder";
-                string flName = "videoCapture" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".png";
+                string flName = "Photo" + DateTime.Now.ToString("yyyyMMddhhmmss") + imageExtension;
                 flName = Path.Combine(dirName, flName);
-                img.Save(flName, ImageFormat.Png);
+                img.Save(flName, imageFormat);
             }
             catch (Exception e)
             {
@@ -585,6 +589,15 @@ namespace ScreenRecorder
 
         private void filterCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            Folder folder = new Folder();
+            var observableCollection = folder.Files;
+
+            if (observableCollection == null) throw new ArgumentNullException(@"observableCollection");
+            Console.WriteLine(observableCollection.Count);
+            foreach (var fileInfo in observableCollection)
+            {
+                DeleteListLine(fileInfo.Name);
+            }
             string dir = "c:\\ScreenRecorder";
             string[] fns = Directory.GetFiles(dir);
 
@@ -595,19 +608,10 @@ namespace ScreenRecorder
             var sortByDateAscending = from fn in fns orderby new FileInfo(fn).LastWriteTime ascending select fn;
             var sortByNameAscending = from fn in fns orderby new FileInfo(fn).Name ascending select fn;
 
-            Folder folder = new Folder();
-            var observableCollection = folder.Files;
-
-            if (observableCollection == null) throw new ArgumentNullException(@"observableCollection");
-            Console.WriteLine(observableCollection.Count);
-
-            foreach (var fileInfo in observableCollection)
-            {
-                DeleteListLine(fileInfo.Name);
-            }
 
             if (filterCombobox.SelectedItem as string == "By size descending")
             {
+                
                 foreach (string n in sortBySizeDescending)
                 {
                     Console.WriteLine(Path.GetFileName(n));
@@ -616,6 +620,7 @@ namespace ScreenRecorder
             }
             else if (filterCombobox.SelectedItem as string == "By name descending")
             {
+                
                 foreach (string n in sortByNameDescending)
                 {
                     Console.WriteLine(Path.GetFileName(n));
@@ -624,6 +629,7 @@ namespace ScreenRecorder
             }
             else if (filterCombobox.SelectedItem as string == "By date descending")
             {
+                
                 foreach (string n in sortByDateDescending)
                 {
                     Console.WriteLine(Path.GetFileName(n));
@@ -632,6 +638,7 @@ namespace ScreenRecorder
             }
             else if (filterCombobox.SelectedItem as string == "By size ascending")
             {
+                
                 foreach (string n in sortBySizeAscending)
                 {
                     Console.WriteLine(Path.GetFileName(n));
@@ -640,6 +647,7 @@ namespace ScreenRecorder
             }
             else if (filterCombobox.SelectedItem as string == "By name ascending")
             {
+                
                 foreach (string n in sortByNameAscending)
                 {
                     Console.WriteLine(Path.GetFileName(n));
@@ -648,6 +656,7 @@ namespace ScreenRecorder
             }
             else if (filterCombobox.SelectedItem as string == "By date ascending")
             {
+                
                 foreach (string n in sortByDateAscending)
                 {
                     Console.WriteLine(Path.GetFileName(n));
@@ -660,27 +669,82 @@ namespace ScreenRecorder
             
         }
 
-        //##########################################################################################################################
-        //######################################## Part for the properties view ##############################
-
-
-        private void menuProperties_Click(object sender, RoutedEventArgs e)
-        {
-            openProperties();
-        }
-
-        private void onOpenProperties(object sender, HotkeyEventArgs e)
-        {
-            openProperties();
-        }
-
-        private void openProperties()
-        {
-            PropertyWindow propertyWindow = new PropertyWindow();
-            propertyWindow.Show();
-            this.Close();
-        }
 
         
+
+        
+
+        //##########################################################################################################################
+        //######################################## Part for the properties tab ##############################
+
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            var button = sender as System.Windows.Controls.RadioButton;
+            if (button == null)
+                return;
+            if (button.IsChecked != null && button.IsChecked.Value)
+                Console.WriteLine(button.Content.ToString());
+
+
+            switch (button.Content.ToString())
+            { 
+                case "Bmp":
+                    imageFormat = ImageFormat.Bmp;
+                    imageExtension = ".bmp";
+                    break;
+                case "Emf":
+                    imageFormat = ImageFormat.Emf;
+                    imageExtension = ".emf";
+                    break;
+                case "Gif":
+                    imageFormat = ImageFormat.Gif;
+                    imageExtension = ".gif";
+                    break;
+                case "Jpeg":
+                    imageFormat = ImageFormat.Jpeg;
+                    imageExtension = ".jpeg";
+                    break;
+                case "Png":
+                    imageFormat = ImageFormat.Png;
+                    imageExtension = ".png";
+                    break;
+                case "Tiff":
+                    imageFormat = ImageFormat.Png;
+                    imageExtension = ".tiff";
+                    break;
+                case "Exif":
+                    imageFormat = ImageFormat.Png;
+                    imageExtension = ".exif";
+                    break;
+                default:
+                    Console.WriteLine("Unexpected error my friend !");
+                    break;
+            }
+        }
+
+        private void RadioButton_Checked_1(object sender, RoutedEventArgs e)
+        {
+            var button = sender as System.Windows.Controls.RadioButton;
+            if (button == null)
+                return;
+            if (button.IsChecked != null && button.IsChecked.Value)
+                Console.WriteLine(button.Content.ToString());
+
+            switch (button.Content.ToString())
+            {
+                case "MPEG4":
+                    videoFormat = VideoCodec.MPEG4;
+                    videoExtension = ".mp4";
+                    break;
+                case "WMV":
+                    videoFormat = VideoCodec.WMV2;
+                    videoExtension = ".wmv";
+                    break;
+                default:
+                    Console.WriteLine("Unexpected error my friend !");
+                    break;
+            }
+        }
     }
 }
