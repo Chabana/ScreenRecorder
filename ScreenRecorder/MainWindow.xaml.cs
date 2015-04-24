@@ -55,7 +55,7 @@ namespace ScreenRecorder
         {
             InitializeComponent();
 
-            HotkeyManager.Current.AddOrReplace("Increment", Key.A, ModifierKeys.Control | ModifierKeys.Alt, OnIncrement);
+            HotkeyManager.Current.AddOrReplace("Increment", Key.A, ModifierKeys.Control | ModifierKeys.Alt, onStartScreenshots);
 
             MouseDown += MainWindow_MouseDown;
 
@@ -83,14 +83,29 @@ namespace ScreenRecorder
             Update();
         }
 
-        private void OnIncrement(object sender, HotkeyEventArgs e)
+        private void onStartScreenshots(object sender, HotkeyEventArgs e)
         {
-            test();
+            startScreenshots();
         }
 
-        private void test()
+        private void startScreenshots()
         {
-            Console.WriteLine("key pressed");
+            Rectangle screenArea = Rectangle.Empty;
+
+            foreach (Screen screen in Screen.AllScreens)
+            {
+                screenArea = Rectangle.Union(screenArea, screen.Bounds);
+            }
+
+            ScreenCaptureStream stream = new ScreenCaptureStream(screenArea);
+
+            Thread.Sleep(1800);
+
+            stream.NewFrame += new NewFrameEventHandler(dev_NewFrame);
+
+            stream.Start();
+
+            Console.WriteLine("Screenshot taken");
         }
 
         /// <summary>
@@ -213,22 +228,7 @@ namespace ScreenRecorder
         private void menuScreenshot_Click(object sender, RoutedEventArgs e)
         {
 
-            Rectangle screenArea = Rectangle.Empty;
-
-            foreach (Screen screen in Screen.AllScreens)
-            {
-                screenArea = Rectangle.Union(screenArea, screen.Bounds);
-            }
-
-            ScreenCaptureStream stream = new ScreenCaptureStream(screenArea);
-
-            Thread.Sleep(1800);
-
-            stream.NewFrame += new NewFrameEventHandler(dev_NewFrame);
-
-            stream.Start();
-
-            Console.WriteLine("Screenshot taken");
+            startScreenshots();
 
         }
 
