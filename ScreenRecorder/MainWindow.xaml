@@ -15,6 +15,9 @@
     ResizeMode="CanResizeWithGrip" StateChanged="Window_StateChanged" >
     <!-- PreviewKeyDown="MainWindow_OnPreviewKeyDown">-->
 
+    
+
+
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Open" CanExecute="Open_CanExecute" Executed="Open_Executed" />
         <CommandBinding Command="MediaCommands.Play" CanExecute="Play_CanExecute" Executed="Play_Executed" />
@@ -294,12 +297,17 @@
                     <MenuItem Header="_Ouvrir" Click="menuOpen_Click"/>
                     <Separator />
                     <MenuItem x:Name="menuScreenshot" Header="Take Screenshot" Click="menuScreenshot_Click" />
-                    <MenuItem x:Name="menuCaptureVideo" Header="Start Video Capture" Click="menuCaptureVideo_Click"/>
+                    <MenuItem x:Name="menuCaptureVideo" Header="Start Video Capture" Click="menuCaptureVideo_Click" />
                     <Separator />
                     <MenuItem Header="Quitter" Click="menuQuit_Click"/>
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>
 
+
     </Grid>
+
+    
+
+
 </Window>

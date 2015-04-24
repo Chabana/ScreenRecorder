@@ -16,8 +16,10 @@ using System.Windows.Threading;
 using AForge.Video;
 using AForge.Video.FFMPEG;
 using Hardcodet.Wpf.TaskbarNotification;
+using NHotkey;
 using Application = System.Windows.Application;
 using Image = System.Drawing.Image;
+using NHotkey.Wpf;
 
 namespace ScreenRecorder
 {
@@ -53,6 +55,8 @@ namespace ScreenRecorder
         {
             InitializeComponent();
 
+            HotkeyManager.Current.AddOrReplace("Increment", Key.A, ModifierKeys.Control | ModifierKeys.Alt, OnIncrement);
+
             MouseDown += MainWindow_MouseDown;
 
             Folder folder = new Folder();
@@ -77,6 +81,16 @@ namespace ScreenRecorder
             writer = new VideoFileWriter();
 
             Update();
+        }
+
+        private void OnIncrement(object sender, HotkeyEventArgs e)
+        {
+            test();
+        }
+
+        private void test()
+        {
+            Console.WriteLine("key pressed");
         }
 
         /// <summary>
@@ -198,6 +212,7 @@ namespace ScreenRecorder
         /// <param name="e"></param>
         private void menuScreenshot_Click(object sender, RoutedEventArgs e)
         {
+
             Rectangle screenArea = Rectangle.Empty;
 
             foreach (Screen screen in Screen.AllScreens)
@@ -206,7 +221,7 @@ namespace ScreenRecorder
             }
 
             ScreenCaptureStream stream = new ScreenCaptureStream(screenArea);
-            
+
             Thread.Sleep(1800);
 
             stream.NewFrame += new NewFrameEventHandler(dev_NewFrame);
@@ -214,8 +229,7 @@ namespace ScreenRecorder
             stream.Start();
 
             Console.WriteLine("Screenshot taken");
-           
-            
+
         }
 
         private void dev_NewFrame(object sender, NewFrameEventArgs eventArgs)
@@ -507,6 +521,21 @@ namespace ScreenRecorder
                 }
                 
             }       
+        }
+
+        private void OpenCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Open();//Implementation of open file
+        }
+
+        private void Open()
+        {
+            
+        }
+
+        private void SaveAsCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            //SaveAs();//Implementation of saveAs
         }
 
     }

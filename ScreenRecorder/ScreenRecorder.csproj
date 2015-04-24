@@ -69,6 +69,12 @@
     <Reference Include="Hardcodet.Wpf.TaskbarNotification">
       <HintPath>..\packages\Hardcodet.NotifyIcon.Wpf.1.0.5\lib\net45\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
     </Reference>
+    <Reference Include="NHotkey">
+      <HintPath>..\packages\NHotkey.1.2.1\lib\net20\NHotkey.dll</HintPath>
+    </Reference>
+    <Reference Include="NHotkey.Wpf">
+      <HintPath>..\packages\NHotkey.Wpf.1.2.1\lib\net35\NHotkey.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="PresentationFramework.AeroLite" />
