@@ -184,6 +184,7 @@
     </Window.Resources>
 
     <Grid Margin="10 10 0 0">
+       
         <Grid.RowDefinitions>
             <RowDefinition Height="20px" />
             <RowDefinition Height="auto" />
@@ -194,7 +195,7 @@
             <ColumnDefinition Width="auto" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-
+        <ComboBox x:Name="filterCombobox" SelectionChanged="filterCombobox_SelectionChanged"></ComboBox>
 
         <Grid Grid.Column="2" >
             <Button x:Name="btnQuit" Content="-" Margin="0,0,9,0px" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="40" Background="#FFB64040" BorderBrush="#FF333331" Foreground="White" Click="btnMinimize_Click"/>

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -48,6 +49,9 @@ namespace ScreenRecorder
         private string snapShot = "";
         private string snapDir = "";
         public int waitLimit = 4000; //ms
+        private List<string> listFilters;
+        readonly string[] extensionsVideos = { ".mp4", ".wmv", ".avi" };
+        readonly string[] extensionsPictures = { ".jpg", ".png", ".bmp" };
 
         //##########################################################################################################################
         //######################################## Constructor -> Initialize the application ##############################
@@ -62,7 +66,17 @@ namespace ScreenRecorder
             HotkeyManager.Current.AddOrReplace("ExitApplication", Key.E, ModifierKeys.Control | ModifierKeys.Alt, onExitApplication);
             HotkeyManager.Current.AddOrReplace("OpenApplication", Key.O, ModifierKeys.Control | ModifierKeys.Alt, onOpenApplication);
 
-            
+            listFilters = new List<string>();
+            listFilters.Add("By date descending");
+            listFilters.Add("By name descending");
+            listFilters.Add("By size descending");
+            listFilters.Add("By date ascending");
+            listFilters.Add("By name ascending");
+            listFilters.Add("By size ascending");
+
+            this.filterCombobox.IsEditable = true;
+            this.filterCombobox.IsTextSearchEnabled = true;
+            this.filterCombobox.ItemsSource = listFilters;
 
 
             MouseDown += MainWindow_MouseDown;
@@ -77,7 +91,6 @@ namespace ScreenRecorder
             {
                 AddListLine(fileInfo.Name);
             }
-
 
             //Minimize the window and don't put in the taskbar
             WindowState = WindowState.Minimized;
@@ -270,6 +283,7 @@ namespace ScreenRecorder
             stream.NewFrame += new NewFrameEventHandler(dev_NewFrame);
 
             stream.Start();
+            filterCombobox_SelectionChanged(filterCombobox, null);
 
             Console.WriteLine("Screenshot taken");
         }
@@ -387,8 +401,6 @@ namespace ScreenRecorder
 
             watcher.NotifyFilter = NotifyFilters.LastAccess |  NotifyFilters.FileName | NotifyFilters.DirectoryName;
 
-            //watcher.Filter = "*.avi";
-
             string[] extensions = { "*.jpg", "*.mp4", "*.wmv", "*.png", "*.avi", "*.bmp" };
 
             List<FileSystemWatcher> watchersExtension = new List<FileSystemWatcher>();
@@ -411,6 +423,7 @@ namespace ScreenRecorder
 
         void fileSystemWatcher_Created(object sender, FileSystemEventArgs e)
         {
+            
             DisplayFileSystemWatcherInfo(e.ChangeType, e.Name);
         }
 
@@ -536,8 +549,7 @@ namespace ScreenRecorder
 
         private void TrvStructure_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            string[] extensionsVideos = {".mp4", ".wmv", ".avi"};
-            string[] extensionsPictures = { ".jpg", ".png", ".bmp" };
+            
             if (!tvi.IsSelected)
             {
                 foreach (string extension in extensionsVideos)
@@ -562,6 +574,83 @@ namespace ScreenRecorder
                 }
                 
             }       
+        }
+
+        private void filterCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string dir = "c:\\ScreenRecorder";
+            string[] fns = Directory.GetFiles(dir);
+
+            var sortBySizeDescending = from fn in fns orderby new FileInfo(fn).Length descending select fn;
+            var sortByDateDescending = from fn in fns orderby new FileInfo(fn).LastWriteTime descending select fn;
+            var sortByNameDescending = from fn in fns orderby new FileInfo(fn).Name descending select fn;
+            var sortBySizeAscending = from fn in fns orderby new FileInfo(fn).Length ascending select fn;
+            var sortByDateAscending = from fn in fns orderby new FileInfo(fn).LastWriteTime ascending select fn;
+            var sortByNameAscending = from fn in fns orderby new FileInfo(fn).Name ascending select fn;
+
+            Folder folder = new Folder();
+            var observableCollection = folder.Files;
+
+            if (observableCollection == null) throw new ArgumentNullException(@"observableCollection");
+            Console.WriteLine(observableCollection.Count);
+
+            foreach (var fileInfo in observableCollection)
+            {
+                DeleteListLine(fileInfo.Name);
+            }
+
+            if (filterCombobox.SelectedItem as string == "By size descending")
+            {
+                foreach (string n in sortBySizeDescending)
+                {
+                    Console.WriteLine(Path.GetFileName(n));
+                    AddListLine(Path.GetFileName(n));
+                }
+            }
+            else if (filterCombobox.SelectedItem as string == "By name descending")
+            {
+                foreach (string n in sortByNameDescending)
+                {
+                    Console.WriteLine(Path.GetFileName(n));
+                    AddListLine(Path.GetFileName(n));
+                }
+            }
+            else if (filterCombobox.SelectedItem as string == "By date descending")
+            {
+                foreach (string n in sortByDateDescending)
+                {
+                    Console.WriteLine(Path.GetFileName(n));
+                    AddListLine(Path.GetFileName(n));
+                }
+            }
+            else if (filterCombobox.SelectedItem as string == "By size ascending")
+            {
+                foreach (string n in sortBySizeAscending)
+                {
+                    Console.WriteLine(Path.GetFileName(n));
+                    AddListLine(Path.GetFileName(n));
+                }
+            }
+            else if (filterCombobox.SelectedItem as string == "By name ascending")
+            {
+                foreach (string n in sortByNameAscending)
+                {
+                    Console.WriteLine(Path.GetFileName(n));
+                    AddListLine(Path.GetFileName(n));
+                }
+            }
+            else if (filterCombobox.SelectedItem as string == "By date ascending")
+            {
+                foreach (string n in sortByDateAscending)
+                {
+                    Console.WriteLine(Path.GetFileName(n));
+                    AddListLine(Path.GetFileName(n));
+                }
+            }
+
+            
+
+            
         }
 
         
