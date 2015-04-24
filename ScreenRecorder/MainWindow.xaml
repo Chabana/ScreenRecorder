@@ -276,7 +276,7 @@
                     </StackPanel>
                 </TabItem>
                 <TabItem Header="Image">
-                    <Image VerticalAlignment="Center" Source="img/Control_pause_blue.png"></Image>
+                    <Image x:Name="tabImage" VerticalAlignment="Center" Source="img/Control_pause_blue.png"></Image>
                     </TabItem>
             </TabControl>
             

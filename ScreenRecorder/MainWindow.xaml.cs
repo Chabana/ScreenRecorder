@@ -490,6 +490,7 @@ namespace ScreenRecorder
                     if (e.NewValue.ToString().Contains(extension))
                     {
                         DispatcherTimer timerMedia = new DispatcherTimer();
+                        mePlayer.Stretch = Stretch.Fill;
                         mePlayer.Source = new Uri("c:\\ScreenRecorder\\" + e.NewValue.ToString());
                         timerMedia.Interval = TimeSpan.FromSeconds(1);
                         timerMedia.Tick += timer_Tick;
@@ -501,16 +502,7 @@ namespace ScreenRecorder
                 {
                     if (e.NewValue.ToString().Contains(extension))
                     {
-                        PictureBox pbx1 = new AForge.Controls.PictureBox();
-
-                        
-
-                        pbx1.Image = Image.FromFile("c:\\ScreenRecorder\\" + e.NewValue.ToString());
-                        pbx1.SizeMode = PictureBoxSizeMode.StretchImage;
-
-                        pbx1.Show();
-
-                        Console.WriteLine("PICTEUUUUUURE");
+                        tabImage.Source = new BitmapImage(new Uri("c:\\ScreenRecorder\\" + e.NewValue.ToString(), UriKind.RelativeOrAbsolute));
                     }
                 }
                 
