@@ -4,7 +4,7 @@
         xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" 
         xmlns:cbox="clr-namespace:ScreenRecorder"
 	    x:Class="ScreenRecorder.MainWindow" 
-        Title="Markdown" 
+        Title="ScreenRecorder" 
         Height="600"
 	    Width="1000" 
         Background="#FFFF" 
@@ -12,11 +12,7 @@
         Foreground="#FFFFFFFF" 
         BorderThickness="0 0px 0 0"  WindowStyle="None"
     AllowsTransparency="True"
-    ResizeMode="CanResizeWithGrip" StateChanged="Window_StateChanged" >
-    <!-- PreviewKeyDown="MainWindow_OnPreviewKeyDown">-->
-
-    
-
+    ResizeMode="CanResizeWithGrip">
 
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Open" CanExecute="Open_CanExecute" Executed="Open_Executed" />

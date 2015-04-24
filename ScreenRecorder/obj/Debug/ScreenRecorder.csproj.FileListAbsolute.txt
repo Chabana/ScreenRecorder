@@ -38,6 +38,8 @@ C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenR
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\bin\Debug\AForge.Video.FFMPEG.dll
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\bin\Debug\AForge.Vision.dll
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\bin\Debug\Hardcodet.Wpf.TaskbarNotification.dll
+C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\bin\Debug\NHotkey.dll
+C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\bin\Debug\NHotkey.Wpf.dll
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\bin\Debug\SharpDX.D3DCompiler.dll
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\bin\Debug\SharpDX.Direct2D1.dll
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\bin\Debug\SharpDX.Toolkit.Compiler.dll
@@ -71,6 +73,3 @@ C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenR
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.Properties.Resources.resources
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.csproj.GenerateResource.Cache
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.exe
-C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.csprojResolveAssemblyReference.cache
-C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\bin\Debug\NHotkey.dll
-C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenRecorder\ScreenRecorder\bin\Debug\NHotkey.Wpf.dll
