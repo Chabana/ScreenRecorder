@@ -253,8 +253,6 @@ namespace ScreenRecorder
             try
             {
                 _rec = false;
-
-
                 Console.WriteLine(@"FILE SAVED !!!!");
             }
             catch (Exception exception)
@@ -327,10 +325,7 @@ namespace ScreenRecorder
             {
                 Console.WriteLine(e.Message);
             }
-
-
         }
-
 
         //##########################################################################################################################
         //######################################## Start open application from menu or shortcut ##############################
@@ -412,7 +407,7 @@ namespace ScreenRecorder
 
             watcher.NotifyFilter = NotifyFilters.LastAccess |  NotifyFilters.FileName | NotifyFilters.DirectoryName;
 
-            string[] extensions = { "*.jpg", "*.mp4", "*.wmv", "*.png", "*.avi", "*.bmp" };
+            string[] extensions = { "*.jpg", "*.mp4", "*.wmv", "*.png", "*.tiff", "*.jpeg", "*.bmp", ".mpeg" };
 
             List<FileSystemWatcher> watchersExtension = new List<FileSystemWatcher>();
 

@@ -310,12 +310,12 @@
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Margin="0,0,0,0" Width="450">
                                 <Label FontWeight="Bold">Frame rate :</Label>
-                                <RadioButton GroupName="image" Checked="RadioButtonFrameRate" Content="10"></RadioButton>
-                                <RadioButton GroupName="image" Checked="RadioButtonFrameRate" Content="15"></RadioButton>
-                                <RadioButton GroupName="image" Checked="RadioButtonFrameRate" Content="20"></RadioButton>
-                                <RadioButton GroupName="image" Checked="RadioButtonFrameRate" Content="25" IsChecked="True"></RadioButton>
-                                <RadioButton GroupName="image" Checked="RadioButtonFrameRate" Content="48"></RadioButton>
-                                <RadioButton GroupName="image" Checked="RadioButtonFrameRate" Content="60"></RadioButton>
+                                <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="10"></RadioButton>
+                                <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="15"></RadioButton>
+                                <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="20"></RadioButton>
+                                <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="25" IsChecked="True"></RadioButton>
+                                <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="48"></RadioButton>
+                                <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="60"></RadioButton>
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
