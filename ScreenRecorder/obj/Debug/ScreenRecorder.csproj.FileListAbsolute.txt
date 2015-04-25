@@ -153,3 +153,5 @@ C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorderFinal\Sc
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorderFinal\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.csproj.GenerateResource.Cache
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorderFinal\ScreenRecorder\ScreenRecorder\obj\Debug\GeneratedInternalTypeHelper.g.cs
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorderFinal\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder_MarkupCompile.lref
+C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorderFinal\ScreenRecorder\ScreenRecorder\obj\Debug\EmailForm.baml
+C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorderFinal\ScreenRecorder\ScreenRecorder\obj\Debug\EmailForm.g.cs

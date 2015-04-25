@@ -1,0 +1,29 @@
+﻿<Window x:Class="ScreenRecorder.EmailForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="EmailForm" Height="375.309" Width="327.16" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <Label x:Name="labelTitle" FontSize="15" FontWeight="Bold">Enter Gmail informations to send e-mail</Label>
+            <Label x:Name="lblEmailSucceed" Foreground="Green" BorderThickness="0,10,0,0">Your E-mail has been sent !</Label>
+            <StackPanel Orientation="Horizontal">
+                <Label x:Name="labelYourEmail" Margin="0,30,0,0">Your E-mail :</Label>
+                <TextBox x:Name="txtYourEmail" ToolTip="Your E-mail" Width="224" Margin="0,30,0,0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label x:Name="labelYourPassword" Margin="0,30,0,0">Your Password :</Label>
+                <PasswordBox x:Name="passwordBoxYourPassword" ToolTip="Your Password" Width="206" Margin="0,30,0,0"></PasswordBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label x:Name="labelDestinationEmail" Margin="0,30,0,0">Destination E-mail :</Label>
+                <TextBox x:Name="txtEmailDestination" ToolTip="Email Destination" Width="185" Margin="0,30,0,0"></TextBox>
+            </StackPanel>
+            <StackPanel Margin="0,20,0,0">
+                <Label x:Name="lblErrorYourEmail" FontWeight="Bold" Foreground="Red">Pattern for your e-mail : yourEmail@gmail.com</Label>
+                <Label x:Name="lblErrorYourPassword" FontWeight="Bold" Foreground="Red">Verify if your password is correct</Label>
+                <Label x:Name="lblErrorEmailDestination" FontWeight="Bold" Foreground="Red">Pattern for e-mail destination : destination@gmail.com</Label>
+            </StackPanel>
+            <Button x:Name="btnSendEmail" Content="Send" Margin="126,11,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="68" Click="btnSendEmail_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

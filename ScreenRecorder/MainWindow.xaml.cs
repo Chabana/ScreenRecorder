@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,6 +24,7 @@ using NHotkey.Wpf;
 using Application = System.Windows.Application;
 using Image = System.Drawing.Image;
 using RadioButton = System.Windows.Controls.RadioButton;
+
 
 namespace ScreenRecorder
 {
@@ -55,6 +57,8 @@ namespace ScreenRecorder
         private string _imageExtension = ".png";
         private VideoCodec _videoFormat = VideoCodec.MPEG4;
         private string _videoExtension = ".mp4";
+
+        private string pictureName = "";
 
         //##########################################################################################################################
         //######################################## Constructor -> Initialize the application ##############################
@@ -114,6 +118,8 @@ namespace ScreenRecorder
             ShowStandardBalloon(title, text);
 
             _writer = new VideoFileWriter();
+
+            this.btnSendImageEmail.IsEnabled = false;
 
             Update();
         }
@@ -580,6 +586,9 @@ namespace ScreenRecorder
                     Tabcontroler.SelectedIndex = 1;
 
                     var fileName = "c:\\ScreenRecorder\\" + e.NewValue;
+                    pictureName = fileName;
+
+                    this.btnSendImageEmail.IsEnabled = true;
 
                     BitmapSource img = BitmapFrame.Create(new Uri(fileName, UriKind.RelativeOrAbsolute));
 
@@ -784,5 +793,17 @@ namespace ScreenRecorder
                     break;
             }
         }
+
+        //###################################################################################################
+        //######################################## Part for sending email ##############################
+
+        private void btnSendImageEmail_Click(object sender, RoutedEventArgs e)
+        {
+            EmailForm emailForm = new EmailForm(pictureName);
+            emailForm.Show();
+
+        }
+
+        
     }
 }

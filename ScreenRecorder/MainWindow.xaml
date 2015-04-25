@@ -245,7 +245,9 @@
                 
                 <TabItem Header="Image">
                     <StackPanel>
-                        <TextBlock FontSize="20px" Margin="0px 10px 0px 0px">File informations</TextBlock>
+                        <TextBlock FontSize="20px" Margin="0px 10px 0px 0px"><Run Text="File informations "/><InlineUIContainer>
+                    			<Button x:Name="btnSendImageEmail" Content="Send Image by e-mail" Margin="315,0,0,0" Click="btnSendImageEmail_Click"/>
+                    		</InlineUIContainer></TextBlock>
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="20px" />
@@ -314,6 +316,7 @@
                         </StackPanel>
                     </StackPanel>
                 </TabItem>
+                
             </TabControl>
 
         </Grid>
