@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -572,7 +575,6 @@ namespace ScreenRecorder
                 {
                     Tabcontroler.SelectedItem = 0;
                     Tabcontroler.SelectedIndex = 0;
-                    Console.WriteLine("YOLO 0");
                     DispatcherTimer timerMedia = new DispatcherTimer();
                     MePlayer.Stretch = Stretch.Fill;
                     MePlayer.Source = new Uri("c:\\ScreenRecorder\\" + e.NewValue);
@@ -588,8 +590,25 @@ namespace ScreenRecorder
                 {
                     Tabcontroler.SelectedItem = 1;
                     Tabcontroler.SelectedIndex = 1;
-                    Console.WriteLine("YOLO 1");
-                    TabImage.Source = new BitmapImage(new Uri("c:\\ScreenRecorder\\" + e.NewValue, UriKind.RelativeOrAbsolute));
+
+                    var fileName = "c:\\ScreenRecorder\\" + e.NewValue;
+
+                    BitmapSource img = BitmapFrame.Create(new Uri(fileName, UriKind.RelativeOrAbsolute));
+
+                    BitmapMetadata mdata = (BitmapMetadata)img.Metadata;
+                    
+                    DateTime fileCreatedDate = File.GetCreationTime(fileName);
+
+                    if (mdata != null)
+                    {
+                        ImageFilename.Text = Path.GetFileName(fileName);
+                        ImageHeight.Text = img.PixelHeight.ToString();
+                        ImageWidth.Text = img.PixelWidth.ToString();
+                        ImageExtension.Text = mdata.Format;
+                        ImageCreated.Text = fileCreatedDate.ToString(CultureInfo.CurrentCulture);
+                    }
+
+                    TabImage.Source = new BitmapImage(new Uri(fileName, UriKind.RelativeOrAbsolute));
                 }
             }
         }

@@ -32,9 +32,6 @@
             <Style.Setters>
                 <Setter Property="Background" Value="White" />
             </Style.Setters>
-            <!--<Style.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#003d3d3b" />
-            </Style.Resources>-->
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="true">
                     <!-- Set Foreground color -->
@@ -251,12 +248,49 @@
 
                     </StackPanel>
                 </TabItem>
+                
                 <TabItem Header="Image">
-                    <Image x:Name="TabImage" VerticalAlignment="Center" Source="img/Control_pause_blue.png"></Image>
+                    <StackPanel>
+                        <TextBlock FontSize="20px" Margin="0px 10px 0px 0px">File informations</TextBlock>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20px" />
+                                <RowDefinition Height="20px" />
+                                <RowDefinition Height="20px" />
+                                <RowDefinition Height="20px" />
+                                <RowDefinition Height="20px" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="{Binding ActualWidth,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox Grid.Column="0" Grid.Row="0" IsEnabled="False">Filename: </TextBox>
+                            <TextBox Grid.Column="1" Grid.Row="0" IsEnabled="False" Name="ImageFilename"></TextBox>
+
+                            <TextBox Grid.Column="0" Grid.Row="1" IsEnabled="False">Height</TextBox>
+                            <TextBox Grid.Column="1" Grid.Row="1" IsEnabled="False" Name="ImageHeight"></TextBox>
+
+                            <TextBox Grid.Column="0" Grid.Row="2" IsEnabled="False">Width</TextBox>
+                            <TextBox Grid.Column="1" Grid.Row="2" IsEnabled="False" Name="ImageWidth"></TextBox>
+
+                            <TextBox Grid.Column="0" Grid.Row="3" IsEnabled="False">Format</TextBox>
+                            <TextBox Grid.Column="1" Grid.Row="3" IsEnabled="False" Name="ImageExtension"></TextBox>
+
+                            <TextBox Grid.Column="0" Grid.Row="4" IsEnabled="False">Created</TextBox>
+                            <TextBox Grid.Column="1" Grid.Row="4" IsEnabled="False" Name="ImageCreated"></TextBox>
+                        </Grid>
+                        <TextBlock FontSize="20px" Margin="0px 10px 0px 0px">Preview</TextBlock>
+
+                        <Image  x:Name="TabImage" VerticalAlignment="Center" Source="img/Control_pause_blue.png"></Image>
+
+                    </StackPanel>
                 </TabItem>
+                
                 <TabItem Header="Properties">
                     <StackPanel Margin="10" Orientation="Vertical">
-                        <Label Content="Select properties for the application" FontSize="22" FontWeight="Bold"></Label>
+                        <Label Content="Select properties for the appl  ication" FontSize="22" FontWeight="Bold"></Label>
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Margin="0,0,0,0" Width="450">
                                 <Label FontWeight="Bold">Image extension :</Label>
