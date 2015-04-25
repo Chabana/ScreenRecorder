@@ -294,22 +294,30 @@
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Margin="0,0,0,0" Width="450">
                                 <Label FontWeight="Bold">Image extension :</Label>
-                                <RadioButton GroupName="image" Checked="RadioButton_Checked" Content="Bmp"></RadioButton>
-                                <RadioButton GroupName="image" Checked="RadioButton_Checked" Content="Emf"></RadioButton>
-                                <RadioButton GroupName="image" Checked="RadioButton_Checked" Content="Gif"></RadioButton>
-                                <RadioButton GroupName="image" Checked="RadioButton_Checked" Content="Jpeg"></RadioButton>
-                                <RadioButton GroupName="image" Checked="RadioButton_Checked" Content="Png" IsChecked="True"></RadioButton>
-                                <RadioButton GroupName="image" Checked="RadioButton_Checked" Content="Tiff"></RadioButton>
-                                <RadioButton GroupName="image" Checked="RadioButton_Checked" Content="Exif"></RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButtonImageFormat" Content="Bmp"></RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButtonImageFormat" Content="Gif"></RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButtonImageFormat" Content="Jpeg"></RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButtonImageFormat" Content="Png" IsChecked="True"></RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButtonImageFormat" Content="Tiff"></RadioButton>
                             </StackPanel>
+                            
                             <StackPanel>
                                 <Label FontWeight="Bold">Video extension :</Label>
-                                <RadioButton GroupName="video" Checked="RadioButton_Checked_1" IsChecked="True" Content="MPEG4"></RadioButton>
-                                <RadioButton GroupName="video" Checked="RadioButton_Checked_1" Content="WMV"></RadioButton>
+                                <RadioButton GroupName="video" Checked="RadioButtonVideoFormat" IsChecked="True" Content="MPEG4"></RadioButton>
+                                <RadioButton GroupName="video" Checked="RadioButtonVideoFormat" Content="WMV"></RadioButton>
                             </StackPanel>
-
                         </StackPanel>
-                        
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Margin="0,0,0,0" Width="450">
+                                <Label FontWeight="Bold">Frame rate :</Label>
+                                <RadioButton GroupName="image" Checked="RadioButtonFrameRate" Content="10"></RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButtonFrameRate" Content="15"></RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButtonFrameRate" Content="20"></RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButtonFrameRate" Content="25" IsChecked="True"></RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButtonFrameRate" Content="48"></RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButtonFrameRate" Content="60"></RadioButton>
+                            </StackPanel>
+                        </StackPanel>
                     </StackPanel>
                 </TabItem>
             </TabControl>
@@ -334,11 +342,5 @@
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>
-
-
     </Grid>
-
-
-
-
 </Window>

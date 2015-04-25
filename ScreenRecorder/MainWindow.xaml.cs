@@ -38,6 +38,7 @@ namespace ScreenRecorder
         private Rectangle _screenSize = Screen.PrimaryScreen.Bounds;
 
         private UInt32 _frameCount;
+        private int _frameRate = 25;
 
         private readonly int _width = SystemInformation.VirtualScreen.Width;
         private readonly int _height = SystemInformation.VirtualScreen.Height;
@@ -46,20 +47,10 @@ namespace ScreenRecorder
 
         readonly Stopwatch _stopwatch = new Stopwatch();
 
-/*
-        private string _currentOpenedFile;
-*/
-
-/*
-        private string _snapShot = "";
-*/
-/*
-        private string _snapDir = "";
-*/
         public int WaitLimit = 4000; //ms
         private List<string> _listFilters;
         private readonly string[] _extensionsVideos = { ".mp4", ".wmv"};
-        private readonly string[] _extensionsPictures = { ".jpeg", ".png", ".bmp", ".emf", ".gif", ".tiff", ".exif" };
+        private readonly string[] _extensionsPictures = { ".jpeg", ".png", ".bmp", ".gif", ".tiff" };
         private ImageFormat _imageFormat = ImageFormat.Png;
         private string _imageExtension = ".png";
         private VideoCodec _videoFormat = VideoCodec.MPEG4;
@@ -91,7 +82,6 @@ namespace ScreenRecorder
             FilterCombobox.IsEditable = true;
             FilterCombobox.IsTextSearchEnabled = true;
             FilterCombobox.ItemsSource = _listFilters;
-
 
             MouseDown += MainWindow_MouseDown;
 
@@ -184,7 +174,7 @@ namespace ScreenRecorder
                         _writer.Open(fullName + _videoExtension,
                             _width,
                             _height,
-                            20,
+                            _frameRate,
                             _videoFormat);
                     }
                     catch (Exception exception)
@@ -693,22 +683,12 @@ namespace ScreenRecorder
                     }
                     break;
             }
-
-            
-
-            
         }
 
-
-        
-
-        
-
-        //##########################################################################################################################
+        //###################################################################################################
         //######################################## Part for the properties tab ##############################
 
-
-        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        private void RadioButtonImageFormat(object sender, RoutedEventArgs e)
         {
             var button = sender as RadioButton;
             if (button == null || button.Content == null)
@@ -722,10 +702,6 @@ namespace ScreenRecorder
                 case "Bmp":
                     _imageFormat = ImageFormat.Bmp;
                     _imageExtension = ".bmp";
-                    break;
-                case "Emf":
-                    _imageFormat = ImageFormat.Emf;
-                    _imageExtension = ".emf";
                     break;
                 case "Gif":
                     _imageFormat = ImageFormat.Gif;
@@ -743,9 +719,40 @@ namespace ScreenRecorder
                     _imageFormat = ImageFormat.Png;
                     _imageExtension = ".tiff";
                     break;
-                case "Exif":
-                    _imageFormat = ImageFormat.Png;
-                    _imageExtension = ".exif";
+                default:
+                    Console.WriteLine("Unexpected error my friend !");
+                    break;
+            }
+        }
+
+        private void RadioButtonFrameRate(object sender, RoutedEventArgs e)
+        {
+            var button = sender as RadioButton;
+            if (button == null || button.Content == null)
+                return;
+
+            if (button.IsChecked != null && button.IsChecked.Value)
+                Console.WriteLine(button.Content.ToString());
+
+            switch (button.Content.ToString())
+            {
+                case "10":
+                    _frameRate = 10;
+                    break;
+                case "15":
+                    _frameRate = 15;
+                    break;
+                case "20":
+                    _frameRate = 20;
+                    break;
+                case "24":
+                    _frameRate = 24;
+                    break;
+                case "48":
+                    _frameRate = 48;
+                    break;
+                case "60":
+                    _frameRate = 60;
                     break;
                 default:
                     Console.WriteLine("Unexpected error my friend !");
@@ -753,7 +760,7 @@ namespace ScreenRecorder
             }
         }
 
-        private void RadioButton_Checked_1(object sender, RoutedEventArgs e)
+        private void RadioButtonVideoFormat(object sender, RoutedEventArgs e)
         {
             var button = sender as RadioButton;
       
@@ -768,10 +775,12 @@ namespace ScreenRecorder
                     _videoFormat = VideoCodec.MPEG4;
                     _videoExtension = ".mp4";
                     break;
+
                 case "WMV":
                     _videoFormat = VideoCodec.WMV2;
                     _videoExtension = ".wmv";
                     break;
+
                 default:
                     Console.WriteLine("Unexpected error my friend !");
                     break;
