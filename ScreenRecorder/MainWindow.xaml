@@ -2,7 +2,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:microsoftWindowsThemes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" 
-        xmlns:cbox="clr-namespace:ScreenRecorder"
 	    x:Class="ScreenRecorder.MainWindow" 
         Title="ScreenRecorder" 
         Height="600"
@@ -23,11 +22,6 @@
 
     <Window.Resources>
 
-        <HierarchicalDataTemplate 
-		    DataType    = "{x:Type cbox:Folder}"
-            ItemsSource = "{Binding Path=Files}">
-            <TextBlock Text="{Binding Path=Name}" />
-        </HierarchicalDataTemplate>
         <Style TargetType="{x:Type TreeViewItem}">
             <Style.Setters>
                 <Setter Property="Background" Value="White" />
@@ -283,7 +277,7 @@
                         </Grid>
                         <TextBlock FontSize="20px" Margin="0px 10px 0px 0px">Preview</TextBlock>
 
-                        <Image  x:Name="TabImage" VerticalAlignment="Center" Source=""></Image>
+                        <Image  x:Name="TabImage" VerticalAlignment="Center"></Image>
 
                     </StackPanel>
                 </TabItem>

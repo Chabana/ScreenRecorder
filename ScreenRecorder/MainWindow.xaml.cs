@@ -103,7 +103,7 @@ namespace ScreenRecorder
 
             //Minimize the window and don't put in the taskbar
             WindowState = WindowState.Minimized;
-            ShowInTaskbar = false;
+            ShowInTaskbar = true;
             const string title = "ScreenRecorder";
             const string text = "L'application est minimisée";
             ShowStandardBalloon(title, text);

@@ -107,7 +107,6 @@ C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenR
 \\psf\Home\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\App.g.cs
 \\psf\Home\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\GeneratedInternalTypeHelper.g.cs
 \\psf\Home\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder_MarkupCompile.cache
-\\psf\Home\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder_MarkupCompile.lref
 \\psf\Home\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\MainWindow.baml
 \\psf\Home\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.g.resources
 \\psf\Home\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.Properties.Resources.resources
