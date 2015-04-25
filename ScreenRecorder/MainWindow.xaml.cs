@@ -31,32 +31,38 @@ namespace ScreenRecorder
     public partial class MainWindow : Window
     {
 
-        private readonly VideoFileWriter writer;
-        private bool rec = false;
+        private readonly VideoFileWriter _writer;
+        private bool _rec;
 
-        private Rectangle screenSize = Screen.PrimaryScreen.Bounds;
+        private Rectangle _screenSize = Screen.PrimaryScreen.Bounds;
 
-        private UInt32 frameCount = 0;
+        private UInt32 _frameCount;
 
-        private readonly int width = SystemInformation.VirtualScreen.Width;
-        private readonly int height = SystemInformation.VirtualScreen.Height;
+        private readonly int _width = SystemInformation.VirtualScreen.Width;
+        private readonly int _height = SystemInformation.VirtualScreen.Height;
 
-        private ScreenCaptureStream streamVideo;
+        private ScreenCaptureStream _streamVideo;
 
-        readonly Stopwatch stopwatch = new Stopwatch();
+        readonly Stopwatch _stopwatch = new Stopwatch();
 
+/*
         private string _currentOpenedFile;
+*/
 
-        private string snapShot = "";
-        private string snapDir = "";
-        public int waitLimit = 4000; //ms
-        private List<string> listFilters;
-        private readonly string[] extensionsVideos = { ".mp4", ".wmv", ".avi" };
-        private readonly string[] extensionsPictures = { ".jpeg", ".png", ".bmp", ".emf", ".gif", ".tiff", ".exif" };
-        private ImageFormat imageFormat = ImageFormat.Png;
-        private string imageExtension = ".png";
-        private VideoCodec videoFormat = VideoCodec.MPEG4;
-        private string videoExtension = ".mp4";
+/*
+        private string _snapShot = "";
+*/
+/*
+        private string _snapDir = "";
+*/
+        public int WaitLimit = 4000; //ms
+        private List<string> _listFilters;
+        private readonly string[] _extensionsVideos = { ".mp4", ".wmv"};
+        private readonly string[] _extensionsPictures = { ".jpeg", ".png", ".bmp", ".emf", ".gif", ".tiff", ".exif" };
+        private ImageFormat _imageFormat = ImageFormat.Png;
+        private string _imageExtension = ".png";
+        private VideoCodec _videoFormat = VideoCodec.MPEG4;
+        private string _videoExtension = ".mp4";
 
         //##########################################################################################################################
         //######################################## Constructor -> Initialize the application ##############################
@@ -66,22 +72,22 @@ namespace ScreenRecorder
         {
             InitializeComponent();
 
-            HotkeyManager.Current.AddOrReplace("Screenshots", Key.S, ModifierKeys.Control | ModifierKeys.Alt, onStartScreenshots);
-            HotkeyManager.Current.AddOrReplace("VideoCapture", Key.V, ModifierKeys.Control | ModifierKeys.Alt, onStartVideocapture);
-            HotkeyManager.Current.AddOrReplace("ExitApplication", Key.E, ModifierKeys.Control | ModifierKeys.Alt, onExitApplication);
-            HotkeyManager.Current.AddOrReplace("OpenApplication", Key.O, ModifierKeys.Control | ModifierKeys.Alt, onOpenApplication);
+            HotkeyManager.Current.AddOrReplace("Screenshots", Key.S, ModifierKeys.Control | ModifierKeys.Alt, OnStartScreenshots);
+            HotkeyManager.Current.AddOrReplace("VideoCapture", Key.V, ModifierKeys.Control | ModifierKeys.Alt, OnStartVideocapture);
+            HotkeyManager.Current.AddOrReplace("ExitApplication", Key.E, ModifierKeys.Control | ModifierKeys.Alt, OnExitApplication);
+            HotkeyManager.Current.AddOrReplace("OpenApplication", Key.O, ModifierKeys.Control | ModifierKeys.Alt, OnOpenApplication);
 
-            listFilters = new List<string>();
-            listFilters.Add("By date descending");
-            listFilters.Add("By name descending");
-            listFilters.Add("By size descending");
-            listFilters.Add("By date ascending");
-            listFilters.Add("By name ascending");
-            listFilters.Add("By size ascending");
+            _listFilters = new List<string>();
+            _listFilters.Add("By date descending");
+            _listFilters.Add("By name descending");
+            _listFilters.Add("By size descending");
+            _listFilters.Add("By date ascending");
+            _listFilters.Add("By name ascending");
+            _listFilters.Add("By size ascending");
 
-            this.FilterCombobox.IsEditable = true;
-            this.FilterCombobox.IsTextSearchEnabled = true;
-            this.FilterCombobox.ItemsSource = listFilters;
+            FilterCombobox.IsEditable = true;
+            FilterCombobox.IsTextSearchEnabled = true;
+            FilterCombobox.ItemsSource = _listFilters;
 
 
             MouseDown += MainWindow_MouseDown;
@@ -104,7 +110,7 @@ namespace ScreenRecorder
             const string text = "L'application est minimisée";
             ShowStandardBalloon(title, text);
 
-            writer = new VideoFileWriter();
+            _writer = new VideoFileWriter();
 
             Update();
         }
@@ -115,15 +121,15 @@ namespace ScreenRecorder
         //######################################## Exit application from menu or shortcut ##############################
 
 
-        private void onExitApplication(object sender, HotkeyEventArgs e)
+        private void OnExitApplication(object sender, HotkeyEventArgs e)
         {
-            exitApplication();
+            ExitApplication();
         }
 
-        private void exitApplication()
+        private void ExitApplication()
         {
             //Save the video screen in a file
-            stopVideoRecording();
+            StopVideoRecording();
 
             //Quit the application
             Application.Current.Shutdown();
@@ -131,34 +137,34 @@ namespace ScreenRecorder
 
         private void menuQuit_Click(object sender, RoutedEventArgs e)
         {
-            exitApplication();
+            ExitApplication();
         }
 
         //##########################################################################################################################
         //######################################## Start video capture from menu or shortcut ##############################
 
 
-        private void onStartVideocapture(object sender, HotkeyEventArgs e)
+        private void OnStartVideocapture(object sender, HotkeyEventArgs e)
         {
-            startVideocapture();
+            StartVideocapture();
         }
 
-        private void startVideocapture()
+        private void StartVideocapture()
         {
             if ((string)MenuCaptureVideo.Header == "Start Video Capture")
             {
-                var title = "Video has started recording";
-                var text = "Don't forget to stop the video recording";
+                const string title = "Video has started recording";
+                const string text = "Don't forget to stop the video recording";
                 MenuCaptureVideo.Header = "Stop Video Capture";
                 ShowStandardBalloon(title, text);
 
 
-                if (rec == false)
+                if (_rec == false)
                 {
                     Console.WriteLine(@"Recording has started");
-                    rec = true;
+                    _rec = true;
 
-                    frameCount = 0;
+                    _frameCount = 0;
 
                     var time = DateTime.Now.ToString("d_MMM_yyyy_HH_mm_ssff");
                     var compName = Environment.UserName;
@@ -167,11 +173,11 @@ namespace ScreenRecorder
                     try
                     {
                         //Change FPS and the codec for video
-                        writer.Open(fullName + videoExtension,
-                            width,
-                            height,
+                        _writer.Open(fullName + _videoExtension,
+                            _width,
+                            _height,
                             20,
-                            videoFormat);
+                            _videoFormat);
                     }
                     catch (Exception exception)
                     {
@@ -185,10 +191,10 @@ namespace ScreenRecorder
             }
             else
             {
-                var title = "Video has stopped recording";
-                var text = "You are not being recorded";
+                const string title = "Video has stopped recording";
+                const string text = "You are not being recorded";
                 ShowStandardBalloon(title, text);
-                stopVideoRecording();
+                StopVideoRecording();
                 MenuCaptureVideo.Header = "Start Video Capture";
                 Console.WriteLine(@"Recording has stopped");
             }
@@ -204,13 +210,13 @@ namespace ScreenRecorder
                     screenArea = Rectangle.Union(screenArea, screen.Bounds);
                 }
 
-                streamVideo = new ScreenCaptureStream(screenArea);
+                _streamVideo = new ScreenCaptureStream(screenArea);
 
-                streamVideo.NewFrame += new NewFrameEventHandler(video_NewFrame);
+                _streamVideo.NewFrame += video_NewFrame;
 
-                streamVideo.Start();
+                _streamVideo.Start();
 
-                stopwatch.Start();
+                _stopwatch.Start();
             }
             catch (Exception exception)
             {
@@ -222,18 +228,18 @@ namespace ScreenRecorder
         {
             try
             {
-                if (rec)
+                if (_rec)
                 {
-                    writer.WriteVideoFrame(eventArgs.Frame);
+                    _writer.WriteVideoFrame(eventArgs.Frame);
                 }
 
                 else
                 {
-                    stopwatch.Reset();
+                    _stopwatch.Reset();
                     Thread.Sleep(500);
-                    streamVideo.SignalToStop();
+                    _streamVideo.SignalToStop();
                     Thread.Sleep(500);
-                    writer.Close();
+                    _writer.Close();
                 }
             }
             catch (Exception exception)
@@ -243,12 +249,12 @@ namespace ScreenRecorder
             }
         }
 
-        private void stopVideoRecording()
+        private void StopVideoRecording()
         {
-            rec = false;
+            _rec = false;
             try
             {
-                rec = false;
+                _rec = false;
 
 
                 Console.WriteLine(@"FILE SAVED !!!!");
@@ -261,7 +267,7 @@ namespace ScreenRecorder
 
         private void menuCaptureVideo_Click(object sender, RoutedEventArgs e)
         {
-            startVideocapture();
+            StartVideocapture();
         }
 
 
@@ -269,12 +275,12 @@ namespace ScreenRecorder
         //######################################## Start screenshots from menu or shortcut ##############################
 
 
-        private void onStartScreenshots(object sender, HotkeyEventArgs e)
+        private void OnStartScreenshots(object sender, HotkeyEventArgs e)
         {
-            startScreenshots();
+            StartScreenshots();
         }
 
-        private void startScreenshots()
+        private void StartScreenshots()
         {
             Rectangle screenArea = Rectangle.Empty;
 
@@ -287,7 +293,7 @@ namespace ScreenRecorder
 
             Thread.Sleep(1800);
 
-            stream.NewFrame += new NewFrameEventHandler(dev_NewFrame);
+            stream.NewFrame += dev_NewFrame;
 
             stream.Start();
             filterCombobox_SelectionChanged(FilterCombobox, null);
@@ -303,7 +309,7 @@ namespace ScreenRecorder
         private void menuScreenshot_Click(object sender, RoutedEventArgs e)
         {
 
-            startScreenshots();
+            StartScreenshots();
 
         }
 
@@ -313,11 +319,11 @@ namespace ScreenRecorder
             {
                 Bitmap bitmap = eventArgs.Frame.Clone() as Bitmap;
                 ((ScreenCaptureStream)sender).SignalToStop();
-                Image img = (Image)bitmap;
+                Image img = bitmap;
                 string dirName = "c:\\ScreenRecorder";
-                string flName = "Photo" + DateTime.Now.ToString("yyyyMMddhhmmss") + imageExtension;
+                string flName = "Photo" + DateTime.Now.ToString("yyyyMMddhhmmss") + _imageExtension;
                 flName = Path.Combine(dirName, flName);
-                img.Save(flName, imageFormat);
+                img.Save(flName, _imageFormat);
             }
             catch (Exception e)
             {
@@ -331,12 +337,12 @@ namespace ScreenRecorder
         //##########################################################################################################################
         //######################################## Start open application from menu or shortcut ##############################
 
-        private void onOpenApplication(object sender, HotkeyEventArgs e)
+        private void OnOpenApplication(object sender, HotkeyEventArgs e)
         {
-            openApplication();
+            OpenApplication();
         }
 
-        private void openApplication()
+        private void OpenApplication()
         {
             if (WindowState == WindowState.Minimized)
             {
@@ -349,7 +355,7 @@ namespace ScreenRecorder
 
         private void menuOpen_Click(object sender, RoutedEventArgs e)
         {
-            openApplication();
+            OpenApplication();
         }
 
         //##########################################################################################################################
@@ -415,14 +421,14 @@ namespace ScreenRecorder
             foreach (String extension in extensions)
             {
                 FileSystemWatcher w = new FileSystemWatcher {Filter = extension};
-                w.Changed += new FileSystemEventHandler(fileSystemWatcher_Changed);
+                w.Changed += fileSystemWatcher_Changed;
                 watchersExtension.Add(w);
             }
 
-            watcher.Created += new FileSystemEventHandler(fileSystemWatcher_Created);
+            watcher.Created += fileSystemWatcher_Created;
             
-            watcher.Deleted += new FileSystemEventHandler(fileSystemWatcher_Deleted);
-            watcher.Renamed += new RenamedEventHandler(fileSystemWatcher_Renamed);
+            watcher.Deleted += fileSystemWatcher_Deleted;
+            watcher.Renamed += fileSystemWatcher_Renamed;
 
             watcher.EnableRaisingEvents = true;
         }
@@ -467,23 +473,23 @@ namespace ScreenRecorder
 
         public void DeleteListLine(string text)
         {
-            this.Tvi.Items.Remove(text);
+            Tvi.Items.Remove(text);
         }
  
         public void AddListLine(string text)
         {
-            this.Tvi.Items.Add(text);
+            Tvi.Items.Add(text);
         }
 
         //##########################################################################################################################
         //######################################## Part for the video player and image viewer ##############################
 
-        private bool mediaPlayerIsPlaying = false;
-        private bool userIsDraggingSlider = false;
+        private bool _mediaPlayerIsPlaying;
+        private bool _userIsDraggingSlider;
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            if ((MePlayer.Source != null) && (MePlayer.NaturalDuration.HasTimeSpan) && (!userIsDraggingSlider))
+            if ((MePlayer.Source != null) && (MePlayer.NaturalDuration.HasTimeSpan) && (!_userIsDraggingSlider))
             {
                 SliProgress.Minimum = 0;
                 SliProgress.Maximum = MePlayer.NaturalDuration.TimeSpan.TotalSeconds;
@@ -508,12 +514,12 @@ namespace ScreenRecorder
         private void Play_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             MePlayer.Play();
-            mediaPlayerIsPlaying = true;
+            _mediaPlayerIsPlaying = true;
         }
 
         private void Pause_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = mediaPlayerIsPlaying;
+            e.CanExecute = _mediaPlayerIsPlaying;
         }
 
         private void Pause_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -523,23 +529,23 @@ namespace ScreenRecorder
 
         private void Stop_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = mediaPlayerIsPlaying;
+            e.CanExecute = _mediaPlayerIsPlaying;
         }
 
         private void Stop_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             MePlayer.Stop();
-            mediaPlayerIsPlaying = false;
+            _mediaPlayerIsPlaying = false;
         }
 
         private void sliProgress_DragStarted(object sender, DragStartedEventArgs e)
         {
-            userIsDraggingSlider = true;
+            _userIsDraggingSlider = true;
         }
 
         private void sliProgress_DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            userIsDraggingSlider = false;
+            _userIsDraggingSlider = false;
             MePlayer.Position = TimeSpan.FromSeconds(SliProgress.Value);
         }
 
@@ -558,24 +564,24 @@ namespace ScreenRecorder
             
             if (!Tvi.IsSelected)
             {
-                foreach (string extension in extensionsVideos)
+                foreach (string extension in _extensionsVideos)
                 {
                     if (e.NewValue.ToString().Contains(extension))
                     {
                         DispatcherTimer timerMedia = new DispatcherTimer();
                         MePlayer.Stretch = Stretch.Fill;
-                        MePlayer.Source = new Uri("c:\\ScreenRecorder\\" + e.NewValue.ToString());
+                        MePlayer.Source = new Uri("c:\\ScreenRecorder\\" + e.NewValue);
                         timerMedia.Interval = TimeSpan.FromSeconds(1);
                         timerMedia.Tick += timer_Tick;
                         timerMedia.Start();
                     }
                 }
 
-                foreach (string extension in extensionsPictures)
+                foreach (string extension in _extensionsPictures)
                 {
                     if (e.NewValue.ToString().Contains(extension))
                     {
-                        TabImage.Source = new BitmapImage(new Uri("c:\\ScreenRecorder\\" + e.NewValue.ToString(), UriKind.RelativeOrAbsolute));
+                        TabImage.Source = new BitmapImage(new Uri("c:\\ScreenRecorder\\" + e.NewValue, UriKind.RelativeOrAbsolute));
                     }
                 }
             }       
@@ -685,32 +691,32 @@ namespace ScreenRecorder
             switch (button.Content.ToString())
             { 
                 case "Bmp":
-                    imageFormat = ImageFormat.Bmp;
-                    imageExtension = ".bmp";
+                    _imageFormat = ImageFormat.Bmp;
+                    _imageExtension = ".bmp";
                     break;
                 case "Emf":
-                    imageFormat = ImageFormat.Emf;
-                    imageExtension = ".emf";
+                    _imageFormat = ImageFormat.Emf;
+                    _imageExtension = ".emf";
                     break;
                 case "Gif":
-                    imageFormat = ImageFormat.Gif;
-                    imageExtension = ".gif";
+                    _imageFormat = ImageFormat.Gif;
+                    _imageExtension = ".gif";
                     break;
                 case "Jpeg":
-                    imageFormat = ImageFormat.Jpeg;
-                    imageExtension = ".jpeg";
+                    _imageFormat = ImageFormat.Jpeg;
+                    _imageExtension = ".jpeg";
                     break;
                 case "Png":
-                    imageFormat = ImageFormat.Png;
-                    imageExtension = ".png";
+                    _imageFormat = ImageFormat.Png;
+                    _imageExtension = ".png";
                     break;
                 case "Tiff":
-                    imageFormat = ImageFormat.Png;
-                    imageExtension = ".tiff";
+                    _imageFormat = ImageFormat.Png;
+                    _imageExtension = ".tiff";
                     break;
                 case "Exif":
-                    imageFormat = ImageFormat.Png;
-                    imageExtension = ".exif";
+                    _imageFormat = ImageFormat.Png;
+                    _imageExtension = ".exif";
                     break;
                 default:
                     Console.WriteLine("Unexpected error my friend !");
@@ -730,12 +736,12 @@ namespace ScreenRecorder
             switch (button.Content.ToString())
             {
                 case "MPEG4":
-                    videoFormat = VideoCodec.MPEG4;
-                    videoExtension = ".mp4";
+                    _videoFormat = VideoCodec.MPEG4;
+                    _videoExtension = ".mp4";
                     break;
                 case "WMV":
-                    videoFormat = VideoCodec.WMV2;
-                    videoExtension = ".wmv";
+                    _videoFormat = VideoCodec.WMV2;
+                    _videoExtension = ".wmv";
                     break;
                 default:
                     Console.WriteLine("Unexpected error my friend !");

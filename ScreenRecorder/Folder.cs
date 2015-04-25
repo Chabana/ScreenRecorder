@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Security;
 
 namespace ScreenRecorder
 {
@@ -12,32 +13,48 @@ namespace ScreenRecorder
 
         public Folder()
         {
-            this.FullPath = @"c:\ScreenRecorder";
+            FullPath = @"c:\ScreenRecorder";
         }
 
         public string Name
         {
-            get { return this._folder.Name; }
+            get { return _folder.Name; }
         }
 
+        
         public string FullPath
         {
-            get { return this._folder.FullName; }
+            get { return _folder.FullName; }
 
             set
             {
                 if (Directory.Exists(value))
                 {
-                    this._folder = new DirectoryInfo(value);
+                    try
+                    {
+                        _folder = new DirectoryInfo(value);
+                    }
+                    catch (SecurityException securityException)
+                    {
+                    }
                 }
                 else
                 {
-                    Directory.CreateDirectory(value);
-                    throw new ArgumentException(@"must exist", "fullPath");
+                    try
+                    {
+                        Directory.CreateDirectory(value);
+                    }
+                    catch (IOException ioException)
+                    {
+                    }
+                    try
+                    {
+                        throw new ArgumentException(@"must exist", "fullPath");
+                    }
+                    catch (ArgumentException argumentException)
+                    {
+                    }
                 }
-
-                
-
             }
         }
 
@@ -46,24 +63,24 @@ namespace ScreenRecorder
         {
             get
             {
-                if (this._files == null)
+                if (_files == null)
                 {
                     
-                    this._files = new ObservableCollection<FileInfo>();
-                    string[] extensions = { "*.jpeg", "*.mp4", "*.wmv", "*.png", "*.avi", "*.bmp", "*.emf", "*.gif", "*.tiff", "*.exif" };
+                    _files = new ObservableCollection<FileInfo>();
+                    string[] extensions = { "*.jpeg", "*.mp4", "*.wmv", "*.png", "*.bmp", "*.emf", "*.gif", "*.tiff", "*.exif" };
 
                     foreach (String extension in extensions)
                     {
-                        FileInfo[] fi = this._folder.GetFiles(extension, SearchOption.AllDirectories);
+                        FileInfo[] fi = _folder.GetFiles(extension, SearchOption.AllDirectories);
 
                         for (int i = 0; i < fi.Length; i++)
                         {
-                            this._files.Add(fi[i]);
+                            _files.Add(fi[i]);
                         }
                     }
                 }
 
-                return this._files;
+                return _files;
             }
         }
 
@@ -71,21 +88,21 @@ namespace ScreenRecorder
         {
             get
             {
-                if (this._subFolders == null)
+                if (_subFolders == null)
                 {
-                    this._subFolders = new ObservableCollection<Folder>();
+                    _subFolders = new ObservableCollection<Folder>();
 
-                    DirectoryInfo[] di = this._folder.GetDirectories();
+                    DirectoryInfo[] di = _folder.GetDirectories();
 
                     for (int i = 0; i < di.Length; i++)
                     {
                         Folder newFolder = new Folder();
                         newFolder.FullPath = di[i].FullName;
-                        this._subFolders.Add(newFolder);
+                        _subFolders.Add(newFolder);
                     }
                 }
 
-                return this._subFolders;
+                return _subFolders;
             }
         }
     }
