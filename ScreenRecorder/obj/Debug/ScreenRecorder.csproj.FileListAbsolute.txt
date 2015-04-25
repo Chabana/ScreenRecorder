@@ -151,3 +151,5 @@ C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorderFinal\Sc
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorderFinal\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.g.resources
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorderFinal\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.Properties.Resources.resources
 C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorderFinal\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.csproj.GenerateResource.Cache
+C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorderFinal\ScreenRecorder\ScreenRecorder\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorderFinal\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder_MarkupCompile.lref

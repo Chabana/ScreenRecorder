@@ -110,7 +110,7 @@ namespace ScreenRecorder
             }
 
             const string title = "ScreenRecorder";
-            const string text = "L'application est minimisée";
+            const string text = "The application has been minimized";
             ShowStandardBalloon(title, text);
 
             _writer = new VideoFileWriter();
@@ -156,8 +156,8 @@ namespace ScreenRecorder
         {
             if ((string)MenuCaptureVideo.Header == "Start Video Capture")
             {
-                const string title = "Video has started recording";
-                const string text = "Don't forget to stop the video recording";
+                const string title = "ScreenRecorder";
+                const string text = "Video has started recording";
                 MenuCaptureVideo.Header = "Stop Video Capture";
                 ShowStandardBalloon(title, text);
 
@@ -194,8 +194,8 @@ namespace ScreenRecorder
             }
             else
             {
-                const string title = "Video has stopped recording";
-                const string text = "You are not being recorded";
+                const string title = "ScreenRecorder";
+                const string text = "Video has been saved (C:\\ScreenRecorder)";
                 ShowStandardBalloon(title, text);
                 StopVideoRecording();
                 MenuCaptureVideo.Header = "Start Video Capture";
@@ -297,9 +297,12 @@ namespace ScreenRecorder
             stream.NewFrame += dev_NewFrame;
 
             stream.Start();
-            filterCombobox_SelectionChanged(FilterCombobox, null);
 
-            Console.WriteLine("Screenshot taken");
+            Console.WriteLine(@"Screenshot taken");
+
+            const string title = "ScreenRecorder";
+            const string text = "Screenshot has been saved (C:\\ScreenRecorder)";
+            ShowStandardBalloon(title, text);
         }
 
         /// <summary>
@@ -309,9 +312,7 @@ namespace ScreenRecorder
         /// <param name="e"></param>
         private void menuScreenshot_Click(object sender, RoutedEventArgs e)
         {
-
             StartScreenshots();
-
         }
 
         private void dev_NewFrame(object sender, NewFrameEventArgs eventArgs)
@@ -345,7 +346,7 @@ namespace ScreenRecorder
             if (WindowState == WindowState.Minimized)
             {
                 WindowState = WindowState.Normal;
-                this.Visibility = Visibility.Visible;
+                Visibility = Visibility.Visible;
                 ShowInTaskbar = true;
                 //hide balloon
                 MyNotifyIcon.HideBalloonTip();
@@ -379,7 +380,7 @@ namespace ScreenRecorder
                 WindowState = WindowState.Minimized;
                 ShowInTaskbar = false;
                 const string title = "ScreenRecorder";
-                const string text = "L'application est minimisée";
+                const string text = "The application has been minimized";
                 ShowStandardBalloon(title, text);
                 
             }
@@ -413,7 +414,7 @@ namespace ScreenRecorder
 
             watcher.NotifyFilter = NotifyFilters.LastAccess |  NotifyFilters.FileName | NotifyFilters.DirectoryName;
 
-            string[] extensions = { "*.jpg", "*.mp4", "*.wmv", "*.png", "*.tiff", "*.jpeg", "*.bmp", ".mpeg" };
+            string[] extensions = { "*.jpeg", "*.mp4", "*.wmv", "*.png", "*.bmp", "*.emf", "*.gif", "*.tiff", "*.exif" };
 
             List<FileSystemWatcher> watchersExtension = new List<FileSystemWatcher>();
 
@@ -553,13 +554,6 @@ namespace ScreenRecorder
             LblProgressStatus.Text = TimeSpan.FromSeconds(SliProgress.Value).ToString(@"hh\:mm\:ss");
         }
 
-        private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            MePlayer.Volume += (e.Delta > 0) ? 0.1 : -0.1;
-        }
-
-        
-
         private void TrvStructure_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (Tvi.IsSelected) return;
@@ -682,6 +676,9 @@ namespace ScreenRecorder
                         Console.WriteLine(Path.GetFileName(n));
                         AddListLine(Path.GetFileName(n));
                     }
+                    break;
+                default:
+                    Console.WriteLine(@"Can't read the files with the filters !");
                     break;
             }
         }
