@@ -62,7 +62,15 @@ namespace ScreenRecorder
 
         public MainWindow()
         {
+
+            
             InitializeComponent();
+
+            //Minimize the window and don't put in the taskbar
+
+            ShowInTaskbar = false;
+            WindowState = WindowState.Minimized;
+            this.Visibility = Visibility.Hidden;
 
             HotkeyManager.Current.AddOrReplace("Screenshots", Key.S, ModifierKeys.Control | ModifierKeys.Alt, OnStartScreenshots);
             HotkeyManager.Current.AddOrReplace("VideoCapture", Key.V, ModifierKeys.Control | ModifierKeys.Alt, OnStartVideocapture);
@@ -101,9 +109,6 @@ namespace ScreenRecorder
                 AddListLine(fileInfo.Name);
             }
 
-            //Minimize the window and don't put in the taskbar
-            WindowState = WindowState.Minimized;
-            ShowInTaskbar = true;
             const string title = "ScreenRecorder";
             const string text = "L'application est minimisée";
             ShowStandardBalloon(title, text);
@@ -340,6 +345,7 @@ namespace ScreenRecorder
             if (WindowState == WindowState.Minimized)
             {
                 WindowState = WindowState.Normal;
+                this.Visibility = Visibility.Visible;
                 ShowInTaskbar = true;
                 //hide balloon
                 MyNotifyIcon.HideBalloonTip();
