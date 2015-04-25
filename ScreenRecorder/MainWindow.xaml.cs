@@ -98,6 +98,7 @@ namespace ScreenRecorder
             MouseDown += MainWindow_MouseDown;
 
             Folder folder = new Folder();
+            folder.FullPath = "c:\\ScreenRecorder";
             var observableCollection = folder.Files;
 
             if (observableCollection == null) try
