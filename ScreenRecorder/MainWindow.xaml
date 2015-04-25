@@ -206,7 +206,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <TabControl Grid.RowSpan="2">
+            <TabControl Name="Tabcontroler" Grid.RowSpan="2">
                 <TabItem Header="Video">
                     <StackPanel Orientation="Vertical">
                         <ToolBar>

@@ -561,32 +561,37 @@ namespace ScreenRecorder
             MePlayer.Volume += (e.Delta > 0) ? 0.1 : -0.1;
         }
 
+        
+
         private void TrvStructure_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            
-            if (!Tvi.IsSelected)
+            if (Tvi.IsSelected) return;
+            foreach (string extension in _extensionsVideos)
             {
-                foreach (string extension in _extensionsVideos)
+                if (e.NewValue.ToString().Contains(extension))
                 {
-                    if (e.NewValue.ToString().Contains(extension))
-                    {
-                        DispatcherTimer timerMedia = new DispatcherTimer();
-                        MePlayer.Stretch = Stretch.Fill;
-                        MePlayer.Source = new Uri("c:\\ScreenRecorder\\" + e.NewValue);
-                        timerMedia.Interval = TimeSpan.FromSeconds(1);
-                        timerMedia.Tick += timer_Tick;
-                        timerMedia.Start();
-                    }
+                    Tabcontroler.SelectedItem = 0;
+                    Tabcontroler.SelectedIndex = 0;
+                    Console.WriteLine("YOLO 0");
+                    DispatcherTimer timerMedia = new DispatcherTimer();
+                    MePlayer.Stretch = Stretch.Fill;
+                    MePlayer.Source = new Uri("c:\\ScreenRecorder\\" + e.NewValue);
+                    timerMedia.Interval = TimeSpan.FromSeconds(1);
+                    timerMedia.Tick += timer_Tick;
+                    timerMedia.Start();
                 }
+            }
 
-                foreach (string extension in _extensionsPictures)
+            foreach (string extension in _extensionsPictures)
+            {
+                if (e.NewValue.ToString().Contains(extension))
                 {
-                    if (e.NewValue.ToString().Contains(extension))
-                    {
-                        TabImage.Source = new BitmapImage(new Uri("c:\\ScreenRecorder\\" + e.NewValue, UriKind.RelativeOrAbsolute));
-                    }
+                    Tabcontroler.SelectedItem = 1;
+                    Tabcontroler.SelectedIndex = 1;
+                    Console.WriteLine("YOLO 1");
+                    TabImage.Source = new BitmapImage(new Uri("c:\\ScreenRecorder\\" + e.NewValue, UriKind.RelativeOrAbsolute));
                 }
-            }       
+            }
         }
 
         //##########################################################################################################################
