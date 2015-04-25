@@ -7,7 +7,7 @@
         Title="ScreenRecorder" 
         Height="600"
 	    Width="1000" 
-        Background="#FFFF" 
+        Background="#FFFFFF" 
         BorderBrush="#FF3F3F46" 
         Foreground="#FFFFFFFF" 
         BorderThickness="0 0px 0 0"  WindowStyle="None"
@@ -21,8 +21,6 @@
         <CommandBinding Command="MediaCommands.Stop" CanExecute="Stop_CanExecute" Executed="Stop_Executed" />
     </Window.CommandBindings>
 
-
-
     <Window.Resources>
 
         <HierarchicalDataTemplate 
@@ -32,11 +30,11 @@
         </HierarchicalDataTemplate>
         <Style TargetType="{x:Type TreeViewItem}">
             <Style.Setters>
-                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Background" Value="White" />
             </Style.Setters>
-            <Style.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FF3d3d3b" />
-            </Style.Resources>
+            <!--<Style.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#003d3d3b" />
+            </Style.Resources>-->
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="true">
                     <!-- Set Foreground color -->
@@ -161,38 +159,43 @@
         </Style>
     </Window.Resources>
 
-    <Grid Margin="10 10 0 0">
+    <Grid Margin="10px 10px 0px 0px">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="20px" />
             <RowDefinition Height="auto" />
-            <RowDefinition />
+        <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="auto" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <ComboBox x:Name="FilterCombobox" SelectionChanged="filterCombobox_SelectionChanged"></ComboBox>
+
 
         <Grid Grid.Row="0" Grid.Column="2" >
             <Button x:Name="BtnQuit" Content="-" Margin="0,0,9,0px" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="40" Background="#FFB64040" BorderBrush="#FF333331" Foreground="White" Click="btnMinimize_Click"/>
         </Grid>
-        <Expander Header="" ExpandDirection="Right" Margin="0,0,0,10" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0">
-            <TreeView x:Name="TrvStructure" Foreground="#ffffffff" BorderBrush="#FF3d3d3b" Background="#FF3d3d3b" Width="200px" Margin="10px 2px 10px 0px" SelectedItemChanged="TrvStructure_SelectedItemChanged">
-                <TreeViewItem x:Name="Tvi" Header="ScreenRecorder" />
-                <TreeView.Resources>
 
-                </TreeView.Resources>
+        <Expander Header="" IsExpanded="True" ExpandDirection="Right" Margin="0,0,0,10" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0">
+            
+            <TreeView x:Name="TrvStructure" Foreground="#ffffffff" BorderBrush="#FF3d3d3b" Width="250px" SelectedItemChanged="TrvStructure_SelectedItemChanged">
+
+                <ComboBox x:Name="FilterCombobox" SelectionChanged="filterCombobox_SelectionChanged" Width="200px"></ComboBox>
+
+                <TreeViewItem x:Name="Tvi" Header="ScreenRecorder"/> 
+                
                 <TreeView.Style>
                     <Style TargetType="{x:Type TreeView}">
                         <Setter Property="FontFamily" Value="Helvetica neue" />
-                        <Setter Property="FontSize" Value="12pt" />
-                        <Setter Property="FontWeight" Value="Normal"/>
+                        <Setter Property="Margin" Value="10px 2px 10px 0px"></Setter>
+                        <Setter Property="FontSize" Value="10pt" />
+                        <Setter Property="FontWeight" Value="Light"/>
                         <Setter Property="Foreground" Value="White"/>
                         <Setter Property="FontStyle" Value="Normal"/>
                     </Style>
                 </TreeView.Style>
+                    
             </TreeView>
 
         </Expander>

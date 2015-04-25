@@ -77,13 +77,15 @@ namespace ScreenRecorder
             HotkeyManager.Current.AddOrReplace("ExitApplication", Key.E, ModifierKeys.Control | ModifierKeys.Alt, OnExitApplication);
             HotkeyManager.Current.AddOrReplace("OpenApplication", Key.O, ModifierKeys.Control | ModifierKeys.Alt, OnOpenApplication);
 
-            _listFilters = new List<string>();
-            _listFilters.Add("By date descending");
-            _listFilters.Add("By name descending");
-            _listFilters.Add("By size descending");
-            _listFilters.Add("By date ascending");
-            _listFilters.Add("By name ascending");
-            _listFilters.Add("By size ascending");
+            _listFilters = new List<string>
+            {
+                "y date descending",
+                "By name descending",
+                "By size descending",
+                "By date ascending",
+                "By name ascending",
+                "By size ascending"
+            };
 
             FilterCombobox.IsEditable = true;
             FilterCombobox.IsTextSearchEnabled = true;
