@@ -102,6 +102,7 @@ C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenR
 \\psf\Home\Documents\ScreenRecorder\ScreenRecorder\bin\Debug\AForge.Vision.xml
 \\psf\Home\Documents\ScreenRecorder\ScreenRecorder\bin\Debug\Hardcodet.Wpf.TaskbarNotification.pdb
 \\psf\Home\Documents\ScreenRecorder\ScreenRecorder\bin\Debug\Hardcodet.Wpf.TaskbarNotification.xml
+\\psf\Home\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.csprojResolveAssemblyReference.cache
 \\psf\Home\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\MainWindow.g.cs
 \\psf\Home\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\App.g.cs
 \\psf\Home\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\GeneratedInternalTypeHelper.g.cs
@@ -113,4 +114,3 @@ C:\Users\daniel.decarval\Documents\Inf3DLMb\DOT.NET\ProjetScreenRecorder\ScreenR
 \\psf\Home\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.csproj.GenerateResource.Cache
 \\psf\Home\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.exe
 \\psf\Home\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.pdb
-\\psf\Home\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.csprojResolveAssemblyReference.cache

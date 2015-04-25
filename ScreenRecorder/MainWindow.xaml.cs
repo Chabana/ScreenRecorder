@@ -79,9 +79,9 @@ namespace ScreenRecorder
             listFilters.Add("By name ascending");
             listFilters.Add("By size ascending");
 
-            this.filterCombobox.IsEditable = true;
-            this.filterCombobox.IsTextSearchEnabled = true;
-            this.filterCombobox.ItemsSource = listFilters;
+            this.FilterCombobox.IsEditable = true;
+            this.FilterCombobox.IsTextSearchEnabled = true;
+            this.FilterCombobox.ItemsSource = listFilters;
 
 
             MouseDown += MainWindow_MouseDown;
@@ -145,11 +145,11 @@ namespace ScreenRecorder
 
         private void startVideocapture()
         {
-            if ((string)menuCaptureVideo.Header == "Start Video Capture")
+            if ((string)MenuCaptureVideo.Header == "Start Video Capture")
             {
                 var title = "Video has started recording";
                 var text = "Don't forget to stop the video recording";
-                menuCaptureVideo.Header = "Stop Video Capture";
+                MenuCaptureVideo.Header = "Stop Video Capture";
                 ShowStandardBalloon(title, text);
 
 
@@ -189,7 +189,7 @@ namespace ScreenRecorder
                 var text = "You are not being recorded";
                 ShowStandardBalloon(title, text);
                 stopVideoRecording();
-                menuCaptureVideo.Header = "Start Video Capture";
+                MenuCaptureVideo.Header = "Start Video Capture";
                 Console.WriteLine(@"Recording has stopped");
             }
         }
@@ -290,7 +290,7 @@ namespace ScreenRecorder
             stream.NewFrame += new NewFrameEventHandler(dev_NewFrame);
 
             stream.Start();
-            filterCombobox_SelectionChanged(filterCombobox, null);
+            filterCombobox_SelectionChanged(FilterCombobox, null);
 
             Console.WriteLine("Screenshot taken");
         }
@@ -467,12 +467,12 @@ namespace ScreenRecorder
 
         public void DeleteListLine(string text)
         {
-            this.tvi.Items.Remove(text);
+            this.Tvi.Items.Remove(text);
         }
  
         public void AddListLine(string text)
         {
-            this.tvi.Items.Add(text);
+            this.Tvi.Items.Add(text);
         }
 
         //##########################################################################################################################
@@ -483,11 +483,11 @@ namespace ScreenRecorder
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            if ((mePlayer.Source != null) && (mePlayer.NaturalDuration.HasTimeSpan) && (!userIsDraggingSlider))
+            if ((MePlayer.Source != null) && (MePlayer.NaturalDuration.HasTimeSpan) && (!userIsDraggingSlider))
             {
-                sliProgress.Minimum = 0;
-                sliProgress.Maximum = mePlayer.NaturalDuration.TimeSpan.TotalSeconds;
-                sliProgress.Value = mePlayer.Position.TotalSeconds;
+                SliProgress.Minimum = 0;
+                SliProgress.Maximum = MePlayer.NaturalDuration.TimeSpan.TotalSeconds;
+                SliProgress.Value = MePlayer.Position.TotalSeconds;
             }
         }
 
@@ -502,12 +502,12 @@ namespace ScreenRecorder
 
         private void Play_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = (mePlayer != null) && (mePlayer.Source != null);
+            e.CanExecute = (MePlayer != null) && (MePlayer.Source != null);
         }
 
         private void Play_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            mePlayer.Play();
+            MePlayer.Play();
             mediaPlayerIsPlaying = true;
         }
 
@@ -518,7 +518,7 @@ namespace ScreenRecorder
 
         private void Pause_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            mePlayer.Pause();
+            MePlayer.Pause();
         }
 
         private void Stop_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -528,7 +528,7 @@ namespace ScreenRecorder
 
         private void Stop_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            mePlayer.Stop();
+            MePlayer.Stop();
             mediaPlayerIsPlaying = false;
         }
 
@@ -540,31 +540,31 @@ namespace ScreenRecorder
         private void sliProgress_DragCompleted(object sender, DragCompletedEventArgs e)
         {
             userIsDraggingSlider = false;
-            mePlayer.Position = TimeSpan.FromSeconds(sliProgress.Value);
+            MePlayer.Position = TimeSpan.FromSeconds(SliProgress.Value);
         }
 
         private void sliProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            lblProgressStatus.Text = TimeSpan.FromSeconds(sliProgress.Value).ToString(@"hh\:mm\:ss");
+            LblProgressStatus.Text = TimeSpan.FromSeconds(SliProgress.Value).ToString(@"hh\:mm\:ss");
         }
 
         private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            mePlayer.Volume += (e.Delta > 0) ? 0.1 : -0.1;
+            MePlayer.Volume += (e.Delta > 0) ? 0.1 : -0.1;
         }
 
         private void TrvStructure_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             
-            if (!tvi.IsSelected)
+            if (!Tvi.IsSelected)
             {
                 foreach (string extension in extensionsVideos)
                 {
                     if (e.NewValue.ToString().Contains(extension))
                     {
                         DispatcherTimer timerMedia = new DispatcherTimer();
-                        mePlayer.Stretch = Stretch.Fill;
-                        mePlayer.Source = new Uri("c:\\ScreenRecorder\\" + e.NewValue.ToString());
+                        MePlayer.Stretch = Stretch.Fill;
+                        MePlayer.Source = new Uri("c:\\ScreenRecorder\\" + e.NewValue.ToString());
                         timerMedia.Interval = TimeSpan.FromSeconds(1);
                         timerMedia.Tick += timer_Tick;
                         timerMedia.Start();
@@ -575,7 +575,7 @@ namespace ScreenRecorder
                 {
                     if (e.NewValue.ToString().Contains(extension))
                     {
-                        tabImage.Source = new BitmapImage(new Uri("c:\\ScreenRecorder\\" + e.NewValue.ToString(), UriKind.RelativeOrAbsolute));
+                        TabImage.Source = new BitmapImage(new Uri("c:\\ScreenRecorder\\" + e.NewValue.ToString(), UriKind.RelativeOrAbsolute));
                     }
                 }
             }       
@@ -596,7 +596,7 @@ namespace ScreenRecorder
             {
                 DeleteListLine(fileInfo.Name);
             }
-            string dir = "c:\\ScreenRecorder";
+            const string dir = "c:\\ScreenRecorder";
             string[] fns = Directory.GetFiles(dir);
 
             var sortBySizeDescending = from fn in fns orderby new FileInfo(fn).Length descending select fn;
@@ -607,59 +607,56 @@ namespace ScreenRecorder
             var sortByNameAscending = from fn in fns orderby new FileInfo(fn).Name ascending select fn;
 
 
-            if (filterCombobox.SelectedItem as string == "By size descending")
+            switch (FilterCombobox.SelectedItem as string)
             {
-                
-                foreach (string n in sortBySizeDescending)
-                {
-                    Console.WriteLine(Path.GetFileName(n));
-                    AddListLine(Path.GetFileName(n));
-                }
-            }
-            else if (filterCombobox.SelectedItem as string == "By name descending")
-            {
-                
-                foreach (string n in sortByNameDescending)
-                {
-                    Console.WriteLine(Path.GetFileName(n));
-                    AddListLine(Path.GetFileName(n));
-                }
-            }
-            else if (filterCombobox.SelectedItem as string == "By date descending")
-            {
-                
-                foreach (string n in sortByDateDescending)
-                {
-                    Console.WriteLine(Path.GetFileName(n));
-                    AddListLine(Path.GetFileName(n));
-                }
-            }
-            else if (filterCombobox.SelectedItem as string == "By size ascending")
-            {
-                
-                foreach (string n in sortBySizeAscending)
-                {
-                    Console.WriteLine(Path.GetFileName(n));
-                    AddListLine(Path.GetFileName(n));
-                }
-            }
-            else if (filterCombobox.SelectedItem as string == "By name ascending")
-            {
-                
-                foreach (string n in sortByNameAscending)
-                {
-                    Console.WriteLine(Path.GetFileName(n));
-                    AddListLine(Path.GetFileName(n));
-                }
-            }
-            else if (filterCombobox.SelectedItem as string == "By date ascending")
-            {
-                
-                foreach (string n in sortByDateAscending)
-                {
-                    Console.WriteLine(Path.GetFileName(n));
-                    AddListLine(Path.GetFileName(n));
-                }
+                case "By size descending":
+
+                    foreach (string n in sortBySizeDescending)
+                    {
+                        Console.WriteLine(Path.GetFileName(n));
+                        AddListLine(Path.GetFileName(n));
+                    }
+                    break;
+                case "By name descending":
+
+                    foreach (string n in sortByNameDescending)
+                    {
+                        Console.WriteLine(Path.GetFileName(n));
+                        AddListLine(Path.GetFileName(n));
+                    }
+                    break;
+                case "By date descending":
+
+                    foreach (string n in sortByDateDescending)
+                    {
+                        Console.WriteLine(Path.GetFileName(n));
+                        AddListLine(Path.GetFileName(n));
+                    }
+                    break;
+                case "By size ascending":
+
+                    foreach (string n in sortBySizeAscending)
+                    {
+                        Console.WriteLine(Path.GetFileName(n));
+                        AddListLine(Path.GetFileName(n));
+                    }
+                    break;
+                case "By name ascending":
+
+                    foreach (string n in sortByNameAscending)
+                    {
+                        Console.WriteLine(Path.GetFileName(n));
+                        AddListLine(Path.GetFileName(n));
+                    }
+                    break;
+                case "By date ascending":
+
+                    foreach (string n in sortByDateAscending)
+                    {
+                        Console.WriteLine(Path.GetFileName(n));
+                        AddListLine(Path.GetFileName(n));
+                    }
+                    break;
             }
 
             

@@ -1,7 +1,7 @@
 ﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
         xmlns:tb="http://www.hardcodet.net/taskbar"
-        xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" 
+        xmlns:microsoftWindowsThemes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" 
         xmlns:cbox="clr-namespace:ScreenRecorder"
 	    x:Class="ScreenRecorder.MainWindow" 
         Title="ScreenRecorder" 
@@ -24,12 +24,6 @@
 
 
     <Window.Resources>
-
-        <ObjectDataProvider x:Key="RootFolderDataProvider" >
-            <ObjectDataProvider.ObjectInstance>
-                <cbox:Folder FullPath="c:\ScreenRecorder" />
-            </ObjectDataProvider.ObjectInstance>
-        </ObjectDataProvider>
 
         <HierarchicalDataTemplate 
 		    DataType    = "{x:Type cbox:Folder}"
@@ -56,23 +50,6 @@
         <!-- ************************************  -->
         <!-- SCROLL VIEW  -->
         <!-- ************************************  -->
-        <ControlTemplate x:Key="ScrollViewerControlTemplate" TargetType="{x:Type ScrollViewer}">
-            <Grid x:Name="Grid" Background="Black">
-                <!--Background="{TemplateBinding Background}">-->
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Rectangle x:Name="Corner" Grid.Column="1" Fill="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Grid.Row="1"/>
-                <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" CanContentScroll="{TemplateBinding CanContentScroll}" CanHorizontallyScroll="False" CanVerticallyScroll="False" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Grid.RowSpan="2" Margin="{TemplateBinding Padding}" Grid.ColumnSpan="2"/>
-                <ScrollBar x:Name="PART_VerticalScrollBar" AutomationProperties.AutomationId="VerticalScrollBar" Cursor="Arrow" Grid.Column="1" Maximum="{TemplateBinding ScrollableHeight}" Minimum="0" Grid.Row="0" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}" Width="8"/>
-                <ScrollBar x:Name="PART_HorizontalScrollBar" AutomationProperties.AutomationId="HorizontalScrollBar" Cursor="Arrow" Grid.Column="0" Maximum="{TemplateBinding ScrollableWidth}" Minimum="0" Orientation="Horizontal" Grid.Row="1" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportWidth}" Height="8"/>
-            </Grid>
-        </ControlTemplate>
 
         <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -134,6 +111,7 @@
                         <Grid x:Name="Bg" SnapsToDevicePixels="true" Background="#00BFBFBF">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="0.00001*"/>
+                                <RowDefinition />
                             </Grid.RowDefinitions>
                             <Track x:Name="PART_Track" IsDirectionReversed="true" IsEnabled="{TemplateBinding IsMouseOver}" Grid.Row="1">
                                 <Track.DecreaseRepeatButton>
@@ -143,7 +121,7 @@
                                     <RepeatButton Command="{x:Static ScrollBar.PageDownCommand}" Style="{StaticResource ScrollBarPageButton}"/>
                                 </Track.IncreaseRepeatButton>
                                 <Track.Thumb>
-                                    <Thumb Style="{DynamicResource VerticalThumb}" Microsoft_Windows_Themes:ScrollChrome.ScrollGlyph="VerticalGripper" Width="12"/>
+                                    <Thumb Style="{DynamicResource VerticalThumb}" microsoftWindowsThemes:ScrollChrome.ScrollGlyph="VerticalGripper" Width="12"/>
                                 </Track.Thumb>
                             </Track>
                         </Grid>
@@ -171,7 +149,7 @@
                                             <RepeatButton Command="{x:Static ScrollBar.PageRightCommand}" Style="{StaticResource ScrollBarPageButton}"/>
                                         </Track.IncreaseRepeatButton>
                                         <Track.Thumb>
-                                            <Thumb Microsoft_Windows_Themes:ScrollChrome.ScrollGlyph="HorizontalGripper" Style="{DynamicResource HorizontalThumb}" Height="12"/>
+                                            <Thumb microsoftWindowsThemes:ScrollChrome.ScrollGlyph="HorizontalGripper" Style="{DynamicResource HorizontalThumb}" Height="12"/>
                                         </Track.Thumb>
                                     </Track>
                                 </Grid>
@@ -195,20 +173,15 @@
             <ColumnDefinition Width="auto" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <ComboBox x:Name="filterCombobox" SelectionChanged="filterCombobox_SelectionChanged"></ComboBox>
+        <ComboBox x:Name="FilterCombobox" SelectionChanged="filterCombobox_SelectionChanged"></ComboBox>
 
-        <Grid Grid.Column="2" >
-            <Button x:Name="btnQuit" Content="-" Margin="0,0,9,0px" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="40" Background="#FFB64040" BorderBrush="#FF333331" Foreground="White" Click="btnMinimize_Click"/>
+        <Grid Grid.Row="0" Grid.Column="2" >
+            <Button x:Name="BtnQuit" Content="-" Margin="0,0,9,0px" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="40" Background="#FFB64040" BorderBrush="#FF333331" Foreground="White" Click="btnMinimize_Click"/>
         </Grid>
         <Expander Header="" ExpandDirection="Right" Margin="0,0,0,10" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0">
             <TreeView x:Name="TrvStructure" Foreground="#ffffffff" BorderBrush="#FF3d3d3b" Background="#FF3d3d3b" Width="200px" Margin="10px 2px 10px 0px" SelectedItemChanged="TrvStructure_SelectedItemChanged">
-                <TreeViewItem x:Name="tvi" Header="ScreenRecorder" />
+                <TreeViewItem x:Name="Tvi" Header="ScreenRecorder" />
                 <TreeView.Resources>
-                    <ContextMenu x:Key="MenuContext"  StaysOpen="true" x:Name="yeah">
-                        <!--<MenuItem Header="Nouveau ficher" Click="AddFilesToFolder_Click"/>
-                        <MenuItem Header="Nouveau dossier" Click="AddFolder_Click"/>
-                        <MenuItem Header="Renommer"/>-->
-                    </ContextMenu>
 
                 </TreeView.Resources>
                 <TreeView.Style>
@@ -264,19 +237,19 @@
                                 </ItemsPanelTemplate>
                             </StatusBar.ItemsPanel>
                             <StatusBarItem>
-                                <TextBlock x:Name="lblProgressStatus"><Run Text="00:00:00"/></TextBlock>
+                                <TextBlock x:Name="LblProgressStatus"><Run Text="00:00:00"/></TextBlock>
                             </StatusBarItem>
                             <StatusBarItem Grid.Column="1" HorizontalContentAlignment="Stretch">
-                                <Slider x:Name="sliProgress" Thumb.DragStarted="sliProgress_DragStarted"  Thumb.DragCompleted="sliProgress_DragCompleted" ValueChanged="sliProgress_ValueChanged" />
+                                <Slider x:Name="SliProgress" Thumb.DragStarted="sliProgress_DragStarted"  Thumb.DragCompleted="sliProgress_DragCompleted" ValueChanged="sliProgress_ValueChanged" />
                             </StatusBarItem>
                         </StatusBar>
 
-                        <MediaElement Name="mePlayer" Grid.Row="1"  LoadedBehavior="Manual" Stretch="None" />
+                        <MediaElement Name="MePlayer" LoadedBehavior="Manual" Stretch="None" />
 
                     </StackPanel>
                 </TabItem>
                 <TabItem Header="Image">
-                    <Image x:Name="tabImage" VerticalAlignment="Center" Source="img/Control_pause_blue.png"></Image>
+                    <Image x:Name="TabImage" VerticalAlignment="Center" Source="img/Control_pause_blue.png"></Image>
                 </TabItem>
                 <TabItem Header="Properties">
                     <StackPanel Margin="10" Orientation="Vertical">
@@ -306,7 +279,7 @@
 
         </Grid>
 
-        <tb:TaskbarIcon x:Name="MyNotifyIcon"
+        <tb:TaskbarIcon Grid.Row="0" Grid.Column="0" x:Name="MyNotifyIcon"
   IconSource="/res/Error.ico"
   ToolTipText="ScreenRecorder" PopupActivation="DoubleClick">
 
@@ -317,8 +290,8 @@
       Background="AliceBlue">
                     <MenuItem Header="_Ouvrir" Click="menuOpen_Click" InputGestureText="Ctrl+Alt+O"/>
                     <Separator />
-                    <MenuItem x:Name="menuScreenshot" Header="Take Screenshot" Click="menuScreenshot_Click" InputGestureText="Ctrl+Alt+S" />
-                    <MenuItem x:Name="menuCaptureVideo" Header="Start Video Capture" Click="menuCaptureVideo_Click" InputGestureText="Ctrl+Alt+V" />
+                    <MenuItem x:Name="MenuScreenshot" Header="Take Screenshot" Click="menuScreenshot_Click" InputGestureText="Ctrl+Alt+S" />
+                    <MenuItem x:Name="MenuCaptureVideo" Header="Start Video Capture" Click="menuCaptureVideo_Click" InputGestureText="Ctrl+Alt+V" />
                     <Separator />
                     <MenuItem Header="Quitter" Click="menuQuit_Click" InputGestureText="Ctrl+Alt+E"/>
                 </ContextMenu>
