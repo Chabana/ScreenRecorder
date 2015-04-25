@@ -23,7 +23,10 @@
                 <Label x:Name="lblErrorYourPassword" FontWeight="Bold" Foreground="Red">Verify if your password is correct</Label>
                 <Label x:Name="lblErrorEmailDestination" FontWeight="Bold" Foreground="Red">Pattern for e-mail destination : destination@gmail.com</Label>
             </StackPanel>
-            <Button x:Name="btnSendEmail" Content="Send" Margin="126,11,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="68" Click="btnSendEmail_Click"/>
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="btnSendEmail" Content="Send" Margin="100,11,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="68" Click="btnSendEmail_Click"/>
+                <Button x:Name="btnQuitSendEmail" Content="Back" Margin="20,11,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="68" Click="btnQuitSendEmail_Click"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

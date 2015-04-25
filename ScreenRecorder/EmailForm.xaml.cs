@@ -16,6 +16,7 @@ using System.Net.Mail;
 using System.Net.Mime;
 using System.Security;
 using System.Threading;
+using System.Windows.Threading;
 
 namespace ScreenRecorder
 {
@@ -57,11 +58,11 @@ namespace ScreenRecorder
                 //receiver email id
                 mM.To.Add(txtEmailDestination.Text);
                 //subject of the email
-                mM.Subject = "your subject line will go here";
+                mM.Subject = "New Image for you !";
                 //deciding for the attachment
                 mM.Attachments.Add(new Attachment(pictureName));
                 //add the body of the email
-                mM.Body = "Body of the email";
+                mM.Body = "Here is a new image for you my friend !!!!!";
                 mM.IsBodyHtml = true;
                 //SMTP client
                 SmtpClient sC = new SmtpClient("smtp.gmail.com");
@@ -73,11 +74,20 @@ namespace ScreenRecorder
                 sC.EnableSsl = true;
                 //Send an email
                 sC.Send(mM);
+
                 this.lblEmailSucceed.Visibility = Visibility.Visible;
                 this.lblErrorYourEmail.Visibility = Visibility.Hidden;
                 this.lblErrorYourPassword.Visibility = Visibility.Hidden;
                 this.lblErrorEmailDestination.Visibility = Visibility.Hidden;
+                lblEmailSucceed.Dispatcher.Invoke(DispatcherPriority.Background, new Action(delegate()
+                {
+
+                    lblEmailSucceed.UpdateLayout();
+                }));
+
+                System.Threading.Thread.Sleep(2000);
                 this.Close();
+
 
             }//end of try block
             catch (Exception ex)
@@ -89,11 +99,15 @@ namespace ScreenRecorder
 
             }//end of catch
 
+
+
             
         }
 
-
-
+        private void btnQuitSendEmail_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
 
     }
 }
