@@ -283,7 +283,7 @@
                         </Grid>
                         <TextBlock FontSize="20px" Margin="0px 10px 0px 0px">Preview</TextBlock>
 
-                        <Image  x:Name="TabImage" VerticalAlignment="Center" Source="img/Control_pause_blue.png"></Image>
+                        <Image  x:Name="TabImage" VerticalAlignment="Center" Source=""></Image>
 
                     </StackPanel>
                 </TabItem>

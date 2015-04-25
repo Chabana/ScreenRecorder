@@ -6,8 +6,6 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -82,7 +80,7 @@ namespace ScreenRecorder
 
             _listFilters = new List<string>
             {
-                "y date descending",
+                "By date descending",
                 "By name descending",
                 "By size descending",
                 "By date ascending",
@@ -100,8 +98,13 @@ namespace ScreenRecorder
             Folder folder = new Folder();
             var observableCollection = folder.Files;
 
-            if (observableCollection == null) throw new ArgumentNullException(@"observableCollection");
-            Console.WriteLine(observableCollection.Count);
+            if (observableCollection == null) try
+            {
+                throw new ArgumentNullException(@"observableCollection");
+            }
+            catch (ArgumentNullException argumentNullException)
+            {
+            }
 
             foreach (var fileInfo in observableCollection)
             {
