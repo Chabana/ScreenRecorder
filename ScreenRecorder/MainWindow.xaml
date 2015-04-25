@@ -284,18 +284,18 @@
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Margin="0,0,0,0" Width="450">
                                 <Label FontWeight="Bold">Image extension :</Label>
-                                <RadioButton GroupName="image" Checked="RadioButton_Checked" >Bmp</RadioButton>
-                                <RadioButton GroupName="image" Checked="RadioButton_Checked">Emf</RadioButton>
-                                <RadioButton GroupName="image" Checked="RadioButton_Checked">Gif</RadioButton>
-                                <RadioButton GroupName="image" Checked="RadioButton_Checked">Jpeg</RadioButton>
-                                <RadioButton GroupName="image" Checked="RadioButton_Checked">Png</RadioButton>
-                                <RadioButton GroupName="image" Checked="RadioButton_Checked">Tiff</RadioButton>
-                                <RadioButton GroupName="image" Checked="RadioButton_Checked">Exif</RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButton_Checked" Content="Bmp"></RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButton_Checked" Content="Emf"></RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButton_Checked" Content="Gif"></RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButton_Checked" Content="Jpeg"></RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButton_Checked" Content="Png" IsChecked="True"></RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButton_Checked" Content="Tiff"></RadioButton>
+                                <RadioButton GroupName="image" Checked="RadioButton_Checked" Content="Exif"></RadioButton>
                             </StackPanel>
                             <StackPanel>
                                 <Label FontWeight="Bold">Video extension :</Label>
-                                <RadioButton GroupName="video" Checked="RadioButton_Checked_1" >MPEG4</RadioButton>
-                                <RadioButton GroupName="video" Checked="RadioButton_Checked_1">WMV</RadioButton>
+                                <RadioButton GroupName="video" Checked="RadioButton_Checked_1" IsChecked="True" Content="MPEG4"></RadioButton>
+                                <RadioButton GroupName="video" Checked="RadioButton_Checked_1" Content="WMV"></RadioButton>
                             </StackPanel>
 
                         </StackPanel>

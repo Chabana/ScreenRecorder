@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -19,9 +18,10 @@ using AForge.Video;
 using AForge.Video.FFMPEG;
 using Hardcodet.Wpf.TaskbarNotification;
 using NHotkey;
+using NHotkey.Wpf;
 using Application = System.Windows.Application;
 using Image = System.Drawing.Image;
-using NHotkey.Wpf;
+using RadioButton = System.Windows.Controls.RadioButton;
 
 namespace ScreenRecorder
 {
@@ -414,8 +414,7 @@ namespace ScreenRecorder
 
             foreach (String extension in extensions)
             {
-                FileSystemWatcher w = new FileSystemWatcher();
-                w.Filter = extension;
+                FileSystemWatcher w = new FileSystemWatcher {Filter = extension};
                 w.Changed += new FileSystemEventHandler(fileSystemWatcher_Changed);
                 watchersExtension.Add(w);
             }
@@ -579,7 +578,6 @@ namespace ScreenRecorder
                         tabImage.Source = new BitmapImage(new Uri("c:\\ScreenRecorder\\" + e.NewValue.ToString(), UriKind.RelativeOrAbsolute));
                     }
                 }
-                
             }       
         }
 
@@ -680,12 +678,12 @@ namespace ScreenRecorder
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            var button = sender as System.Windows.Controls.RadioButton;
-            if (button == null)
+            var button = sender as RadioButton;
+            if (button == null || button.Content == null)
                 return;
+
             if (button.IsChecked != null && button.IsChecked.Value)
                 Console.WriteLine(button.Content.ToString());
-
 
             switch (button.Content.ToString())
             { 
@@ -725,8 +723,9 @@ namespace ScreenRecorder
 
         private void RadioButton_Checked_1(object sender, RoutedEventArgs e)
         {
-            var button = sender as System.Windows.Controls.RadioButton;
-            if (button == null)
+            var button = sender as RadioButton;
+      
+            if (button == null || button.Content == null)
                 return;
             if (button.IsChecked != null && button.IsChecked.Value)
                 Console.WriteLine(button.Content.ToString());
