@@ -6,7 +6,6 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,7 +23,6 @@ using NHotkey.Wpf;
 using Application = System.Windows.Application;
 using Image = System.Drawing.Image;
 using RadioButton = System.Windows.Controls.RadioButton;
-
 
 namespace ScreenRecorder
 {
@@ -74,7 +72,7 @@ namespace ScreenRecorder
 
             ShowInTaskbar = false;
             WindowState = WindowState.Minimized;
-            this.Visibility = Visibility.Hidden;
+            Visibility = Visibility.Hidden;
 
             HotkeyManager.Current.AddOrReplace("Screenshots", Key.S, ModifierKeys.Control | ModifierKeys.Alt, OnStartScreenshots);
             HotkeyManager.Current.AddOrReplace("VideoCapture", Key.V, ModifierKeys.Control | ModifierKeys.Alt, OnStartVideocapture);
@@ -120,7 +118,7 @@ namespace ScreenRecorder
 
             _writer = new VideoFileWriter();
 
-            this.btnSendImageEmail.IsEnabled = false;
+            btnSendImageEmail.IsEnabled = false;
 
             Update();
         }
@@ -589,7 +587,7 @@ namespace ScreenRecorder
                     var fileName = "c:\\ScreenRecorder\\" + e.NewValue;
                     pictureName = fileName;
 
-                    this.btnSendImageEmail.IsEnabled = true;
+                    btnSendImageEmail.IsEnabled = true;
 
                     BitmapSource img = BitmapFrame.Create(new Uri(fileName, UriKind.RelativeOrAbsolute));
 

@@ -4,28 +4,28 @@
         Title="EmailForm" Height="375.309" Width="327.16" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
     <Grid>
         <StackPanel Orientation="Vertical">
-            <Label x:Name="labelTitle" FontSize="15" FontWeight="Bold">Enter Gmail informations to send e-mail</Label>
-            <Label x:Name="lblEmailSucceed" Foreground="Green" BorderThickness="0,10,0,0">Your E-mail has been sent !</Label>
+            <Label x:Name="LabelTitle" FontSize="15" FontWeight="Bold">Enter your Gmail informations</Label>
+            <Label x:Name="LblEmailSucceed" Foreground="Green" BorderThickness="0,10,0,0">Your E-mail has been sent !</Label>
             <StackPanel Orientation="Horizontal">
-                <Label x:Name="labelYourEmail" Margin="0,30,0,0">Your E-mail :</Label>
-                <TextBox x:Name="txtYourEmail" ToolTip="Your E-mail" Width="224" Margin="0,30,0,0"/>
+                <Label x:Name="LabelYourEmail" Margin="0,30,0,0">Your E-mail :</Label>
+                <TextBox x:Name="TxtYourEmail" ToolTip="Your E-mail" Width="224" Margin="0,30,0,0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label x:Name="labelYourPassword" Margin="0,30,0,0">Your Password :</Label>
-                <PasswordBox x:Name="passwordBoxYourPassword" ToolTip="Your Password" Width="206" Margin="0,30,0,0"></PasswordBox>
+                <Label x:Name="LabelYourPassword" Margin="0,30,0,0">Your Password :</Label>
+                <PasswordBox x:Name="PasswordBoxYourPassword" ToolTip="Your Password" Width="206" Margin="0,30,0,0"></PasswordBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label x:Name="labelDestinationEmail" Margin="0,30,0,0">Destination E-mail :</Label>
-                <TextBox x:Name="txtEmailDestination" ToolTip="Email Destination" Width="185" Margin="0,30,0,0"></TextBox>
+                <Label x:Name="LabelDestinationEmail" Margin="0,30,0,0">Destination E-mail :</Label>
+                <TextBox x:Name="TxtEmailDestination" ToolTip="Email Destination" Width="185" Margin="0,30,0,0"></TextBox>
             </StackPanel>
             <StackPanel Margin="0,20,0,0">
-                <Label x:Name="lblErrorYourEmail" FontWeight="Bold" Foreground="Red">Pattern for your e-mail : yourEmail@gmail.com</Label>
-                <Label x:Name="lblErrorYourPassword" FontWeight="Bold" Foreground="Red">Verify if your password is correct</Label>
-                <Label x:Name="lblErrorEmailDestination" FontWeight="Bold" Foreground="Red">Pattern for e-mail destination : destination@gmail.com</Label>
+                <Label x:Name="LblErrorYourEmail" FontWeight="Bold" Foreground="Red"></Label>
+                <Label x:Name="LblErrorYourPassword" FontWeight="Bold" Foreground="Red"></Label>
+                <Label x:Name="LblErrorEmailDestination" FontWeight="Bold" Foreground="Red"></Label>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Button x:Name="btnSendEmail" Content="Send" Margin="100,11,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="68" Click="btnSendEmail_Click"/>
-                <Button x:Name="btnQuitSendEmail" Content="Back" Margin="20,11,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="68" Click="btnQuitSendEmail_Click"/>
+                <Button x:Name="BtnSendEmail" Content="Send" Margin="100,11,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="68" Click="btnSendEmail_Click"/>
+                <Button x:Name="BtnQuitSendEmail" Content="Back" Margin="20,11,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="68" Click="btnQuitSendEmail_Click"/>
             </StackPanel>
         </StackPanel>
     </Grid>

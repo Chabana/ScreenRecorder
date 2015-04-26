@@ -1,21 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Net.Mail;
-using System.Net.Mime;
-using System.Security;
+using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows;
 using System.Windows.Threading;
 
 namespace ScreenRecorder
@@ -25,88 +13,151 @@ namespace ScreenRecorder
     /// </summary>
     public partial class EmailForm : Window
     {
-        private string pictureName;
+        private string _pictureName;
         public EmailForm(string pictureName)
         {
-            this.pictureName = pictureName;
+            _pictureName = pictureName;
             InitializeComponent();
 
-
-            
-
-            this.lblErrorYourEmail.Visibility = Visibility.Hidden;
-            this.lblErrorYourPassword.Visibility = Visibility.Hidden;
-            this.lblErrorEmailDestination.Visibility = Visibility.Hidden;
-            this.lblEmailSucceed.Visibility = Visibility.Hidden;
+            LblErrorYourEmail.Visibility = Visibility.Hidden;
+            LblErrorYourPassword.Visibility = Visibility.Hidden;
+            LblErrorEmailDestination.Visibility = Visibility.Hidden;
+            LblEmailSucceed.Visibility = Visibility.Hidden;
         }
 
 
 
         private void btnSendEmail_Click(object sender, RoutedEventArgs e)
         {
-            if (!txtYourEmail.Text.Contains("@gmail.com"))
+            bool emailSenderValid = false;
+            bool passwordValid = false;
+            bool emailDestValid = false;
+
+            // Your Email Field Validation
+            bool emailSender = Regex.IsMatch(TxtYourEmail.Text.Trim(), @"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b");
+
+            if (TxtYourEmail.Text == "")
             {
-                
+                LblErrorYourEmail.Content = "Your email is empty";
+                LblErrorYourEmail.Visibility = Visibility.Visible;
+
+            }
+            else if (emailSender)
+            {
+                LblErrorYourEmail.Content = "Your email is not a valid email : YourEmail@gmail.com";
+                LblErrorYourEmail.Visibility = Visibility.Visible;
+            }
+            else if (!TxtYourEmail.Text.Contains("@gmail.com"))
+            {
+                LblErrorYourEmail.Content = "Only Gmail account are accepted";
+                LblErrorYourEmail.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                LblErrorYourEmail.Content = null;
+                LblErrorYourEmail.Visibility = Visibility.Hidden;
+                emailSenderValid = true;
             }
 
-            try
+            // Password Field Validation
+            if (PasswordBoxYourPassword.Password == "")
             {
-                //Mail Message
-                MailMessage mM = new MailMessage();
-                //Mail Address
-                mM.From = new MailAddress(txtYourEmail.Text);
-                //receiver email id
-                mM.To.Add(txtEmailDestination.Text);
-                //subject of the email
-                mM.Subject = "New Image for you !";
-                //deciding for the attachment
-                mM.Attachments.Add(new Attachment(pictureName));
-                //add the body of the email
-                mM.Body = "Here is a new image for you my friend !!!!!";
-                mM.IsBodyHtml = true;
-                //SMTP client
-                SmtpClient sC = new SmtpClient("smtp.gmail.com");
-                //port number for Gmail mail
-                sC.Port = 587;
-                //credentials to login in to Gmail account
-                sC.Credentials = new NetworkCredential(txtYourEmail.Text, passwordBoxYourPassword.Password);
-                //enabled SSL
-                sC.EnableSsl = true;
-                //Send an email
-                sC.Send(mM);
+                LblErrorYourPassword.Content = "Your password is empty";
+                LblErrorYourPassword.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                LblErrorYourPassword.Content = null;
+                LblErrorYourPassword.Visibility = Visibility.Hidden;
+                passwordValid = true;
+            }
 
-                this.lblEmailSucceed.Visibility = Visibility.Visible;
-                this.lblErrorYourEmail.Visibility = Visibility.Hidden;
-                this.lblErrorYourPassword.Visibility = Visibility.Hidden;
-                this.lblErrorEmailDestination.Visibility = Visibility.Hidden;
-                lblEmailSucceed.Dispatcher.Invoke(DispatcherPriority.Background, new Action(delegate()
+            // Destination Email Field Validation
+            bool emailDestination = Regex.IsMatch(TxtEmailDestination.Text.Trim(), @"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b");
+
+            if (TxtEmailDestination.Text == "")
+            {
+                LblErrorEmailDestination.Content = "Destination email is empty";
+                LblErrorEmailDestination.Visibility = Visibility.Visible;
+            }
+            else if (emailDestination)
+            {
+                LblErrorEmailDestination.Content = "Destination email is not a valid email : YourEmail@gmail.com";
+                LblErrorEmailDestination.Visibility = Visibility.Visible;
+            }
+            else if (!TxtEmailDestination.Text.Contains("@gmail.com"))
+            {
+                LblErrorEmailDestination.Content = "Only Gmail account are accepted";
+                LblErrorEmailDestination.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                LblErrorEmailDestination.Content = null;
+                LblErrorEmailDestination.Visibility = Visibility.Hidden;
+                emailDestValid = true;
+            }
+
+ 
+            // Every fields are valid, let's try to send the email
+            if (emailDestValid && emailSenderValid && passwordValid)
+            {
+                try
+                {
+                    //Mail Message
+                    MailMessage mM = new MailMessage();
+                    //Mail Address
+                    mM.From = new MailAddress(TxtYourEmail.Text);
+                    //receiver email id
+                    mM.To.Add(TxtEmailDestination.Text);
+                    //subject of the email
+                    mM.Subject = "New Image for you !";
+                    //deciding for the attachment
+                    mM.Attachments.Add(new Attachment(_pictureName));
+                    //add the body of the email
+                    mM.Body = "Here is a new image for you my friend !!!!!";
+                    mM.IsBodyHtml = true;
+                    //SMTP client
+                    SmtpClient sC = new SmtpClient("smtp.gmail.com");
+                    //port number for Gmail mail
+                    sC.Port = 587;
+                    //credentials to login in to Gmail account
+                    sC.Credentials = new NetworkCredential(TxtYourEmail.Text, PasswordBoxYourPassword.Password);
+                    //enabled SSL
+                    sC.EnableSsl = true;
+                    //Send an email
+                    sC.Send(mM);
+
+                    LblEmailSucceed.Visibility = Visibility.Visible;
+                    LblErrorYourEmail.Visibility = Visibility.Hidden;
+                    LblErrorYourPassword.Visibility = Visibility.Hidden;
+                    LblErrorEmailDestination.Visibility = Visibility.Hidden;
+                    LblEmailSucceed.Dispatcher.Invoke(DispatcherPriority.Background, new Action(delegate()
+                    {
+
+                        LblEmailSucceed.UpdateLayout();
+                    }));
+
+                    Thread.Sleep(2000);
+                    Close();
+
+
+                } //end of try block
+                catch (Exception ex)
                 {
 
-                    lblEmailSucceed.UpdateLayout();
-                }));
+                    LblErrorYourEmail.Visibility = Visibility.Visible;
+                    LblErrorYourPassword.Visibility = Visibility.Visible;
+                    LblErrorEmailDestination.Visibility = Visibility.Visible;
+                    LblEmailSucceed.Visibility = Visibility.Hidden;
 
-                System.Threading.Thread.Sleep(2000);
-                this.Close();
+                } //end of catch
+            }
 
-
-            }//end of try block
-            catch (Exception ex)
-            {
-                this.lblErrorYourEmail.Visibility = Visibility.Visible;
-                this.lblErrorYourPassword.Visibility = Visibility.Visible;
-                this.lblErrorEmailDestination.Visibility = Visibility.Visible;
-                this.lblEmailSucceed.Visibility = Visibility.Hidden;
-
-            }//end of catch
-
-
-
-            
         }
 
         private void btnQuitSendEmail_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
 
     }
