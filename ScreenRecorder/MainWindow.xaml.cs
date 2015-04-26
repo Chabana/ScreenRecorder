@@ -751,7 +751,7 @@ namespace ScreenRecorder
                     _imageExtension = ".tiff";
                     break;
                 default:
-                    Console.WriteLine("Unexpected error my friend !");
+                    Console.WriteLine(@"Unexpected error my friend !");
                     break;
             }
         }
@@ -786,7 +786,7 @@ namespace ScreenRecorder
                     _frameRate = 60;
                     break;
                 default:
-                    Console.WriteLine("Unexpected error my friend !");
+                    Console.WriteLine(@"Unexpected error my friend !");
                     break;
             }
         }
@@ -813,7 +813,7 @@ namespace ScreenRecorder
                     break;
 
                 default:
-                    Console.WriteLine("Unexpected error my friend !");
+                    Console.WriteLine(@"Unexpected error my friend !");
                     break;
             }
         }
