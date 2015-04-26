@@ -292,7 +292,7 @@
                 
                 <TabItem Header="Properties">
                     <StackPanel Margin="10" Orientation="Vertical">
-                        <Label Content="Select properties for the appl  ication" FontSize="22" FontWeight="Bold"></Label>
+                        <Label Content="Properties" FontSize="22" FontWeight="Bold"></Label>
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Margin="0,0,0,0" Width="450">
                                 <Label FontWeight="Bold">Image extension :</Label>
@@ -322,9 +322,33 @@
                         </StackPanel>
                     </StackPanel>
                 </TabItem>
-                
-            </TabControl>
 
+
+                <TabItem Header="Shortcuts">
+                    <StackPanel Margin="10" Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Margin="0,0,0,0" Width="auto">
+                                <Label FontWeight="Bold">Shortcuts </Label>
+                                <Label>Maximized application : CTRL + O</Label>
+                                <Label>Quit application : CTRL + E</Label>
+                                <Label>Take screenshot : CTRL + S</Label>
+                                <Label>Start/Stop video capture : CTRL + V</Label>
+
+                                <Label FontWeight="Bold">Created by</Label>
+                                <Label>Michael Caraccio</Label>
+                                <Label>Khaled Chabbou</Label>
+                                <Label>Daniel De Carvalho Fernandes</Label>
+
+                                <Label FontWeight="Bold">Professor</Label>
+                                <Label>Olivier Hüsser</Label>
+
+
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+
+            </TabControl>
         </Grid>
 
         <tb:TaskbarIcon Grid.Row="0" Grid.Column="0" x:Name="MyNotifyIcon"
