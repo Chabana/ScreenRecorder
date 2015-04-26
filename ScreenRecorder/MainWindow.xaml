@@ -170,9 +170,9 @@
 
         <Expander Header="" IsExpanded="True" ExpandDirection="Right" Margin="0,0,0,10" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0">
             
-            <TreeView x:Name="TrvStructure" Foreground="#ffffffff" BorderBrush="#FF3d3d3b" Width="280px" SelectedItemChanged="TrvStructure_SelectedItemChanged">
+            <TreeView x:Name="TrvStructure" Foreground="#ffffffff" BorderBrush="#FF3d3d3b" Width="250px" SelectedItemChanged="TrvStructure_SelectedItemChanged">
                 <Label  Margin="-8px 10px 0px 0px" >Sort folder by :</Label>
-                <ComboBox x:Name="FilterCombobox" Margin="-5px 0px 0px 15px" SelectionChanged="filterCombobox_SelectionChanged" Width="250px"></ComboBox>
+                <ComboBox x:Name="FilterCombobox" Margin="-5px 0px 0px 15px" SelectionChanged="filterCombobox_SelectionChanged" Width="220px"></ComboBox>
                 
                 <TreeViewItem IsExpanded="True" x:Name="Tvi" Header="Folder" Margin="-5px 0px 0px 0px" FontSize="13" FontWeight="Normal"/> 
            
@@ -245,9 +245,11 @@
                 
                 <TabItem Header="Image">
                     <StackPanel>
-                        <TextBlock FontSize="20px" Margin="0px 10px 0px 0px"><Run Text="File informations "/><InlineUIContainer>
-                    			<Button x:Name="btnSendImageEmail" Content="Send Image by e-mail" Margin="315,0,0,0" Click="btnSendImageEmail_Click"/>
-                    		</InlineUIContainer></TextBlock>
+                        <TextBlock FontSize="20px" Margin="0px 10px 0px 0px"><Run Text="File informations "/>
+                            <InlineUIContainer>
+                    			<Button x:Name="btnSendImageEmail" FontSize="15px" Padding="5px 2px 5px 2px"  Content="Send by e-mail" Margin="395px -5px 0px 0px" Click="btnSendImageEmail_Click" FontFamily="Helvetica neue" RenderTransformOrigin="0,0" ClipToBounds="True"/>
+                    		</InlineUIContainer>
+                        </TextBlock>
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="20px" />

@@ -29,7 +29,7 @@ namespace ScreenRecorder
     /// <summary>
     /// Logique d'interaction pour MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
 
         private readonly VideoFileWriter _writer;
@@ -56,7 +56,8 @@ namespace ScreenRecorder
         private VideoCodec _videoFormat = VideoCodec.MPEG4;
         private string _videoExtension = ".mp4";
 
-        private string pictureName = "";
+        private string _mainFolderPath = "c:\\ScreenRecorder";
+        private string _pictureName = "";
 
         //##########################################################################################################################
         //######################################## Constructor -> Initialize the application ##############################
@@ -64,8 +65,7 @@ namespace ScreenRecorder
 
         public MainWindow()
         {
-
-            
+   
             InitializeComponent();
 
             //Minimize the window and don't put in the taskbar
@@ -81,12 +81,12 @@ namespace ScreenRecorder
 
             _listFilters = new List<string>
             {
-                "By date descending",
-                "By name descending",
-                "By size descending",
-                "By date ascending",
-                "By name ascending",
-                "By size ascending"
+                "Date descending",
+                "Name descending",
+                "Size descending",
+                "Date ascending",
+                "Name ascending",
+                "Size ascending"
             };
 
             FilterCombobox.IsEditable = true;
@@ -96,7 +96,8 @@ namespace ScreenRecorder
             MouseDown += MainWindow_MouseDown;
 
             Folder folder = new Folder();
-            folder.FullPath = "c:\\ScreenRecorder";
+            folder.FullPath = _mainFolderPath;
+
             var observableCollection = folder.Files;
 
             if (observableCollection == null) try
@@ -121,6 +122,11 @@ namespace ScreenRecorder
             btnSendImageEmail.IsEnabled = false;
 
             Update();
+        }
+
+        private int CountVideoInFolder()
+        {
+            return Directory.GetFiles(_mainFolderPath, "*.xml", SearchOption.AllDirectories).Length;
         }
 
         
@@ -175,7 +181,7 @@ namespace ScreenRecorder
                     _frameCount = 0;
 
                     var time = DateTime.Now.ToString("dd-MM-yy HH.mm.ss");
-                    var fullName = "c:\\ScreenRecorder" + "\\" + "video " + time;
+                    var fullName = _mainFolderPath + "\\" + "video " + time;
 
                     try
                     {
@@ -251,7 +257,6 @@ namespace ScreenRecorder
             }
             catch (Exception exception)
             {
-
                 Console.WriteLine(exception.Message);
             }
         }
@@ -324,12 +329,11 @@ namespace ScreenRecorder
                 Bitmap bitmap = eventArgs.Frame.Clone() as Bitmap;
                 ((ScreenCaptureStream)sender).SignalToStop();
                 Image img = bitmap;
-                string dirName = "c:\\ScreenRecorder";
 
                 var time = DateTime.Now.ToString("dd-MM-yy HH.mm.ss");
                 var fullName = "image " + time + _imageExtension;
 
-                fullName = Path.Combine(dirName, fullName);
+                fullName = Path.Combine(_mainFolderPath, fullName);
                 img.Save(fullName, _imageFormat);
             }
             catch (Exception e)
@@ -408,14 +412,13 @@ namespace ScreenRecorder
 
         private void Update()
         {
-            string folderPath = "c:\\ScreenRecorder";
 
-            if (string.IsNullOrWhiteSpace(folderPath))
+            if (string.IsNullOrWhiteSpace(_mainFolderPath))
                 return;
 
             FileSystemWatcher watcher = new FileSystemWatcher();
 
-            watcher.Path = folderPath;
+            watcher.Path = _mainFolderPath;
 
             watcher.NotifyFilter = NotifyFilters.LastAccess |  NotifyFilters.FileName | NotifyFilters.DirectoryName;
 
@@ -570,7 +573,7 @@ namespace ScreenRecorder
                     Tabcontroler.SelectedIndex = 0;
                     DispatcherTimer timerMedia = new DispatcherTimer();
                     MePlayer.Stretch = Stretch.Fill;
-                    MePlayer.Source = new Uri("c:\\ScreenRecorder\\" + e.NewValue);
+                    MePlayer.Source = new Uri(_mainFolderPath + "\\" + e.NewValue);
                     timerMedia.Interval = TimeSpan.FromSeconds(1);
                     timerMedia.Tick += timer_Tick;
                     timerMedia.Start();
@@ -584,8 +587,8 @@ namespace ScreenRecorder
                     Tabcontroler.SelectedItem = 1;
                     Tabcontroler.SelectedIndex = 1;
 
-                    var fileName = "c:\\ScreenRecorder\\" + e.NewValue;
-                    pictureName = fileName;
+                    var fileName = _mainFolderPath + "\\" + e.NewValue;
+                    _pictureName = fileName;
 
                     btnSendImageEmail.IsEnabled = true;
 
@@ -624,8 +627,8 @@ namespace ScreenRecorder
             {
                 DeleteListLine(fileInfo.Name);
             }
-            const string dir = "c:\\ScreenRecorder";
-            string[] fns = Directory.GetFiles(dir);
+      
+            string[] fns = Directory.GetFiles(_mainFolderPath);
 
             var sortBySizeDescending = from fn in fns orderby new FileInfo(fn).Length descending select fn;
             var sortByDateDescending = from fn in fns orderby new FileInfo(fn).LastWriteTime descending select fn;
@@ -637,7 +640,7 @@ namespace ScreenRecorder
 
             switch (FilterCombobox.SelectedItem as string)
             {
-                case "By size descending":
+                case "Size descending":
 
                     foreach (string n in sortBySizeDescending)
                     {
@@ -645,7 +648,7 @@ namespace ScreenRecorder
                         AddListLine(Path.GetFileName(n));
                     }
                     break;
-                case "By name descending":
+                case "Name descending":
 
                     foreach (string n in sortByNameDescending)
                     {
@@ -653,7 +656,7 @@ namespace ScreenRecorder
                         AddListLine(Path.GetFileName(n));
                     }
                     break;
-                case "By date descending":
+                case "Date descending":
 
                     foreach (string n in sortByDateDescending)
                     {
@@ -661,7 +664,7 @@ namespace ScreenRecorder
                         AddListLine(Path.GetFileName(n));
                     }
                     break;
-                case "By size ascending":
+                case "Size ascending":
 
                     foreach (string n in sortBySizeAscending)
                     {
@@ -669,7 +672,7 @@ namespace ScreenRecorder
                         AddListLine(Path.GetFileName(n));
                     }
                     break;
-                case "By name ascending":
+                case "Name ascending":
 
                     foreach (string n in sortByNameAscending)
                     {
@@ -677,7 +680,7 @@ namespace ScreenRecorder
                         AddListLine(Path.GetFileName(n));
                     }
                     break;
-                case "By date ascending":
+                case "Date ascending":
 
                     foreach (string n in sortByDateAscending)
                     {
@@ -798,11 +801,8 @@ namespace ScreenRecorder
 
         private void btnSendImageEmail_Click(object sender, RoutedEventArgs e)
         {
-            EmailForm emailForm = new EmailForm(pictureName);
+            EmailForm emailForm = new EmailForm(_pictureName);
             emailForm.Show();
-
-        }
-
-        
+        } 
     }
 }

@@ -191,8 +191,8 @@ Y:\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\EmailForm.g.cs
 Y:\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\MainWindow.g.cs
 Y:\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\App.g.cs
 Y:\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder_MarkupCompile.cache
-Y:\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder_MarkupCompile.lref
 Y:\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\MainWindow.baml
 Y:\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.g.resources
 Y:\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.Properties.Resources.resources
 Y:\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.csproj.GenerateResource.Cache
+Y:\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder_MarkupCompile.lref
