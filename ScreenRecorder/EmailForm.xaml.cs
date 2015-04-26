@@ -105,11 +105,11 @@ namespace ScreenRecorder
                     //receiver email id
                     mM.To.Add(TxtEmailDestination.Text);
                     //subject of the email
-                    mM.Subject = "New Image for you !";
+                    mM.Subject = "Image from ScreenRecorder!";
                     //deciding for the attachment
                     mM.Attachments.Add(new Attachment(_pictureName));
                     //add the body of the email
-                    mM.Body = "Here is a new image for you my friend !!!!!";
+                    mM.Body = "You received a new picture! Have a nice day";
                     mM.IsBodyHtml = true;
                     //SMTP client
                     SmtpClient sC = new SmtpClient("smtp.gmail.com");
@@ -131,7 +131,7 @@ namespace ScreenRecorder
                         LblEmailSucceed.UpdateLayout();
                     }));
 
-                    Thread.Sleep(1500);
+                    Thread.Sleep(2000);
                     Close();
 
 
