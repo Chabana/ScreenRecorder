@@ -126,11 +126,20 @@ namespace ScreenRecorder
 
         private int CountVideoInFolder()
         {
-            return Directory.GetFiles(_mainFolderPath, "*.xml", SearchOption.AllDirectories).Length;
+            return Directory.GetFiles(_mainFolderPath, "*.wmv", SearchOption.AllDirectories).Length + Directory.GetFiles(_mainFolderPath, "*.mp4", SearchOption.AllDirectories).Length;
         }
 
-        
+        private int CountImageInFolder()
+        {
+            int countbmp = Directory.GetFiles(_mainFolderPath, "*.bmp", SearchOption.AllDirectories).Length;
+            int counttiff = Directory.GetFiles(_mainFolderPath, "*.tiff", SearchOption.AllDirectories).Length;
+            int countjpeg = Directory.GetFiles(_mainFolderPath, "*.jpeg", SearchOption.AllDirectories).Length;
+            int countjpg = Directory.GetFiles(_mainFolderPath, "*.jpg", SearchOption.AllDirectories).Length;
+            int countgif = Directory.GetFiles(_mainFolderPath, "*.gif", SearchOption.AllDirectories).Length;
+            int countpng = Directory.GetFiles(_mainFolderPath, "*.png", SearchOption.AllDirectories).Length;
 
+            return countbmp + counttiff + countjpeg + countjpg + countgif + countpng;
+        }
         //##########################################################################################################################
         //######################################## Exit application from menu or shortcut ##############################
 
@@ -268,6 +277,9 @@ namespace ScreenRecorder
             {
                 _rec = false;
                 Console.WriteLine(@"FILE SAVED !!!!");
+
+                FileContentCounter.Content = "You have : " + CountVideoInFolder() + (CountVideoInFolder() < 2 ? " video " : " videos ") + " and " + CountImageInFolder() +
+                                         (CountImageInFolder() < 2 ? " image" : " images");
             }
             catch (Exception exception)
             {
@@ -310,6 +322,10 @@ namespace ScreenRecorder
             const string title = "ScreenRecorder";
             const string text = "Screenshot has been saved (C:\\ScreenRecorder)";
             ShowStandardBalloon(title, text);
+
+            Thread.Sleep(100);
+            FileContentCounter.Content = "You have : " + CountVideoInFolder() + (CountVideoInFolder() < 2 ? " video " : " videos ") + " and " + CountImageInFolder() +
+                             (CountImageInFolder() < 2 ? " image" : " images");
         }
 
         /// <summary>
@@ -335,6 +351,9 @@ namespace ScreenRecorder
 
                 fullName = Path.Combine(_mainFolderPath, fullName);
                 img.Save(fullName, _imageFormat);
+
+                FileContentCounter.Content = "You have : " + CountVideoInFolder() + (CountVideoInFolder() < 2 ? " video " : " videos ") + " and " + CountImageInFolder() +
+                                         (CountImageInFolder() < 2 ? " image" : " images");
             }
             catch (Exception e)
             {
@@ -439,6 +458,9 @@ namespace ScreenRecorder
             watcher.Renamed += fileSystemWatcher_Renamed;
 
             watcher.EnableRaisingEvents = true;
+
+            FileContentCounter.Content = "You have : " + CountVideoInFolder() + (CountVideoInFolder() < 2 ? " video " : " videos ") + " and " + CountImageInFolder() +
+                                         (CountImageInFolder() < 2 ? " image" : " images");
         }
 
         void fileSystemWatcher_Created(object sender, FileSystemEventArgs e)

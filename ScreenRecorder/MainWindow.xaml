@@ -173,10 +173,11 @@
             <TreeView x:Name="TrvStructure" Foreground="#ffffffff" BorderBrush="#FF3d3d3b" Width="250px" SelectedItemChanged="TrvStructure_SelectedItemChanged">
                 <Label  Margin="-8px 10px 0px 0px" >Sort folder by :</Label>
                 <ComboBox x:Name="FilterCombobox" Margin="-5px 0px 0px 15px" SelectionChanged="filterCombobox_SelectionChanged" Width="220px"></ComboBox>
-                
-                <TreeViewItem IsExpanded="True" x:Name="Tvi" Header="Folder" Margin="-5px 0px 0px 0px" FontSize="13" FontWeight="Normal"/> 
-           
-                
+                <Label ClipToBounds="True" x:Name="FileContentCounter" Margin="-7px 0px 0px 10px" Content="" VerticalAlignment="Bottom"/>
+
+                <TreeViewItem IsExpanded="True" x:Name="Tvi" Header="Folder" Margin="-2px 0px 0px 0px" FontSize="13" FontWeight="Normal"/>
+
+
                 <TreeView.Style>
                     <Style TargetType="{x:Type TreeView}">
                         <Setter Property="FontFamily" Value="Helvetica neue" />
@@ -187,7 +188,10 @@
                         <Setter Property="FontStyle" Value="Normal"/>
                     </Style>
                 </TreeView.Style>
+
             </TreeView>
+            
+            
 
         </Expander>
         <Grid  Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Margin="10px,5px,10px,10px" Background="White">
