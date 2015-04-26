@@ -11,7 +11,7 @@ namespace ScreenRecorder
     /// <summary>
     /// Logique d'interaction pour EmailForm.xaml
     /// </summary>
-    public partial class EmailForm : Window
+    public partial class EmailForm
     {
         private string _pictureName;
         public EmailForm(string pictureName)
@@ -131,8 +131,7 @@ namespace ScreenRecorder
                     LblErrorYourEmail.Visibility = Visibility.Hidden;
                     LblErrorYourPassword.Visibility = Visibility.Hidden;
                     LblErrorEmailDestination.Visibility = Visibility.Hidden;
-                    LblEmailSucceed.Dispatcher.Invoke(DispatcherPriority.Background, new Action(delegate()
-                    {
+                    LblEmailSucceed.Dispatcher.Invoke(DispatcherPriority.Background, new Action(delegate {
 
                         LblEmailSucceed.UpdateLayout();
                     }));
@@ -142,23 +141,19 @@ namespace ScreenRecorder
 
 
                 } //end of try block
-                catch (Exception ex)
+                catch (Exception)
                 {
-
                     LblErrorYourEmail.Visibility = Visibility.Visible;
                     LblErrorYourPassword.Visibility = Visibility.Visible;
                     LblErrorEmailDestination.Visibility = Visibility.Visible;
                     LblEmailSucceed.Visibility = Visibility.Hidden;
-
                 } //end of catch
             }
-
         }
 
         private void btnQuitSendEmail_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
-
     }
 }

@@ -170,23 +170,23 @@
 
         <Expander Header="" IsExpanded="True" ExpandDirection="Right" Margin="0,0,0,10" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0">
             
-            <TreeView x:Name="TrvStructure" Foreground="#ffffffff" BorderBrush="#FF3d3d3b" Width="250px" SelectedItemChanged="TrvStructure_SelectedItemChanged">
-
-                <ComboBox x:Name="FilterCombobox" SelectionChanged="filterCombobox_SelectionChanged" Width="200px"></ComboBox>
-
-                <TreeViewItem x:Name="Tvi" Header="ScreenRecorder"/> 
+            <TreeView x:Name="TrvStructure" Foreground="#ffffffff" BorderBrush="#FF3d3d3b" Width="280px" SelectedItemChanged="TrvStructure_SelectedItemChanged">
+                <Label  Margin="-8px 10px 0px 0px" >Sort folder by :</Label>
+                <ComboBox x:Name="FilterCombobox" Margin="-5px 0px 0px 15px" SelectionChanged="filterCombobox_SelectionChanged" Width="250px"></ComboBox>
+                
+                <TreeViewItem IsExpanded="True" x:Name="Tvi" Header="Folder" Margin="-5px 0px 0px 0px" FontSize="13" FontWeight="Normal"/> 
+           
                 
                 <TreeView.Style>
                     <Style TargetType="{x:Type TreeView}">
                         <Setter Property="FontFamily" Value="Helvetica neue" />
                         <Setter Property="Margin" Value="10px 2px 10px 0px"></Setter>
-                        <Setter Property="FontSize" Value="10pt" />
+                        <Setter Property="FontSize" Value="10pt"/>
                         <Setter Property="FontWeight" Value="Light"/>
                         <Setter Property="Foreground" Value="White"/>
                         <Setter Property="FontStyle" Value="Normal"/>
                     </Style>
                 </TreeView.Style>
-                    
             </TreeView>
 
         </Expander>

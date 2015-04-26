@@ -174,9 +174,8 @@ namespace ScreenRecorder
 
                     _frameCount = 0;
 
-                    var time = DateTime.Now.ToString("d_MMM_yyyy_HH_mm_ssff");
-                    var compName = Environment.UserName;
-                    var fullName = "c:\\ScreenRecorder" + "\\" + compName.ToUpper() + "_" + time;
+                    var time = DateTime.Now.ToString("dd-MM-yy HH.mm.ss");
+                    var fullName = "c:\\ScreenRecorder" + "\\" + "video " + time;
 
                     try
                     {
@@ -297,8 +296,6 @@ namespace ScreenRecorder
 
             ScreenCaptureStream stream = new ScreenCaptureStream(screenArea);
 
-            Thread.Sleep(1800);
-
             stream.NewFrame += dev_NewFrame;
 
             stream.Start();
@@ -328,9 +325,12 @@ namespace ScreenRecorder
                 ((ScreenCaptureStream)sender).SignalToStop();
                 Image img = bitmap;
                 string dirName = "c:\\ScreenRecorder";
-                string flName = "Photo" + DateTime.Now.ToString("yyyyMMddhhmmss") + _imageExtension;
-                flName = Path.Combine(dirName, flName);
-                img.Save(flName, _imageFormat);
+
+                var time = DateTime.Now.ToString("dd-MM-yy HH.mm.ss");
+                var fullName = "image " + time + _imageExtension;
+
+                fullName = Path.Combine(dirName, fullName);
+                img.Save(fullName, _imageFormat);
             }
             catch (Exception e)
             {
@@ -419,7 +419,7 @@ namespace ScreenRecorder
 
             watcher.NotifyFilter = NotifyFilters.LastAccess |  NotifyFilters.FileName | NotifyFilters.DirectoryName;
 
-            string[] extensions = { "*.jpeg", "*.mp4", "*.wmv", "*.png", "*.bmp", "*.emf", "*.gif", "*.tiff", "*.exif" };
+            string[] extensions = { "*.jpeg", "*.mp4", "*.wmv", "*.png", "*.bmp", "*.gif", "*.tiff", "*.mpeg" };
 
             List<FileSystemWatcher> watchersExtension = new List<FileSystemWatcher>();
 
