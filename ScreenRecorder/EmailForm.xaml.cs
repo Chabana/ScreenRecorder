@@ -34,7 +34,7 @@ namespace ScreenRecorder
             bool emailDestValid = false;
 
             // Your Email Field Validation
-            bool emailSender = Regex.IsMatch(TxtYourEmail.Text.Trim(), @"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b");
+            bool emailSender = Regex.IsMatch(TxtYourEmail.Text.Trim(), @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
 
             if (TxtYourEmail.Text == "")
             {
@@ -42,7 +42,7 @@ namespace ScreenRecorder
                 LblErrorYourEmail.Visibility = Visibility.Visible;
 
             }
-            else if (emailSender)
+            else if (!emailSender)
             {
                 LblErrorYourEmail.Content = "Your email is not a valid email : YourEmail@gmail.com";
                 LblErrorYourEmail.Visibility = Visibility.Visible;
@@ -73,21 +73,16 @@ namespace ScreenRecorder
             }
 
             // Destination Email Field Validation
-            bool emailDestination = Regex.IsMatch(TxtEmailDestination.Text.Trim(), @"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b");
+            bool emailDestination = Regex.IsMatch(TxtEmailDestination.Text.Trim(), @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
 
             if (TxtEmailDestination.Text == "")
             {
                 LblErrorEmailDestination.Content = "Destination email is empty";
                 LblErrorEmailDestination.Visibility = Visibility.Visible;
             }
-            else if (emailDestination)
+            else if (!emailDestination)
             {
                 LblErrorEmailDestination.Content = "Destination email is not a valid email : YourEmail@gmail.com";
-                LblErrorEmailDestination.Visibility = Visibility.Visible;
-            }
-            else if (!TxtEmailDestination.Text.Contains("@gmail.com"))
-            {
-                LblErrorEmailDestination.Content = "Only Gmail account are accepted";
                 LblErrorEmailDestination.Visibility = Visibility.Visible;
             }
             else
@@ -136,13 +131,16 @@ namespace ScreenRecorder
                         LblEmailSucceed.UpdateLayout();
                     }));
 
-                    Thread.Sleep(2000);
+                    Thread.Sleep(1500);
                     Close();
 
 
                 } //end of try block
                 catch (Exception)
                 {
+                    LblErrorEmailDestination.Content = "Email not sent. Maybe a password problem?";
+                    LblErrorEmailDestination.Visibility = Visibility.Visible;
+
                     LblErrorYourEmail.Visibility = Visibility.Visible;
                     LblErrorYourPassword.Visibility = Visibility.Visible;
                     LblErrorEmailDestination.Visibility = Visibility.Visible;
