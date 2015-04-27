@@ -1,31 +1,46 @@
 ﻿<Window x:Class="ScreenRecorder.EmailForm"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="EmailForm" Height="375.309" Width="327.16" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
+        Title="Email Form" Height="597.91" MinHeight="480" Width="400" MinWidth="590" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen">
+
+    <!--ON DEFINIT ICI un STYLE PAR DEFAUT pour les controles de type BOUTON-->
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="MinWidth" Value="40" />
+            <Setter Property="MinHeight" Value="40" />
+            <Setter Property="Margin" Value="3" />
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        <StackPanel Orientation="Vertical">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Margin="10">
             <Label x:Name="LabelTitle" FontSize="15" FontWeight="Bold">Enter your Gmail informations</Label>
-            <Label x:Name="LblEmailSucceed" Foreground="Green" BorderThickness="0,10,0,0">Your E-mail has been sent !</Label>
-            <StackPanel Orientation="Horizontal">
-                <Label x:Name="LabelYourEmail" Margin="0,30,0,0">Your E-mail :</Label>
-                <TextBox x:Name="TxtYourEmail" ToolTip="Your E-mail" Width="224" Margin="0,30,0,0"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label x:Name="LabelYourPassword" Margin="0,30,0,0">Your Password :</Label>
-                <PasswordBox x:Name="PasswordBoxYourPassword" ToolTip="Your Password" Width="206" Margin="0,30,0,0"></PasswordBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label x:Name="LabelDestinationEmail" Margin="0,30,0,0">Destination E-mail :</Label>
-                <TextBox x:Name="TxtEmailDestination" ToolTip="Email Destination" Width="185" Margin="0,30,0,0"></TextBox>
-            </StackPanel>
-            <StackPanel Margin="0,20,0,0">
-                <Label x:Name="LblErrorYourEmail" FontWeight="Bold" Foreground="Red"></Label>
-                <Label x:Name="LblErrorYourPassword" FontWeight="Bold" Foreground="Red"></Label>
-                <Label x:Name="LblErrorEmailDestination" FontWeight="Bold" Foreground="Red"></Label>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Button x:Name="BtnSendEmail" Content="Send" Margin="100,11,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="68" Click="btnSendEmail_Click"/>
-                <Button x:Name="BtnQuitSendEmail" Content="Back" Margin="20,11,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="68" Click="btnQuitSendEmail_Click"/>
+            <Label x:Name="LblEmailSucceed" Foreground="Green">Your E-mail has been sent !</Label>
+            <Label x:Name="LabelYourEmail" >Your E-mail:</Label>
+            <TextBox x:Name="TxtYourEmail" ToolTip="Your E-mail"/>
+            <Label x:Name="LabelYourPassword">Your Password:</Label>
+            <PasswordBox x:Name="PasswordBoxYourPassword" ToolTip="Your Password"></PasswordBox>
+            <Label x:Name="LabelDestinationEmail">Destination E-mail:</Label>
+            <TextBox x:Name="TxtEmailDestination" ToolTip="Email Destination"></TextBox>
+            <Label x:Name="LabelSubjectEmail">Suject E-mail:</Label>
+            <TextBox x:Name="TxtSubjectEmail" ToolTip="Suject E-mail"/>
+            <Label x:Name="LabelBodyEmail">Body E-mail:</Label>
+
+            <TextBox x:Name="TxtBodyEmail" TextWrapping="Wrap" AcceptsReturn="True" ToolTip="Body E-mail" Height="109"/>
+
+            <Label x:Name="LblErrorYourEmail" FontWeight="Bold" Foreground="Red"></Label>
+            <Label x:Name="LblErrorYourPassword" FontWeight="Bold" Foreground="Red"></Label>
+            <Label x:Name="LblErrorEmailDestination" FontWeight="Bold" Foreground="Red"></Label>
+            <Label x:Name="LblErrorEmailSubject" FontWeight="Bold" Foreground="Red"></Label>
+            <Label x:Name="LblErrorEmailBody" FontWeight="Bold" Foreground="Red"></Label>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Height="79" Width="184" Margin="0,0,0,0">
+                <Button x:Name="BtnSendEmail" Content="Send" Width="85" VerticalAlignment="Center" Margin="0,18,10,19" Click="btnSendEmail_Click" Height="42"/>
+                <Button x:Name="BtnQuitSendEmail" Content="Back" Width="85" VerticalAlignment="Center" Click="btnQuitSendEmail_Click" Margin="3,18,3,19" Height="42"/>
             </StackPanel>
         </StackPanel>
     </Grid>

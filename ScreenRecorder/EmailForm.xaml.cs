@@ -36,6 +36,8 @@ namespace ScreenRecorder
             LblErrorYourPassword.Visibility = Visibility.Hidden;
             LblErrorEmailDestination.Visibility = Visibility.Hidden;
             LblEmailSucceed.Visibility = Visibility.Hidden;
+            LblErrorEmailBody.Visibility = Visibility.Hidden;
+            LblErrorEmailSubject.Visibility = Visibility.Hidden;
         }
 
 
@@ -49,6 +51,8 @@ namespace ScreenRecorder
             bool emailSenderValid = false;
             bool passwordValid = false;
             bool emailDestValid = false;
+            bool emailSubjectValid = false;
+            bool emailBodyValid = false;
 
             // Your Email Field Validation
             bool emailSender = Regex.IsMatch(TxtYourEmail.Text.Trim(), @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
@@ -99,7 +103,7 @@ namespace ScreenRecorder
             }
             else if (!emailDestination)
             {
-                LblErrorEmailDestination.Content = "Destination email is not a valid email : YourEmail@gmail.com";
+                LblErrorEmailDestination.Content = "Destination email is not a valid email : DestinationEmail@gmail.com";
                 LblErrorEmailDestination.Visibility = Visibility.Visible;
             }
             else
@@ -109,9 +113,35 @@ namespace ScreenRecorder
                 emailDestValid = true;
             }
 
+            // Subject Field Validation
+            if (TxtSubjectEmail.Text == "")
+            {
+                LblErrorEmailSubject.Content = "Your Subject is empty";
+                LblErrorEmailSubject.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                LblErrorEmailSubject.Content = null;
+                LblErrorEmailSubject.Visibility = Visibility.Hidden;
+                emailSubjectValid = true;
+            }
+
+            // Body Field Validation
+            if (TxtBodyEmail.Text == "")
+            {
+                LblErrorEmailBody.Content = "Your Body is empty";
+                LblErrorEmailBody.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                LblErrorEmailBody.Content = null;
+                LblErrorEmailBody.Visibility = Visibility.Hidden;
+                emailBodyValid = true;
+            }
+
  
             // Every fields are valid, let's try to send the email
-            if (emailDestValid && emailSenderValid && passwordValid)
+            if (emailDestValid && emailSenderValid && passwordValid && emailBodyValid && emailSubjectValid)
             {
                 try
                 {
@@ -122,11 +152,11 @@ namespace ScreenRecorder
                     //receiver email id
                     mM.To.Add(TxtEmailDestination.Text);
                     //subject of the email
-                    mM.Subject = "Image from ScreenRecorder!";
+                    mM.Subject = TxtSubjectEmail.Text;
                     //deciding for the attachment
                     mM.Attachments.Add(new Attachment(_pictureName));
                     //add the body of the email
-                    mM.Body = "You received a new picture! Have a nice day";
+                    mM.Body = TxtBodyEmail.Text;
                     mM.IsBodyHtml = true;
                     //SMTP client
                     SmtpClient sC = new SmtpClient("smtp.gmail.com");
@@ -144,6 +174,8 @@ namespace ScreenRecorder
                     LblErrorYourEmail.Visibility = Visibility.Hidden;
                     LblErrorYourPassword.Visibility = Visibility.Hidden;
                     LblErrorEmailDestination.Visibility = Visibility.Hidden;
+                    LblErrorEmailBody.Visibility = Visibility.Hidden;
+                    LblErrorEmailSubject.Visibility = Visibility.Hidden;
                     LblEmailSucceed.Dispatcher.Invoke(DispatcherPriority.Background, new Action(delegate {
 
                         LblEmailSucceed.UpdateLayout();
@@ -163,6 +195,8 @@ namespace ScreenRecorder
                     LblErrorYourPassword.Visibility = Visibility.Visible;
                     LblErrorEmailDestination.Visibility = Visibility.Visible;
                     LblEmailSucceed.Visibility = Visibility.Hidden;
+                    LblErrorEmailBody.Visibility = Visibility.Visible;
+                    LblErrorEmailSubject.Visibility = Visibility.Visible;
                 } //end of catch
             }
         }
