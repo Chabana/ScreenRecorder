@@ -825,6 +825,24 @@ namespace ScreenRecorder
                     timerMedia.Interval = TimeSpan.FromSeconds(1);
                     timerMedia.Tick += timer_Tick;
                     timerMedia.Start();
+
+
+                    var fileName = _mainFolderPath + "\\" + e.NewValue;
+                    _pictureName = fileName;
+
+                    btnSendImageEmail.IsEnabled = true;
+
+                    //BitmapSource img = BitmapFrame.Create(new Uri(fileName, UriKind.RelativeOrAbsolute));
+
+                    //BitmapMetadata mdata = (BitmapMetadata)img.Metadata;
+
+                    DateTime fileCreatedDate = File.GetCreationTime(fileName);
+
+                    VideoFilename.Text = Path.GetFileName(fileName);
+                    VideoExtension.Text = _videoExtension;
+                    VideoCreated.Text = fileCreatedDate.ToString(CultureInfo.CurrentCulture);
+                    VideoWidth.Text = _width.ToString();
+                    VideoHeight.Text = _height.ToString();
                 }
             }
 
