@@ -828,21 +828,25 @@ namespace ScreenRecorder
 
 
                     var fileName = _mainFolderPath + "\\" + e.NewValue;
-                    _pictureName = fileName;
+                    //_pictureName = fileName;
 
-                    btnSendImageEmail.IsEnabled = true;
+                    //btnSendImageEmail.IsEnabled = true;
 
-                    //BitmapSource img = BitmapFrame.Create(new Uri(fileName, UriKind.RelativeOrAbsolute));
-
-                    //BitmapMetadata mdata = (BitmapMetadata)img.Metadata;
-
+                    VideoFileReader reader = new VideoFileReader();
+                    // open video file
+                    reader.Open(fileName);
+                    
+                    
                     DateTime fileCreatedDate = File.GetCreationTime(fileName);
 
+
                     VideoFilename.Text = Path.GetFileName(fileName);
-                    VideoExtension.Text = _videoExtension;
+                    VideoExtension.Text = reader.CodecName;
                     VideoCreated.Text = fileCreatedDate.ToString(CultureInfo.CurrentCulture);
-                    VideoWidth.Text = _width.ToString();
-                    VideoHeight.Text = _height.ToString();
+                    VideoWidth.Text = reader.Width.ToString();
+                    VideoHeight.Text = reader.Height.ToString();
+
+                    reader.Close();
                 }
             }
 
@@ -1002,7 +1006,7 @@ namespace ScreenRecorder
                     _imageExtension = ".png";
                     break;
                 case "Tiff":
-                    _imageFormat = ImageFormat.Png;
+                    _imageFormat = ImageFormat.Tiff;
                     _imageExtension = ".tiff";
                     break;
                 default:
