@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
@@ -79,6 +80,10 @@ namespace ScreenRecorder
         private string _mainFolderPath = "c:\\ScreenRecorder";
         // Take the picture name
         private string _pictureName = "";
+
+        private Thread thPos;
+        private Thread thdraw;
+        private System.Drawing.Point _currentPoint;
 
         //##########################################################################################################################
         //######################################## Constructor -> Initialize the application ##############################
@@ -319,27 +324,7 @@ namespace ScreenRecorder
         /// <param name="sender"></param>
         /// <param name="eventArgs"></param>
         private void video_NewFrame(object sender, NewFrameEventArgs eventArgs)
-        {
-            try
-            {
-                if (_rec)
-                {
-                    _writer.WriteVideoFrame(eventArgs.Frame);
-                }
-
-                else
-                {
-                    _stopwatch.Reset();
-                    Thread.Sleep(500);
-                    _streamVideo.SignalToStop();
-                    Thread.Sleep(500);
-                    _writer.Close();
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
+        {{    try    {        if (_rec)        {            Bitmap bitmap = eventArgs.Frame;                        thPos = new Thread(             delegate()             {                 this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => this.GetPosition()));             });            thPos.Start();            thdraw = new Thread(            delegate()            {                this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(                    () => {                        SolidBrush myBrush = new SolidBrush(System.Drawing.Color.Red);                        Graphics g = Graphics.FromImage(bitmap);                        g.SmoothingMode = SmoothingMode.AntiAlias;                        g.InterpolationMode = InterpolationMode.HighQualityBicubic;                        g.PixelOffsetMode = PixelOffsetMode.HighQuality;                        g.FillEllipse(myBrush, new Rectangle(_currentPoint.X, _currentPoint.Y, 25, 25));                        myBrush.Dispose();                        g.Flush();                        _writer.WriteVideoFrame(bitmap);                    }));            }                );            thdraw.Start();        }else {            _stopwatch.Reset();            Thread.Sleep(500);            _streamVideo.SignalToStop();            Thread.Sleep(500);            _writer.Close();        }    }    catch (Exception exception)    {        Console.WriteLine(exception.Message);    }}
         }
 
         /// <summary>
@@ -826,11 +811,7 @@ namespace ScreenRecorder
                     timerMedia.Tick += timer_Tick;
                     timerMedia.Start();
 
-
                     var fileName = _mainFolderPath + "\\" + e.NewValue;
-                    //_pictureName = fileName;
-
-                    //btnSendImageEmail.IsEnabled = true;
 
                     VideoFileReader reader = new VideoFileReader();
                     // open video file
@@ -838,7 +819,6 @@ namespace ScreenRecorder
                     
                     
                     DateTime fileCreatedDate = File.GetCreationTime(fileName);
-
 
                     VideoFilename.Text = Path.GetFileName(fileName);
                     VideoExtension.Text = reader.CodecName;
@@ -1099,6 +1079,11 @@ namespace ScreenRecorder
         {
             EmailForm emailForm = new EmailForm(_pictureName);
             emailForm.Show();
-        } 
+        }
+
+        private void GetPosition()
+        {
+            _currentPoint = System.Windows.Forms.Control.MousePosition;
+        }
     }
 }
