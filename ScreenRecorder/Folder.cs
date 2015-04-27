@@ -1,33 +1,51 @@
-﻿using System;
+﻿/*#################################################################################################
+*Project : ScreenRecorder
+*Developped by : Daniel de Carvalho Fernandes, Michael Caraccio & Khaled Chabbou
+*Date : 27 April 2015
+*#################################################################################################*/
+
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Security;
 
 namespace ScreenRecorder
 {
+    /// <summary>
+    /// Class of the folder
+    /// </summary>
     public class Folder 
     {
         private DirectoryInfo _folder;
         private ObservableCollection<Folder> _subFolders;
         private ObservableCollection<FileInfo> _files;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public Folder()
         {
             FullPath = @"c:\ScreenRecorder";
         }
 
+        /// <summary>
+        /// Get name of the folder
+        /// </summary>
         public string Name
         {
             get { return _folder.Name; }
         }
 
-        
+        /// <summary>
+        /// Get/Set of the full path of the directory
+        /// </summary>
         public string FullPath
         {
             get { return _folder.FullName; }
 
             set
             {
+                //Create directory if doesn't exist
                 if (Directory.Exists(value))
                 {
                     try
@@ -58,7 +76,9 @@ namespace ScreenRecorder
             }
         }
 
-
+        /// <summary>
+        /// Get all the files
+        /// </summary>
         public ObservableCollection<FileInfo> Files
         {
             get
@@ -84,6 +104,9 @@ namespace ScreenRecorder
             }
         }
 
+        /// <summary>
+        /// If there is sub folders
+        /// </summary>
         public ObservableCollection<Folder> SubFolders
         {
             get

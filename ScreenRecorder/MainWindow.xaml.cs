@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*#################################################################################################
+*Project : ScreenRecorder
+*Developped by : Daniel de Carvalho Fernandes, Michael Caraccio & Khaled Chabbou
+*Date : 27 April 2015
+*#################################################################################################*/
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -31,54 +37,73 @@ namespace ScreenRecorder
     /// </summary>
     public partial class MainWindow
     {
-
+        // Writer for the video files
         private readonly VideoFileWriter _writer;
+        // Know if a video is being recorded or not
         private bool _rec;
 
+        //Size of the screen
         private Rectangle _screenSize = Screen.PrimaryScreen.Bounds;
 
+        // Count number of frames
         private UInt32 _frameCount;
+        // Set frame rate to 25 fps
         private int _frameRate = 25;
 
+        // Create a virtual screen with height and width
         private readonly int _width = SystemInformation.VirtualScreen.Width;
         private readonly int _height = SystemInformation.VirtualScreen.Height;
 
+        // Create a screen Capture Stream
         private ScreenCaptureStream _streamVideo;
 
+        // Stop the watcher
         readonly Stopwatch _stopwatch = new Stopwatch();
 
+        // Tempo
         public int WaitLimit = 4000; //ms
+        // List of filters (By name, by size, ...)
         private List<string> _listFilters;
+        // Video extensions that the application can support
         private readonly string[] _extensionsVideos = { ".mp4", ".wmv"};
+        // Photo extensions that the application can support
         private readonly string[] _extensionsPictures = { ".jpeg", ".png", ".bmp", ".gif", ".tiff" };
+        // Set the default format of image to "png"
         private ImageFormat _imageFormat = ImageFormat.Png;
         private string _imageExtension = ".png";
+        // Set the default format of video to "mp4"
         private VideoCodec _videoFormat = VideoCodec.MPEG4;
         private string _videoExtension = ".mp4";
 
+        // Set the main folder where the videos and photos are saved and loaded
         private string _mainFolderPath = "c:\\ScreenRecorder";
+        // Take the picture name
         private string _pictureName = "";
 
         //##########################################################################################################################
         //######################################## Constructor -> Initialize the application ##############################
 
 
+        /// <summary>
+        /// Constructor to initialize the components
+        /// </summary>
         public MainWindow()
         {
    
             InitializeComponent();
 
-            //Minimize the window and don't put in the taskbar
-
+            //Minimize the window and don't put in the taskbar and set it to hidden
             ShowInTaskbar = false;
             WindowState = WindowState.Minimized;
             Visibility = Visibility.Hidden;
 
+            // Set the shortcuts for the different functionalities
             HotkeyManager.Current.AddOrReplace("Screenshots", Key.S, ModifierKeys.Control | ModifierKeys.Alt, OnStartScreenshots);
             HotkeyManager.Current.AddOrReplace("VideoCapture", Key.V, ModifierKeys.Control | ModifierKeys.Alt, OnStartVideocapture);
             HotkeyManager.Current.AddOrReplace("ExitApplication", Key.E, ModifierKeys.Control | ModifierKeys.Alt, OnExitApplication);
             HotkeyManager.Current.AddOrReplace("OpenApplication", Key.O, ModifierKeys.Control | ModifierKeys.Alt, OnOpenApplication);
 
+            // Set the list of filters (by name, by date and by size)
             _listFilters = new List<string>
             {
                 "Date descending",
@@ -89,15 +114,19 @@ namespace ScreenRecorder
                 "Size ascending"
             };
 
+            // Set properties to the filter
             FilterCombobox.IsEditable = true;
             FilterCombobox.IsTextSearchEnabled = true;
             FilterCombobox.ItemsSource = _listFilters;
 
+            // Can drag the main window
             MouseDown += MainWindow_MouseDown;
 
+            // Initialize a new folder with the mainFolderPath
             Folder folder = new Folder();
             folder.FullPath = _mainFolderPath;
 
+            // Get the files of the mainFolderPath
             var observableCollection = folder.Files;
 
             if (observableCollection == null) try
@@ -108,27 +137,39 @@ namespace ScreenRecorder
             {
             }
 
+            // At the beginning of the application, add the files to the list
             foreach (var fileInfo in observableCollection)
             {
                 AddListLine(fileInfo.Name);
             }
 
+            // Set the properties to show the baloon
             const string title = "ScreenRecorder";
             const string text = "The application has been minimized";
             ShowStandardBalloon(title, text);
 
+            // Initialize the video file writer
             _writer = new VideoFileWriter();
 
+            // Set the button to send the e-mail to false
             btnSendImageEmail.IsEnabled = false;
 
             Update();
         }
 
+        /// <summary>
+        /// Count the videos in the main folder
+        /// </summary>
+        /// <returns>Return the number of videos in the main folder</returns>
         private int CountVideoInFolder()
         {
             return Directory.GetFiles(_mainFolderPath, "*.wmv", SearchOption.AllDirectories).Length + Directory.GetFiles(_mainFolderPath, "*.mp4", SearchOption.AllDirectories).Length;
         }
 
+        /// <summary>
+        /// Count the images in the main folder
+        /// </summary>
+        /// <returns>Return the number of images in the main folder</returns>
         private int CountImageInFolder()
         {
             int countbmp = Directory.GetFiles(_mainFolderPath, "*.bmp", SearchOption.AllDirectories).Length;
@@ -143,12 +184,19 @@ namespace ScreenRecorder
         //##########################################################################################################################
         //######################################## Exit application from menu or shortcut ##############################
 
-
+        /// <summary>
+        /// When pressed the shortcut to close the window, exit the application
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnExitApplication(object sender, HotkeyEventArgs e)
         {
             ExitApplication();
         }
 
+        /// <summary>
+        /// Exit the current application
+        /// </summary>
         private void ExitApplication()
         {
             //Save the video screen in a file
@@ -158,6 +206,11 @@ namespace ScreenRecorder
             Application.Current.Shutdown();
         }
 
+        /// <summary>
+        /// When clicking the menu button, quit the application
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void menuQuit_Click(object sender, RoutedEventArgs e)
         {
             ExitApplication();
@@ -167,21 +220,31 @@ namespace ScreenRecorder
         //######################################## Start video capture from menu or shortcut ##############################
 
 
+        /// <summary>
+        /// When pressed the shortcut to launch the video recording, launche the video recording
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnStartVideocapture(object sender, HotkeyEventArgs e)
         {
             StartVideocapture();
         }
 
+        /// <summary>
+        /// Start the video recording
+        /// </summary>
         private void StartVideocapture()
         {
+            // Test if the menu caputre equals to Start video capture
             if ((string)MenuCaptureVideo.Header == "Start Video Capture")
             {
+                // Show the balloon and change the title of the menu button to stop video capture
                 const string title = "ScreenRecorder";
                 const string text = "Video has started recording";
                 MenuCaptureVideo.Header = "Stop Video Capture";
                 ShowStandardBalloon(title, text);
 
-
+                // Set the different properties to start the recording
                 if (_rec == false)
                 {
                     Console.WriteLine(@"Recording has started");
@@ -194,7 +257,7 @@ namespace ScreenRecorder
 
                     try
                     {
-                        //Change FPS and the codec for video
+                        // Write the video with the name, frame rate, extension, ...
                         _writer.Open(fullName + _videoExtension,
                             _width,
                             _height,
@@ -213,6 +276,7 @@ namespace ScreenRecorder
             }
             else
             {
+                // Video has been recorded, stop the process and show the baloon
                 const string title = "ScreenRecorder";
                 const string text = "Video has been saved (C:\\ScreenRecorder)";
                 ShowStandardBalloon(title, text);
@@ -222,6 +286,9 @@ namespace ScreenRecorder
             }
         }
 
+        /// <summary>
+        /// Main process to launch the video recording
+        /// </summary>
         private void Process()
         {
             try
@@ -246,6 +313,11 @@ namespace ScreenRecorder
             }
         }
 
+        /// <summary>
+        /// Calls the event to start the video recording
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
         private void video_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
             try
@@ -270,6 +342,9 @@ namespace ScreenRecorder
             }
         }
 
+        /// <summary>
+        /// Stop the video recording when pressed to the menu button or the shortcut
+        /// </summary>
         private void StopVideoRecording()
         {
             _rec = false;
@@ -287,6 +362,11 @@ namespace ScreenRecorder
             }
         }
 
+        /// <summary>
+        /// When the menu button clicked, start the video capture
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void menuCaptureVideo_Click(object sender, RoutedEventArgs e)
         {
             StartVideocapture();
@@ -296,12 +376,19 @@ namespace ScreenRecorder
         //##########################################################################################################################
         //######################################## Start screenshots from menu or shortcut ##############################
 
-
+        /// <summary>
+        /// Start taking a screenshot with the shortcut for that action
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnStartScreenshots(object sender, HotkeyEventArgs e)
         {
             StartScreenshots();
         }
 
+        /// <summary>
+        /// Main process to start to take the screenshot
+        /// </summary>
         private void StartScreenshots()
         {
             Rectangle screenArea = Rectangle.Empty;
@@ -323,13 +410,14 @@ namespace ScreenRecorder
             const string text = "Screenshot has been saved (C:\\ScreenRecorder)";
             ShowStandardBalloon(title, text);
 
+            // File counter of images
             Thread.Sleep(100);
             FileContentCounter.Content = "You have : " + CountVideoInFolder() + (CountVideoInFolder() < 2 ? " video " : " videos ") + " and " + CountImageInFolder() +
                              (CountImageInFolder() < 2 ? " image" : " images");
         }
 
         /// <summary>
-        /// Fonction pour prendre des screenshots
+        /// Take screenshots by clicking the menu button
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -338,6 +426,11 @@ namespace ScreenRecorder
             StartScreenshots();
         }
 
+        /// <summary>
+        /// Event to take a screenshot
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
         private void dev_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
             try
@@ -352,6 +445,8 @@ namespace ScreenRecorder
                 fullName = Path.Combine(_mainFolderPath, fullName);
                 img.Save(fullName, _imageFormat);
 
+
+                //File counter for the images in the folder
                 FileContentCounter.Content = "You have : " + CountVideoInFolder() + (CountVideoInFolder() < 2 ? " video " : " videos ") + " and " + CountImageInFolder() +
                                          (CountImageInFolder() < 2 ? " image" : " images");
             }
@@ -364,11 +459,19 @@ namespace ScreenRecorder
         //##########################################################################################################################
         //######################################## Start open application from menu or shortcut ##############################
 
+        /// <summary>
+        /// Shortcut to open the main application
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnOpenApplication(object sender, HotkeyEventArgs e)
         {
             OpenApplication();
         }
 
+        /// <summary>
+        /// Function to open the main application
+        /// </summary>
         private void OpenApplication()
         {
             if (WindowState == WindowState.Minimized)
@@ -381,6 +484,11 @@ namespace ScreenRecorder
             }
         }
 
+        /// <summary>
+        /// Click the menu button to open the main window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void menuOpen_Click(object sender, RoutedEventArgs e)
         {
             OpenApplication();
@@ -389,6 +497,11 @@ namespace ScreenRecorder
         //##########################################################################################################################
         //######################################## Can drag the main application ##############################
 
+        /// <summary>
+        /// Drag the main window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
@@ -401,6 +514,11 @@ namespace ScreenRecorder
         //######################################## Can minimize the main application ##############################
 
 
+        /// <summary>
+        /// Click the button to minimize the application
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnMinimize_Click(object sender, RoutedEventArgs e)
         {
             if (WindowState == WindowState.Normal || WindowState == WindowState.Maximized)
@@ -417,6 +535,11 @@ namespace ScreenRecorder
         //##########################################################################################################################
         //######################################## Show balloons to warn the user ##############################
         
+        /// <summary>
+        /// Function to show the different balloons of the application, to warn the user
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="text"></param>
         private void ShowStandardBalloon(string title, string text)
         {
             //show balloon with built-in icon
@@ -429,18 +552,24 @@ namespace ScreenRecorder
         //##########################################################################################################################
         //######################################## Part for the files update (Create, Delete, Rename) ##############################
 
+        /// <summary>
+        /// Update the tree view
+        /// </summary>
         private void Update()
         {
 
             if (string.IsNullOrWhiteSpace(_mainFolderPath))
                 return;
 
+            //Create a watcher for the different files
             FileSystemWatcher watcher = new FileSystemWatcher();
 
             watcher.Path = _mainFolderPath;
 
+            // Filter the watcher
             watcher.NotifyFilter = NotifyFilters.LastAccess |  NotifyFilters.FileName | NotifyFilters.DirectoryName;
 
+            // All the extensions
             string[] extensions = { "*.jpeg", "*.mp4", "*.wmv", "*.png", "*.bmp", "*.gif", "*.tiff", "*.mpeg" };
 
             List<FileSystemWatcher> watchersExtension = new List<FileSystemWatcher>();
@@ -452,6 +581,7 @@ namespace ScreenRecorder
                 watchersExtension.Add(w);
             }
 
+            //Watcher for the CRUD
             watcher.Created += fileSystemWatcher_Created;
             
             watcher.Deleted += fileSystemWatcher_Deleted;
@@ -463,27 +593,53 @@ namespace ScreenRecorder
                                          (CountImageInFolder() < 2 ? " image" : " images");
         }
 
+        /// <summary>
+        /// Watcher for the creation of a file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void fileSystemWatcher_Created(object sender, FileSystemEventArgs e)
         {
             
             DisplayFileSystemWatcherInfo(e.ChangeType, e.Name);
         }
 
+        /// <summary>
+        /// Watcher for the changement of a file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void fileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
         {
             DisplayFileSystemWatcherInfo(e.ChangeType, e.Name);
         }
 
+        /// <summary>
+        /// Watcher when a file is deleted
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void fileSystemWatcher_Deleted(object sender, FileSystemEventArgs e)
         {
             DisplayFileSystemWatcherInfo(e.ChangeType, e.Name);
         }
 
+        /// <summary>
+        /// Watcher when a file is renamed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void fileSystemWatcher_Renamed(object sender, RenamedEventArgs e)
         {
             DisplayFileSystemWatcherInfo(e.ChangeType, e.Name, e.OldName);
         }
 
+        /// <summary>
+        /// Function to launch the different delegates
+        /// </summary>
+        /// <param name="watcherChangeTypes"></param>
+        /// <param name="name"></param>
+        /// <param name="oldName"></param>
         void DisplayFileSystemWatcherInfo(WatcherChangeTypes watcherChangeTypes, string name, string oldName = null)
         {
             if (watcherChangeTypes == WatcherChangeTypes.Renamed)
@@ -501,11 +657,19 @@ namespace ScreenRecorder
             }
         }
 
+        /// <summary>
+        /// Delete all the files from the list
+        /// </summary>
+        /// <param name="text"></param>
         public void DeleteListLine(string text)
         {
             Tvi.Items.Remove(text);
         }
  
+        /// <summary>
+        /// Add all the files to the list
+        /// </summary>
+        /// <param name="text"></param>
         public void AddListLine(string text)
         {
             Tvi.Items.Add(text);
@@ -517,6 +681,11 @@ namespace ScreenRecorder
         private bool _mediaPlayerIsPlaying;
         private bool _userIsDraggingSlider;
 
+        /// <summary>
+        /// Tick for the slider to show the time for the video
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void timer_Tick(object sender, EventArgs e)
         {
             if ((MePlayer.Source != null) && (MePlayer.NaturalDuration.HasTimeSpan) && (!_userIsDraggingSlider))
@@ -527,6 +696,11 @@ namespace ScreenRecorder
             }
         }
 
+        /// <summary>
+        /// Open the stream
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Open_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
@@ -536,57 +710,109 @@ namespace ScreenRecorder
         {
         }
 
+        /// <summary>
+        /// Play the video
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Play_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = (MePlayer != null) && (MePlayer.Source != null);
         }
 
+        /// <summary>
+        /// Execute the playing of the video
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Play_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             MePlayer.Play();
             _mediaPlayerIsPlaying = true;
         }
 
+        /// <summary>
+        /// Click pause to pause the video
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Pause_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = _mediaPlayerIsPlaying;
         }
 
+        /// <summary>
+        /// Pause the video
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Pause_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             MePlayer.Pause();
         }
 
+        /// <summary>
+        /// Click stop to stop the video
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Stop_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = _mediaPlayerIsPlaying;
         }
 
+        /// <summary>
+        /// Stop the video
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Stop_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             MePlayer.Stop();
             _mediaPlayerIsPlaying = false;
         }
 
+        /// <summary>
+        /// Can drag the slider of vieo time
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void sliProgress_DragStarted(object sender, DragStartedEventArgs e)
         {
             _userIsDraggingSlider = true;
         }
 
+        /// <summary>
+        /// Function to drag the slider
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void sliProgress_DragCompleted(object sender, DragCompletedEventArgs e)
         {
             _userIsDraggingSlider = false;
             MePlayer.Position = TimeSpan.FromSeconds(SliProgress.Value);
         }
 
+        /// <summary>
+        /// Event to the value changed of the slider
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void sliProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             LblProgressStatus.Text = TimeSpan.FromSeconds(SliProgress.Value).ToString(@"hh\:mm\:ss");
         }
 
+        /// <summary>
+        /// Select an item of the tree view
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TrvStructure_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (Tvi.IsSelected) return;
+
+            //Check for the videos and images
             foreach (string extension in _extensionsVideos)
             {
                 if (e.NewValue.ToString().Contains(extension))
@@ -637,7 +863,11 @@ namespace ScreenRecorder
         //##########################################################################################################################
         //######################################## Part for filters by name, by size or by date ascending and descending ##############################
 
-
+        /// <summary>
+        /// Event to change the selection of a filter in the combobox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void filterCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Folder folder = new Folder();
@@ -645,6 +875,7 @@ namespace ScreenRecorder
 
             if (observableCollection == null) throw new ArgumentNullException(@"observableCollection");
             Console.WriteLine(observableCollection.Count);
+            //At the beginning, delete all the medias
             foreach (var fileInfo in observableCollection)
             {
                 DeleteListLine(fileInfo.Name);
@@ -652,6 +883,7 @@ namespace ScreenRecorder
       
             string[] fns = Directory.GetFiles(_mainFolderPath);
 
+            //The different filters
             var sortBySizeDescending = from fn in fns orderby new FileInfo(fn).Length descending select fn;
             var sortByDateDescending = from fn in fns orderby new FileInfo(fn).LastWriteTime descending select fn;
             var sortByNameDescending = from fn in fns orderby new FileInfo(fn).Name descending select fn;
@@ -659,7 +891,7 @@ namespace ScreenRecorder
             var sortByDateAscending = from fn in fns orderby new FileInfo(fn).LastWriteTime ascending select fn;
             var sortByNameAscending = from fn in fns orderby new FileInfo(fn).Name ascending select fn;
 
-
+            // Switch to select a filter
             switch (FilterCombobox.SelectedItem as string)
             {
                 case "Size descending":
@@ -719,6 +951,11 @@ namespace ScreenRecorder
         //###################################################################################################
         //######################################## Part for the properties tab ##############################
 
+        /// <summary>
+        /// Select a radio button (unique) to select the format of the screenshot
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RadioButtonImageFormat(object sender, RoutedEventArgs e)
         {
             var button = sender as RadioButton;
@@ -756,6 +993,11 @@ namespace ScreenRecorder
             }
         }
 
+        /// <summary>
+        /// Select a radio button (unique) to select the frame rate of the video
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RadioButtonFrameRate(object sender, RoutedEventArgs e)
         {
             var button = sender as RadioButton;
@@ -791,6 +1033,11 @@ namespace ScreenRecorder
             }
         }
 
+        /// <summary>
+        /// Select a radio button (unique) for the video format
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RadioButtonVideoFormat(object sender, RoutedEventArgs e)
         {
             var button = sender as RadioButton;
@@ -821,6 +1068,11 @@ namespace ScreenRecorder
         //###################################################################################################
         //######################################## Part for sending email ##############################
 
+        /// <summary>
+        /// Click the button to send a picture by email to open the email form window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnSendImageEmail_Click(object sender, RoutedEventArgs e)
         {
             EmailForm emailForm = new EmailForm(_pictureName);

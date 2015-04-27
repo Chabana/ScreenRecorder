@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*#################################################################################################
+*Project : ScreenRecorder
+*Developped by : Daniel de Carvalho Fernandes, Michael Caraccio & Khaled Chabbou
+*Date : 27 April 2015
+*#################################################################################################*/
+
+using System;
 using System.Net;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
@@ -13,12 +19,19 @@ namespace ScreenRecorder
     /// </summary>
     public partial class EmailForm
     {
+        // Picture of the name
         private string _pictureName;
+
+        /// <summary>
+        /// Constructor that takes a picture name
+        /// </summary>
+        /// <param name="pictureName"></param>
         public EmailForm(string pictureName)
         {
             _pictureName = pictureName;
             InitializeComponent();
 
+            //Error or succeed set to hidden
             LblErrorYourEmail.Visibility = Visibility.Hidden;
             LblErrorYourPassword.Visibility = Visibility.Hidden;
             LblErrorEmailDestination.Visibility = Visibility.Hidden;
@@ -26,7 +39,11 @@ namespace ScreenRecorder
         }
 
 
-
+        /// <summary>
+        /// Button to send the email, and get some validations of the textboxes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnSendEmail_Click(object sender, RoutedEventArgs e)
         {
             bool emailSenderValid = false;
@@ -122,6 +139,7 @@ namespace ScreenRecorder
                     //Send an email
                     sC.Send(mM);
 
+                    //Succeed set to visible
                     LblEmailSucceed.Visibility = Visibility.Visible;
                     LblErrorYourEmail.Visibility = Visibility.Hidden;
                     LblErrorYourPassword.Visibility = Visibility.Hidden;
@@ -149,6 +167,11 @@ namespace ScreenRecorder
             }
         }
 
+        /// <summary>
+        /// Click the button return to quit the current window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnQuitSendEmail_Click(object sender, RoutedEventArgs e)
         {
             Close();
