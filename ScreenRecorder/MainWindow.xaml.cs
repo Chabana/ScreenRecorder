@@ -1100,15 +1100,23 @@ namespace ScreenRecorder
         /// <param name="e"></param>
         private void btnSendImageEmail_Click(object sender, RoutedEventArgs e)
         {
-            EmailForm emailForm = new EmailForm(_pictureName);
+            EmailForm emailForm = new EmailForm(_pictureName, txtEmailSave.Text);
             emailForm.Show();
         }
 
+        /// <summary>
+        /// Get current position of the mouse
+        /// </summary>
         private void GetPosition()
         {
             _currentPoint = System.Windows.Forms.Control.MousePosition;
         }
 
+        /// <summary>
+        /// When we want to save the e-mail, it will serialize to xml file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnEmailSave_Click(object sender, RoutedEventArgs e)
         {
             bool emailSender = Regex.IsMatch(txtEmailSave.Text.Trim(), @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
@@ -1152,6 +1160,9 @@ namespace ScreenRecorder
             }
         }
 
+        /// <summary>
+        /// Serialization of the email
+        /// </summary>
         public void SerializeToXML()
         {
             XmlSerializer serializer = new XmlSerializer(typeof(string));
@@ -1175,6 +1186,11 @@ namespace ScreenRecorder
             return email;
         }
 
+        /// <summary>
+        /// Enables the button when a text is entered
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txtEmailSave_TextChanged(object sender, TextChangedEventArgs e)
         {
             var textBox = sender as TextBox;

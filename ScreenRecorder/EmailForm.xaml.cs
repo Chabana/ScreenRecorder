@@ -21,16 +21,19 @@ namespace ScreenRecorder
     {
         // Picture of the name
         private string _pictureName;
+        private string _emailAddress;
 
         /// <summary>
         /// Constructor that takes a picture name
         /// </summary>
         /// <param name="pictureName"></param>
-        public EmailForm(string pictureName)
+        public EmailForm(string pictureName, string emailAddress)
         {
+            _emailAddress = emailAddress;
             _pictureName = pictureName;
             InitializeComponent();
 
+            TxtYourEmail.Text = _emailAddress;
             //Error or succeed set to hidden
             LblErrorYourEmail.Visibility = Visibility.Hidden;
             LblErrorYourPassword.Visibility = Visibility.Hidden;
