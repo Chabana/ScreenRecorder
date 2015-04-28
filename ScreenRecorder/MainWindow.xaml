@@ -383,11 +383,11 @@
                             <GroupBox Header="Video" FontWeight="Bold" Margin="0,30,25,0">
                                 <StackPanel Orientation="Horizontal">
                                     <GroupBox Header="Video extension" FontWeight="Bold" Margin="0,0,0,0" Width="298">
-                                <StackPanel Margin="0,18,-2,19" Height="64" Orientation="Vertical">
-                                <RadioButton GroupName="video" Checked="RadioButtonVideoFormat" IsChecked="True" Content="MPEG4"></RadioButton>
-                                <RadioButton GroupName="video" Checked="RadioButtonVideoFormat" Content="WMV"></RadioButton>
-                            </StackPanel>
-                                        </GroupBox>
+                                        <StackPanel Margin="0,18,-2,19" Height="64" Orientation="Vertical">
+                                            <RadioButton GroupName="video" Checked="RadioButtonVideoFormat" IsChecked="True" Content="MPEG4"></RadioButton>
+                                            <RadioButton GroupName="video" Checked="RadioButtonVideoFormat" Content="WMV"></RadioButton>
+                                        </StackPanel>
+                                    </GroupBox>
                                     <StackPanel Margin="0,0,0,0" Width="450">
                                         <GroupBox Header="Frame rate" FontWeight="Bold" Margin="0,0,138,0" Height="125">
                                             <StackPanel Margin="0,0,72,0">
@@ -399,13 +399,22 @@
                                                 <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="60"></RadioButton>
                                             </StackPanel>
                                         </GroupBox>
-                                        </StackPanel>
+                                    </StackPanel>
 
                                 </StackPanel>
-                                </GroupBox>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
+                            </GroupBox>
                             
+                            
+
+                        </StackPanel>
+                        <StackPanel >
+                            <GroupBox Header="Email configuration" FontWeight="Bold" Margin="0,0,24,0" Height="125">
+                                <StackPanel Orientation="Horizontal" Margin="0,20,0,-35">
+                                    <Label>Save your e-mail address : </Label>
+                                    <TextBox Width="231" Margin="0,0,0,91" ></TextBox>
+                                    <Button Content="Save" Margin="20,0,0,91" Width="95"></Button>
+                                </StackPanel>
+                            </GroupBox>
                         </StackPanel>
                     </StackPanel>
                 </TabItem>
