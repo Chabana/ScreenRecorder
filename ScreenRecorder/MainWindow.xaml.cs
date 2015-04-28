@@ -374,59 +374,59 @@ namespace ScreenRecorder
         /// <param name="eventArgs"></param>
         private void video_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
-{
-    try
-    {
-        if (_rec)
-        {
-            Bitmap bitmap = eventArgs.Frame;
+            {
+                try
+                {
+                    if (_rec)
+                    {
+                        Bitmap bitmap = eventArgs.Frame;
            
 
-             _thPos = new Thread(
-             delegate()
-             {
-                 this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => this.GetPosition()));
-             });
-            _thPos.Start();
+                         _thPos = new Thread(
+                         delegate()
+                         {
+                             this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => this.GetPosition()));
+                         });
+                        _thPos.Start();
 
-            _thdraw = new Thread(
-            delegate()
-            {
-                this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(
-                    () => {
+                        _thdraw = new Thread(
+                        delegate()
+                        {
+                            this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(
+                                () => {
 
-                        SolidBrush myBrush = new SolidBrush(System.Drawing.Color.Red);
+                                    SolidBrush myBrush = new SolidBrush(System.Drawing.Color.Red);
 
-                        Graphics g = Graphics.FromImage(bitmap);
+                                    Graphics g = Graphics.FromImage(bitmap);
 
-                        g.SmoothingMode = SmoothingMode.AntiAlias;
-                        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                        g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                                    g.SmoothingMode = SmoothingMode.AntiAlias;
+                                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                    g.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-                        g.FillEllipse(myBrush, new Rectangle(_currentPoint.X, _currentPoint.Y, 25, 25));
-                        myBrush.Dispose();
+                                    g.FillEllipse(myBrush, new Rectangle(_currentPoint.X, _currentPoint.Y, 25, 25));
+                                    myBrush.Dispose();
 
-                        g.Flush();
+                                    g.Flush();
 
-                        _writer.WriteVideoFrame(bitmap);
-                    }));
+                                    _writer.WriteVideoFrame(bitmap);
+                                }));
+                        }
+                            );
+                        _thdraw.Start();
+                    }else {
+
+                        _stopwatch.Reset();
+                        Thread.Sleep(500);
+                        _streamVideo.SignalToStop();
+                        Thread.Sleep(500);
+                        _writer.Close();
+                    }
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception.Message);
+                }
             }
-                );
-            _thdraw.Start();
-        }else {
-
-            _stopwatch.Reset();
-            Thread.Sleep(500);
-            _streamVideo.SignalToStop();
-            Thread.Sleep(500);
-            _writer.Close();
-        }
-    }
-    catch (Exception exception)
-    {
-        Console.WriteLine(exception.Message);
-    }
-}
         }
 
         /// <summary>
@@ -1027,7 +1027,7 @@ namespace ScreenRecorder
             var observableCollection = folder.Files;
 
             if (observableCollection == null) throw new ArgumentNullException(@"observableCollection");
-            Console.WriteLine(observableCollection.Count);
+
             //At the beginning, delete all the medias
             foreach (var fileInfo in observableCollection)
             {
@@ -1165,8 +1165,8 @@ namespace ScreenRecorder
                 case "20":
                     _frameRate = 20;
                     break;
-                case "24":
-                    _frameRate = 24;
+                case "25":
+                    _frameRate = 25;
                     break;
                 case "48":
                     _frameRate = 48;
