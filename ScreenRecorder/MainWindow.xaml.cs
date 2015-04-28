@@ -83,6 +83,7 @@ namespace ScreenRecorder
         private string _mainFolderPath = "c:\\ScreenRecorder";
         // Take the picture name
         private string _pictureName = "";
+        private string _videoName = "";
 
         private Thread thPos;
         private Thread thdraw;
@@ -163,6 +164,7 @@ namespace ScreenRecorder
 
             // Set the button to send the e-mail to false
             btnSendImageEmail.IsEnabled = false;
+            btnSendVideoEmail.IsEnabled = false;
 
             lblEmailSucced.Visibility = Visibility.Hidden;
 
@@ -835,6 +837,9 @@ namespace ScreenRecorder
                     timerMedia.Start();
 
                     var fileName = _mainFolderPath + "\\" + e.NewValue;
+                    btnSendVideoEmail.IsEnabled = true;
+
+                    _videoName = fileName;
 
                     VideoFileReader reader = new VideoFileReader();
                     // open video file
@@ -1203,6 +1208,12 @@ namespace ScreenRecorder
                 btnEmailSave.IsEnabled = false;
             }
             
+        }
+
+        private void btnSendVideoEmail_Click(object sender, RoutedEventArgs e)
+        {
+            EmailForm emailForm = new EmailForm(_videoName, txtEmailSave.Text);
+            emailForm.Show();
         }
 
 
