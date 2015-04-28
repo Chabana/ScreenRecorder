@@ -53,6 +53,8 @@ namespace ScreenRecorder
         private UInt32 _frameCount;
         // Set frame rate to 25 fps
         private int _frameRate = 25;
+        // Set bit rate
+        private int _bitRate = 4000000;
 
         // Create a virtual screen with height and width
         private readonly int _width = SystemInformation.VirtualScreen.Width;
@@ -90,6 +92,7 @@ namespace ScreenRecorder
         private System.Drawing.Point _currentPoint;
 
         private string fileSerialize = "serializeEmail.xml";
+
 
         //##########################################################################################################################
         //######################################## Constructor -> Initialize the application ##############################
@@ -230,7 +233,7 @@ namespace ScreenRecorder
         private void ExitApplication()
         {
             //Save the video screen in a file
-            StopVideoRecording();
+            //StopVideoRecording();
 
             //Quit the application
             Application.Current.Shutdown();
@@ -260,6 +263,32 @@ namespace ScreenRecorder
             StartVideocapture();
         }
 
+        protected virtual bool IsFileLocked(FileInfo file)
+        {
+            FileStream stream = null;
+
+            try
+            {
+                stream = file.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+            }
+            catch (IOException)
+            {
+                //the file is unavailable because it is:
+                //still being written to
+                //or being processed by another thread
+                //or does not exist (has already been processed)
+                return true;
+            }
+            finally
+            {
+                if (stream != null)
+                    stream.Close();
+            }
+
+            //file is not locked
+            return false;
+        }
+
         /// <summary>
         /// Start the video recording
         /// </summary>
@@ -273,6 +302,7 @@ namespace ScreenRecorder
                 const string text = "Video has started recording";
                 MenuCaptureVideo.Header = "Stop Video Capture";
                 ShowStandardBalloon(title, text);
+                
 
                 // Set the different properties to start the recording
                 if (_rec == false)
@@ -284,7 +314,6 @@ namespace ScreenRecorder
 
                     var time = DateTime.Now.ToString("dd-MM-yy HH.mm.ss");
                     var fullName = _mainFolderPath + "\\" + "video " + time;
-
                     try
                     {
                         // Write the video with the name, frame rate, extension, ...
@@ -292,7 +321,7 @@ namespace ScreenRecorder
                             _width,
                             _height,
                             _frameRate,
-                            _videoFormat);
+                            _videoFormat, _bitRate);
                     }
                     catch (Exception exception)
                     {
@@ -362,9 +391,11 @@ namespace ScreenRecorder
             {
                 _rec = false;
                 Console.WriteLine(@"FILE SAVED !!!!");
+                
 
                 FileContentCounter.Content = "You have : " + CountVideoInFolder() + (CountVideoInFolder() < 2 ? " video " : " videos ") + " and " + CountImageInFolder() +
                                          (CountImageInFolder() < 2 ? " image" : " images");
+                
             }
             catch (Exception exception)
             {
@@ -451,6 +482,7 @@ namespace ScreenRecorder
 
                 var time = DateTime.Now.ToString("dd-MM-yy HH.mm.ss");
                 var fullName = "image " + time + _imageExtension;
+                
 
                 fullName = Path.Combine(_mainFolderPath, fullName);
                 img.Save(fullName, _imageFormat);
@@ -584,6 +616,8 @@ namespace ScreenRecorder
 
             List<FileSystemWatcher> watchersExtension = new List<FileSystemWatcher>();
 
+            
+
             foreach (String extension in extensions)
             {
                 FileSystemWatcher w = new FileSystemWatcher {Filter = extension};
@@ -591,9 +625,11 @@ namespace ScreenRecorder
                 watchersExtension.Add(w);
             }
 
+            
+
             //Watcher for the CRUD
             watcher.Created += fileSystemWatcher_Created;
-            
+            watcher.Changed += fileSystemWatcher_Changed;
             watcher.Deleted += fileSystemWatcher_Deleted;
             watcher.Renamed += fileSystemWatcher_Renamed;
 
@@ -841,20 +877,37 @@ namespace ScreenRecorder
 
                     _videoName = fileName;
 
-                    VideoFileReader reader = new VideoFileReader();
-                    // open video file
-                    reader.Open(fileName);
-                    
-                    
-                    DateTime fileCreatedDate = File.GetCreationTime(fileName);
+                    if (!IsFileLocked(new FileInfo(fileName)))
+                    {
+                        VideoFileReader reader = new VideoFileReader();
+                        // open video file
 
-                    VideoFilename.Text = Path.GetFileName(fileName);
-                    VideoExtension.Text = reader.CodecName;
-                    VideoCreated.Text = fileCreatedDate.ToString(CultureInfo.CurrentCulture);
-                    VideoWidth.Text = reader.Width.ToString();
-                    VideoHeight.Text = reader.Height.ToString();
 
-                    reader.Close();
+                        try
+                        {
+                            reader.Open(fileName);
+                        }
+                        catch (Exception exp)
+                        {
+                            Console.WriteLine(exp.Message);
+                        }
+
+                        DateTime fileCreatedDate = File.GetCreationTime(fileName);
+
+                        VideoFilename.Text = Path.GetFileName(fileName);
+                        VideoExtension.Text = reader.CodecName;
+                        VideoCreated.Text = fileCreatedDate.ToString(CultureInfo.CurrentCulture);
+                        VideoWidth.Text = reader.Width.ToString();
+                        VideoHeight.Text = reader.Height.ToString();
+
+                        reader.Close();
+                    }
+                    else
+                    {
+                        ShowStandardBalloon("ScreenRecorder", "Your video is still being recorded !!");
+                    }
+
+                    
                 }
             }
 
@@ -1018,7 +1071,7 @@ namespace ScreenRecorder
                     _imageExtension = ".tiff";
                     break;
                 default:
-                    Console.WriteLine(@"Unexpected error my friend !");
+                    Console.WriteLine(@"Bad image extension !");
                     break;
             }
         }
@@ -1058,7 +1111,7 @@ namespace ScreenRecorder
                     _frameRate = 60;
                     break;
                 default:
-                    Console.WriteLine(@"Unexpected error my friend !");
+                    Console.WriteLine(@"Bad frame rate !");
                     break;
             }
         }
@@ -1090,7 +1143,7 @@ namespace ScreenRecorder
                     break;
 
                 default:
-                    Console.WriteLine(@"Unexpected error my friend !");
+                    Console.WriteLine(@"Bad video extension !");
                     break;
             }
         }
@@ -1214,6 +1267,38 @@ namespace ScreenRecorder
         {
             EmailForm emailForm = new EmailForm(_videoName, txtEmailSave.Text);
             emailForm.Show();
+        }
+
+        private void RadioBitRate(object sender, RoutedEventArgs e)
+        {
+        var button = sender as RadioButton;
+            if (button == null || button.Content == null)
+                return;
+
+            if (button.IsChecked != null && button.IsChecked.Value)
+                Console.WriteLine(button.Content.ToString());
+
+            switch (button.Content.ToString())
+            {
+                case "1 Mbps":
+                    _bitRate = 1000000;
+                    break;
+                case "2 Mbps":
+                    _bitRate = 2000000;
+                    break;
+                case "4 Mbps":
+                    _bitRate = 4000000;
+                    break;
+                case "6 Mbps":
+                    _bitRate = 6000000;
+                    break;
+                case "8 Mbps":
+                    _bitRate = 8000000;
+                    break;
+                default:
+                    Console.WriteLine(@"Bad bit rate !");
+                    break;
+            }
         }
 
 

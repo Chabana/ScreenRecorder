@@ -384,14 +384,14 @@
                             </GroupBox>
                             <GroupBox Header="Video" FontWeight="Bold" Margin="0,30,25,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <GroupBox Header="Video extension" FontWeight="Bold" Margin="0,0,0,0" Width="298">
+                                    <GroupBox Header="Video extension" FontWeight="Bold" Margin="0,0,0,0" Width="183">
                                         <StackPanel Margin="0,18,-2,19" Height="64" Orientation="Vertical">
                                             <RadioButton GroupName="video" Checked="RadioButtonVideoFormat" IsChecked="True" Content="MPEG4"></RadioButton>
                                             <RadioButton GroupName="video" Checked="RadioButtonVideoFormat" Content="WMV"></RadioButton>
                                         </StackPanel>
                                     </GroupBox>
                                     <StackPanel Margin="0,0,0,0" Width="450">
-                                        <GroupBox Header="Frame rate" FontWeight="Bold" Margin="0,0,138,0" Height="125">
+                                        <GroupBox Header="Frame rate" FontWeight="Bold" Margin="0,0,262,0" Height="125">
                                             <StackPanel Margin="0,0,72,0">
                                                 <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="10"></RadioButton>
                                                 <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="15"></RadioButton>
@@ -400,9 +400,18 @@
                                                 <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="48"></RadioButton>
                                                 <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="60"></RadioButton>
                                             </StackPanel>
-                                        </GroupBox>
+                                        </GroupBox >
+                                        
                                     </StackPanel>
-
+                                    <GroupBox Header="Bit rate" FontWeight="Bold" Margin="-287,0,0,0" Height="125" Width="240">
+                                        <StackPanel Margin="0,0,0,0">
+                                            <RadioButton GroupName="bitrate" Checked="RadioBitRate" Content="1 Mbps"></RadioButton>
+                                            <RadioButton GroupName="bitrate" Checked="RadioButtonFrameRate" Content="2 Mbps"></RadioButton>
+                                            <RadioButton GroupName="bitrate" Checked="RadioButtonFrameRate" Content="4 Mbps" IsChecked="True"></RadioButton>
+                                            <RadioButton GroupName="bitrate" Checked="RadioButtonFrameRate" Content="6 Mbps"></RadioButton>
+                                            <RadioButton GroupName="bitrate" Checked="RadioButtonFrameRate" Content="8 Mbps"></RadioButton>
+                                        </StackPanel>
+                                    </GroupBox>
                                 </StackPanel>
                             </GroupBox>
 
