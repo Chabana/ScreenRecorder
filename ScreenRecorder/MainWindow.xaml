@@ -218,17 +218,19 @@
                 <TabItem Header="Video">
                     <StackPanel Orientation="Vertical">
 
-                        <Expander Header="Video informations" IsExpanded="True" ExpandDirection="Down" Margin="0,0,0,0" Height="150">
-                            <Grid Height="124">
+                        <Expander Header="Video informations" IsExpanded="True" ExpandDirection="Down" Margin="0,0,0,0">
+                            <Grid Height="121">
 
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="29*"/>
                                     <ColumnDefinition Width="104*"/>
                                 </Grid.ColumnDefinitions>
-                                <Button x:Name="btnSendVideoEmail" FontSize="15px" Padding="5px 2px 5px 2px"  Content="Send by e-mail"  FontFamily="Helvetica neue" Margin="215,-25,0,122" Grid.Column="1" Click="btnSendVideoEmail_Click" Height="25" VerticalAlignment="Bottom"/>
+                                <Button x:Name="btnSendVideoEmail" FontSize="15px" Padding="5px 2px 5px 2px"  Content="Send by e-mail"  FontFamily="Helvetica neue" Margin="220,-23,0,117" Grid.Column="1" Click="btnSendVideoEmail_Click" Height="27" VerticalAlignment="Bottom"/>
 
+                                <TextBlock FontSize="20px" Margin="28,10,-29,22" Grid.ColumnSpan="2"><Run Text=""/>
 
-                                <Grid Margin="0,5,0,0" Grid.ColumnSpan="2">
+                                </TextBlock>
+                                <Grid Margin="0,8,0,0" Grid.ColumnSpan="2">
 
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="20px" />
