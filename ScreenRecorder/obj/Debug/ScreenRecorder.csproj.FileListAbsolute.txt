@@ -165,3 +165,4 @@ Y:\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\MainWindow.baml
 Y:\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.g.resources
 Y:\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.Properties.Resources.resources
 Y:\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.csproj.GenerateResource.Cache
+Y:\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.csprojResolveAssemblyReference.cache

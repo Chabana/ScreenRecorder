@@ -308,7 +308,7 @@
                                         <RowDefinition Height="auto" />
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="auto"/>
                                         <ColumnDefinition Width="38*" />
                                         <ColumnDefinition Width="567*"/>
                                     </Grid.ColumnDefinitions>
@@ -329,7 +329,6 @@
                                     <TextBox Grid.Column="1" Grid.Row="4" IsEnabled="False" Name="ImageCreated" Grid.ColumnSpan="2"></TextBox>
 
                                 </Grid>
-
                             </Grid>
                         </Expander>
                         <TextBlock FontSize="20px" Margin="0px 10px 0px 0px">Preview</TextBlock>

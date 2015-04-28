@@ -13,6 +13,7 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
@@ -44,7 +45,7 @@ namespace ScreenRecorder
         // Writer for the video files
         private readonly VideoFileWriter _writer;
         // Know if a video is being recorded or not
-        private bool _rec;
+        private bool _rec = true;
 
         // Count number of frames
         private UInt32 _frameCount;
@@ -89,7 +90,6 @@ namespace ScreenRecorder
         private System.Drawing.Point _currentPoint;
 
         private string _fileSerialize = "serializeEmail.xml";
-
 
         //##########################################################################################################################
         //######################################## Constructor -> Initialize the application ##############################
@@ -227,9 +227,6 @@ namespace ScreenRecorder
         /// </summary>
         private void ExitApplication()
         {
-            //Save the video screen in a file
-            //StopVideoRecording();
-
             //Quit the application
             Application.Current.Shutdown();
         }
@@ -255,6 +252,16 @@ namespace ScreenRecorder
         /// <param name="e"></param>
         private void OnStartVideocapture(object sender, HotkeyEventArgs e)
         {
+            Console.WriteLine("VAL DE REC : " + _rec);
+            if (_rec)
+            {
+                _rec = false;
+            }
+            else
+            {
+                _rec = true;
+            }
+            Console.WriteLine("VAL DE REC 1: " + _rec);
             StartVideocapture();
         }
 
@@ -309,8 +316,20 @@ namespace ScreenRecorder
 
                     var time = DateTime.Now.ToString("dd-MM-yy HH.mm.ss");
                     var fullName = _mainFolderPath + "\\" + "video " + time;
+
+                    Console.WriteLine(fullName);
+                    Console.WriteLine("ETAT1:" + _writer.IsOpen);
+                    if (_writer.IsOpen)
+                    {
+                        //_writer.Dispose();
+                        _writer.Close();
+                        //_stopwatch.Reset();
+                        //_streamVideo.SignalToStop();
+                    }
+                    Console.WriteLine("ETAT:" + _writer.IsOpen);
                     try
                     {
+                        
                         // Write the video with the name, frame rate, extension, ...
                         _writer.Open(fullName + _videoExtension,
                             _width,
@@ -321,6 +340,7 @@ namespace ScreenRecorder
                     }
                     catch (Exception exception)
                     {
+                        Console.WriteLine("CEST LE MERDE");
 
                         Console.WriteLine(exception.Message);
                     }
@@ -330,10 +350,12 @@ namespace ScreenRecorder
             }
             else
             {
+
                 // Video has been recorded, stop the process and show the baloon
                 const string title = "ScreenRecorder";
                 const string text = "Video has been saved (C:\\ScreenRecorder)";
                 ShowStandardBalloon(title, text);
+                
                 StopVideoRecording();
                 MenuCaptureVideo.Header = "Start Video Capture";
                 Console.WriteLine(@"Recording has stopped");
@@ -412,13 +434,17 @@ namespace ScreenRecorder
                                 }));
                         }
                             );
-                        _thdraw.Start();
-                    }else {
 
+                            _thdraw.Start();
+
+
+                    }else {
+                        _thdraw.Abort();
+                        _thPos.Abort();
                         _stopwatch.Reset();
-                        Thread.Sleep(500);
+                        Thread.Sleep(300);
                         _streamVideo.SignalToStop();
-                        Thread.Sleep(500);
+                        Thread.Sleep(300);
                         _writer.Close();
                     }
                 }
@@ -434,16 +460,32 @@ namespace ScreenRecorder
         /// </summary>
         private void StopVideoRecording()
         {
-            _rec = false;
+            // Set to true for next recording
+            _rec = true;
+
             try
             {
-                _rec = false;
-                Console.WriteLine(@"FILE SAVED !!!!");
-                
+                Thread.Sleep(800);
+
+                string[] fns = Directory.GetFiles(_mainFolderPath);
+                foreach (string fn in fns)
+                {
+                    DeleteListLine(new FileInfo(fn).Name);
+                }
+
+                // At the beginning of the application, add the files to the list
+                foreach (string fn in fns)
+                {
+                    if (IsFileLocked(new FileInfo(fn)))
+                    {
+                        Console.WriteLine("FUUUUUUUUUUU");
+                    }
+                    AddListLine(new FileInfo(fn).Name);
+                }
 
                 FileContentCounter.Content = "You have : " + CountVideoInFolder() + (CountVideoInFolder() < 2 ? " video " : " videos ") + " and " + CountImageInFolder() +
                                          (CountImageInFolder() < 2 ? " image" : " images");
-                
+
             }
             catch (Exception exception)
             {
@@ -664,16 +706,12 @@ namespace ScreenRecorder
 
             List<FileSystemWatcher> watchersExtension = new List<FileSystemWatcher>();
 
-            
-
             foreach (String extension in extensions)
             {
                 FileSystemWatcher w = new FileSystemWatcher {Filter = extension};
                 w.Changed += fileSystemWatcher_Changed;
                 watchersExtension.Add(w);
             }
-
-            
 
             //Watcher for the CRUD
             watcher.Created += fileSystemWatcher_Created;
@@ -694,7 +732,6 @@ namespace ScreenRecorder
         /// <param name="e"></param>
         void fileSystemWatcher_Created(object sender, FileSystemEventArgs e)
         {
-            
             DisplayFileSystemWatcherInfo(e.ChangeType, e.Name);
         }
 
@@ -766,7 +803,17 @@ namespace ScreenRecorder
         /// <param name="text"></param>
         public void AddListLine(string text)
         {
-            Tvi.Items.Add(text + " - " + GetFileSize(_mainFolderPath + "\\" + text).ToString("0.0") + " Mo");
+            try
+            {
+                if (!IsFileLocked(new FileInfo(_mainFolderPath + "\\" + text)))
+                {
+                Console.WriteLine("add"+text);
+                    Tvi.Items.Add(text + " - " + GetFileSize(_mainFolderPath + "\\" + text).ToString("0.0") + " Mo");
+                }
+            }
+            catch (SecurityException securityException)
+            {
+            }
         }
 
         //##########################################################################################################################
@@ -937,9 +984,8 @@ namespace ScreenRecorder
                     if (!IsFileLocked(new FileInfo(fileName)))
                     {
                         VideoFileReader reader = new VideoFileReader();
+                        
                         // open video file
-
-
                         try
                         {
                             reader.Open(fileName);
@@ -1032,6 +1078,7 @@ namespace ScreenRecorder
                 DeleteListLine(fileInfo.Name);
             }
       
+            Console.WriteLine("sadasdadasdsadssadasdasdasdda");
             string[] fns = Directory.GetFiles(_mainFolderPath);
 
             //The different filters
