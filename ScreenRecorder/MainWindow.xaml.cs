@@ -23,6 +23,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using System.Xml.Serialization;
 using AForge.Video;
 using AForge.Video.FFMPEG;
 using Hardcodet.Wpf.TaskbarNotification;
@@ -86,6 +87,8 @@ namespace ScreenRecorder
         private Thread thPos;
         private Thread thdraw;
         private System.Drawing.Point _currentPoint;
+
+        private string fileSerialize = "serializeEmail.xml";
 
         //##########################################################################################################################
         //######################################## Constructor -> Initialize the application ##############################
@@ -162,6 +165,22 @@ namespace ScreenRecorder
             btnSendImageEmail.IsEnabled = false;
 
             lblEmailSucced.Visibility = Visibility.Hidden;
+
+            if (File.Exists(fileSerialize))
+            {
+                txtEmailSave.Text = DeserializeFromXML();
+                btnEmailSave.Content = "Edit";
+                txtEmailSave.IsEnabled = false;
+            }
+            else
+            {
+                using (FileStream fs = File.Create(fileSerialize))
+                {
+                    
+                }
+            }
+
+            
 
             Update();
         }
@@ -1128,8 +1147,32 @@ namespace ScreenRecorder
                     lblEmailSucced.Visibility = Visibility.Visible;
                     btnEmailSave.Content = "Edit";
                     txtEmailSave.IsEnabled = false;
+                    SerializeToXML();
                 }
             }
+        }
+
+        public void SerializeToXML()
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(string));
+            TextWriter textWriter = new StreamWriter(@"serializeEmail.xml");
+            serializer.Serialize(textWriter, txtEmailSave.Text);
+            textWriter.Close();
+        }
+
+        /// <summary>
+        /// Deserialize the email
+        /// </summary>
+        /// <returns></returns>
+        public string DeserializeFromXML()
+        {
+            XmlSerializer deserializer = new XmlSerializer(typeof(string));
+            TextReader textReader = new StreamReader(@"serializeEmail.xml");
+            string email;
+            email = (string)deserializer.Deserialize(textReader);
+            textReader.Close();
+
+            return email;
         }
 
         private void txtEmailSave_TextChanged(object sender, TextChangedEventArgs e)
