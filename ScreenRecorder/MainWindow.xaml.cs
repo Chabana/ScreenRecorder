@@ -30,6 +30,7 @@ using NHotkey.Wpf;
 using Application = System.Windows.Application;
 using Image = System.Drawing.Image;
 using RadioButton = System.Windows.Controls.RadioButton;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace ScreenRecorder
 {
@@ -1085,5 +1086,26 @@ namespace ScreenRecorder
         {
             _currentPoint = System.Windows.Forms.Control.MousePosition;
         }
+
+        private void btnEmailSave_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void txtEmailSave_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            if (textBox.Text.Length > 0)
+            {
+                btnEmailSave.IsEnabled = true;
+            }
+            else
+            {
+                btnEmailSave.IsEnabled = false;
+            }
+            
+        }
+
+
     }
 }

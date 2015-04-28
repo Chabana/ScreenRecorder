@@ -411,8 +411,8 @@
                             <GroupBox Header="Email configuration" FontWeight="Bold" Margin="0,0,24,0" Height="125">
                                 <StackPanel Orientation="Horizontal" Margin="0,20,0,-35">
                                     <Label>Save your e-mail address : </Label>
-                                    <TextBox Width="231" Margin="0,0,0,91" ></TextBox>
-                                    <Button Content="Save" Margin="20,0,0,91" Width="95"></Button>
+                                    <TextBox x:Name="txtEmailSave" Width="231" Margin="0,0,0,91" TextChanged="txtEmailSave_TextChanged"  ></TextBox>
+                                    <Button x:Name="btnEmailSave" Content="Save" Margin="20,0,0,91" Width="95" Click="btnEmailSave_Click" IsEnabled="False"></Button>
                                 </StackPanel>
                             </GroupBox>
                         </StackPanel>
