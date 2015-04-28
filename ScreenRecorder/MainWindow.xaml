@@ -2,12 +2,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:microsoftWindowsThemes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
-        xmlns:cbox="clr-namespace:ScreenRecorder"
-        xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         x:Class="ScreenRecorder.MainWindow" 
         Title="ScreenRecorder" 
         Height="600"
-	    Width="1000" 
+	    Width="1100" 
         Background="#FFFFFF" 
         BorderBrush="#FF3F3F46" 
         Foreground="#FFFFFFFF" 
@@ -171,16 +169,12 @@
 
         <Expander Header="" IsExpanded="True" ExpandDirection="Right" Margin="-5,0,5,10" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0">
 
-            <TreeView x:Name="TrvStructure" Foreground="#ffffffff" BorderBrush="#FF3d3d3b" Width="250px" SelectedItemChanged="TrvStructure_SelectedItemChanged">
+            <TreeView x:Name="TrvStructure" Foreground="#ffffffff" BorderBrush="#FF3d3d3b" Width="300px" SelectedItemChanged="TrvStructure_SelectedItemChanged">
                 <Label  Margin="-8px 10px 0px 0px" >Sort folder by :</Label>
-                <ComboBox x:Name="FilterCombobox" Margin="-5px 0px 0px 15px" SelectionChanged="filterCombobox_SelectionChanged" Width="220px"></ComboBox>
+                <ComboBox x:Name="FilterCombobox" Margin="-5px 0px 0px 15px" SelectionChanged="filterCombobox_SelectionChanged" Width="270px"></ComboBox>
                 <Label ClipToBounds="True" x:Name="FileContentCounter" Margin="-7px 0px 0px 10px" Content="" VerticalAlignment="Bottom" RenderTransformOrigin="4.4,0.5"/>
 
-                <TreeViewItem IsExpanded="True" x:Name="Tvi" Header="Folder" Margin="-2px 0px 0px 0px" FontSize="13" FontWeight="Normal">
-
-                </TreeViewItem>
-
-
+                <TreeViewItem IsExpanded="True" x:Name="Tvi" Header="Folder" Margin="-2px 0px 0px 0px" FontSize="13" FontWeight="Normal"></TreeViewItem>
 
                 <TreeView.Style>
                     <Style TargetType="{x:Type TreeView}">
@@ -191,21 +185,8 @@
                         <Setter Property="Foreground" Value="White"/>
                         <Setter Property="FontStyle" Value="Normal"/>
                     </Style>
-
-
-
-
-
                 </TreeView.Style>
-
-
-
-
-
             </TreeView>
-
-
-
         </Expander>
         <Grid  Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Margin="10px,5px,10px,10px" Background="White">
             <Grid.RowDefinitions>
@@ -225,12 +206,12 @@
                                     <ColumnDefinition Width="29*"/>
                                     <ColumnDefinition Width="104*"/>
                                 </Grid.ColumnDefinitions>
-                                <Button x:Name="btnSendVideoEmail" FontSize="15px" Padding="5px 2px 5px 2px"  Content="Send by e-mail"  FontFamily="Helvetica neue" Margin="220,-23,0,117" Grid.Column="1" Click="btnSendVideoEmail_Click" Height="27" VerticalAlignment="Bottom"/>
+                                <Button x:Name="BtnSendVideoEmail" FontSize="15px" Padding="5px 2px 5px 2px"  Content="Send by e-mail"  FontFamily="Helvetica neue" Margin="350,-23,0,117" Grid.Column="1" Click="btnSendVideoEmail_Click" Height="27" VerticalAlignment="Bottom"/>
 
-                                <TextBlock FontSize="20px" Margin="28,10,-29,22" Grid.ColumnSpan="2"><Run Text=""/>
+                                <TextBlock FontSize="20px" Margin="28,10,-29,22" Grid.ColumnSpan="2" Grid.Column="0"><Run Text=""/>
 
                                 </TextBlock>
-                                <Grid Margin="0,8,0,0" Grid.ColumnSpan="2">
+                                <Grid Margin="0,8,0,0" Grid.ColumnSpan="2" Grid.Column="0">
 
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="20px" />
@@ -313,15 +294,8 @@
                     <StackPanel>
                         <Expander Header="Video informations" IsExpanded="True" ExpandDirection="Down" Margin="0,0,0,0">
                             <Grid>
-
-
-                                <Button x:Name="btnSendImageEmail" FontSize="15px" Padding="5px 2px 5px 2px"  Content="Send by e-mail" Margin="360,-22,0,118" Click="btnSendImageEmail_Click" FontFamily="Helvetica neue"/>
-                                <TextBlock FontSize="20px" Margin="0,9,0,0"><Run Text=""/>
-
-                                </TextBlock>
-
-
-
+                                <Button x:Name="BtnSendImageEmail" FontSize="15px" Padding="5px 2px 5px 2px"  Content="Send by e-mail" Margin="500,-22,0,118" Click="btnSendImageEmail_Click" FontFamily="Helvetica neue"/>
+                                <TextBlock FontSize="20px" Margin="0,9,0,0"><Run Text=""/></TextBlock>
 
                                 <Grid Margin="0,7,0,0" Grid.ColumnSpan="2">
 
@@ -422,12 +396,12 @@
                             <GroupBox Header="Email configuration" FontWeight="Bold" Margin="0,0,24,0" Height="125">
                                 <StackPanel Orientation="Vertical" Margin="0,10,0,2">
                                     <StackPanel>
-                                        <Label x:Name="lblEmailSucced" Content="Your E-mail has been saved" Height="26" Foreground="Green"></Label>
+                                        <Label x:Name="LblEmailSucced" Content="Your E-mail has been saved" Height="26" Foreground="Green"></Label>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Height="118">
                                         <Label>Save your e-mail address :</Label>
-                                        <TextBox x:Name="txtEmailSave" Width="231" Margin="0,0,0,91" TextChanged="txtEmailSave_TextChanged"  ></TextBox>
-                                        <Button x:Name="btnEmailSave" Content="Save" Margin="20,0,0,91" Width="95" Click="btnEmailSave_Click" IsEnabled="False"></Button>
+                                        <TextBox x:Name="TxtEmailSave" Width="231" Margin="0,0,0,91" TextChanged="txtEmailSave_TextChanged"  ></TextBox>
+                                        <Button x:Name="BtnEmailSave" Content="Save" Margin="20,0,0,91" Width="95" Click="btnEmailSave_Click" IsEnabled="False"></Button>
                                     </StackPanel>
 
                                 </StackPanel>

@@ -46,9 +46,6 @@ namespace ScreenRecorder
         // Know if a video is being recorded or not
         private bool _rec;
 
-        //Size of the screen
-        private Rectangle _screenSize = Screen.PrimaryScreen.Bounds;
-
         // Count number of frames
         private UInt32 _frameCount;
         // Set frame rate to 25 fps
@@ -87,11 +84,11 @@ namespace ScreenRecorder
         private string _pictureName = "";
         private string _videoName = "";
 
-        private Thread thPos;
-        private Thread thdraw;
+        private Thread _thPos;
+        private Thread _thdraw;
         private System.Drawing.Point _currentPoint;
 
-        private string fileSerialize = "serializeEmail.xml";
+        private string _fileSerialize = "serializeEmail.xml";
 
 
         //##########################################################################################################################
@@ -166,26 +163,24 @@ namespace ScreenRecorder
             _writer = new VideoFileWriter();
 
             // Set the button to send the e-mail to false
-            btnSendImageEmail.IsEnabled = false;
-            btnSendVideoEmail.IsEnabled = false;
+            BtnSendImageEmail.IsEnabled = false;
+            BtnSendVideoEmail.IsEnabled = false;
 
-            lblEmailSucced.Visibility = Visibility.Hidden;
+            LblEmailSucced.Visibility = Visibility.Hidden;
 
-            if (File.Exists(fileSerialize))
+            if (File.Exists(_fileSerialize))
             {
-                txtEmailSave.Text = DeserializeFromXML();
-                btnEmailSave.Content = "Edit";
-                txtEmailSave.IsEnabled = false;
+                TxtEmailSave.Text = DeserializeFromXml();
+                BtnEmailSave.Content = "Edit";
+                TxtEmailSave.IsEnabled = false;
             }
             else
             {
-                using (FileStream fs = File.Create(fileSerialize))
+                using (FileStream fs = File.Create(_fileSerialize))
                 {
-                    
+
                 }
             }
-
-            
 
             Update();
         }
@@ -321,7 +316,8 @@ namespace ScreenRecorder
                             _width,
                             _height,
                             _frameRate,
-                            _videoFormat, _bitRate);
+                            _videoFormat, 
+                            _bitRate);
                     }
                     catch (Exception exception)
                     {
@@ -331,7 +327,6 @@ namespace ScreenRecorder
                     //Start the main process to capture
                     Process();
                 }
-
             }
             else
             {
@@ -378,7 +373,60 @@ namespace ScreenRecorder
         /// <param name="sender"></param>
         /// <param name="eventArgs"></param>
         private void video_NewFrame(object sender, NewFrameEventArgs eventArgs)
-        {{    try    {        if (_rec)        {            Bitmap bitmap = eventArgs.Frame;                        thPos = new Thread(             delegate()             {                 this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => this.GetPosition()));             });            thPos.Start();            thdraw = new Thread(            delegate()            {                this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(                    () => {                        SolidBrush myBrush = new SolidBrush(System.Drawing.Color.Red);                        Graphics g = Graphics.FromImage(bitmap);                        g.SmoothingMode = SmoothingMode.AntiAlias;                        g.InterpolationMode = InterpolationMode.HighQualityBicubic;                        g.PixelOffsetMode = PixelOffsetMode.HighQuality;                        g.FillEllipse(myBrush, new Rectangle(_currentPoint.X, _currentPoint.Y, 25, 25));                        myBrush.Dispose();                        g.Flush();                        _writer.WriteVideoFrame(bitmap);                    }));            }                );            thdraw.Start();        }else {            _stopwatch.Reset();            Thread.Sleep(500);            _streamVideo.SignalToStop();            Thread.Sleep(500);            _writer.Close();        }    }    catch (Exception exception)    {        Console.WriteLine(exception.Message);    }}
+        {
+{
+    try
+    {
+        if (_rec)
+        {
+            Bitmap bitmap = eventArgs.Frame;
+           
+
+             _thPos = new Thread(
+             delegate()
+             {
+                 this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => this.GetPosition()));
+             });
+            _thPos.Start();
+
+            _thdraw = new Thread(
+            delegate()
+            {
+                this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(
+                    () => {
+
+                        SolidBrush myBrush = new SolidBrush(System.Drawing.Color.Red);
+
+                        Graphics g = Graphics.FromImage(bitmap);
+
+                        g.SmoothingMode = SmoothingMode.AntiAlias;
+                        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                        g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                        g.FillEllipse(myBrush, new Rectangle(_currentPoint.X, _currentPoint.Y, 25, 25));
+                        myBrush.Dispose();
+
+                        g.Flush();
+
+                        _writer.WriteVideoFrame(bitmap);
+                    }));
+            }
+                );
+            _thdraw.Start();
+        }else {
+
+            _stopwatch.Reset();
+            Thread.Sleep(500);
+            _streamVideo.SignalToStop();
+            Thread.Sleep(500);
+            _writer.Close();
+        }
+    }
+    catch (Exception exception)
+    {
+        Console.WriteLine(exception.Message);
+    }
+}
         }
 
         /// <summary>
@@ -709,7 +757,7 @@ namespace ScreenRecorder
         /// <param name="text"></param>
         public void DeleteListLine(string text)
         {
-            Tvi.Items.Remove(text);
+            Tvi.Items.Remove(text + " - " + GetFileSize(_mainFolderPath + "\\" + text).ToString("0.0") +" Mo");
         }
  
         /// <summary>
@@ -718,7 +766,7 @@ namespace ScreenRecorder
         /// <param name="text"></param>
         public void AddListLine(string text)
         {
-            Tvi.Items.Add(text);
+            Tvi.Items.Add(text + " - " + GetFileSize(_mainFolderPath + "\\" + text).ToString("0.0") + " Mo");
         }
 
         //##########################################################################################################################
@@ -863,17 +911,26 @@ namespace ScreenRecorder
             {
                 if (e.NewValue.ToString().Contains(extension))
                 {
+
+                    // Récupération du filename (sans la taille du fichier)
+                    string strfilename = (string)e.NewValue;
+                    int foundS1 = strfilename.IndexOf(" ");
+                    int foundS2 = strfilename.IndexOf(" ", foundS1 + 1);
+                    int foundS3 = strfilename.IndexOf(" ", foundS2 + 1);
+
+                    strfilename = strfilename.Remove(foundS3, (strfilename.Length) - foundS3);
+
                     Tabcontroler.SelectedItem = 0;
                     Tabcontroler.SelectedIndex = 0;
                     DispatcherTimer timerMedia = new DispatcherTimer();
                     MePlayer.Stretch = Stretch.Fill;
-                    MePlayer.Source = new Uri(_mainFolderPath + "\\" + e.NewValue);
+                    MePlayer.Source = new Uri(_mainFolderPath + "\\" + strfilename);
                     timerMedia.Interval = TimeSpan.FromSeconds(1);
                     timerMedia.Tick += timer_Tick;
                     timerMedia.Start();
 
-                    var fileName = _mainFolderPath + "\\" + e.NewValue;
-                    btnSendVideoEmail.IsEnabled = true;
+                    var fileName = _mainFolderPath + "\\" + strfilename;
+                    BtnSendVideoEmail.IsEnabled = true;
 
                     _videoName = fileName;
 
@@ -918,10 +975,18 @@ namespace ScreenRecorder
                     Tabcontroler.SelectedItem = 1;
                     Tabcontroler.SelectedIndex = 1;
 
-                    var fileName = _mainFolderPath + "\\" + e.NewValue;
+                    // Récupération du filename (sans la taille du fichier)
+                    string strfilename = (string) e.NewValue;
+                    int foundS1 = strfilename.IndexOf(" ");
+                    int foundS2 = strfilename.IndexOf(" ", foundS1 + 1);
+                    int foundS3 = strfilename.IndexOf(" ", foundS2 + 1);
+
+                    strfilename = strfilename.Remove(foundS3, (strfilename.Length) -  foundS3);
+
+                    var fileName = _mainFolderPath + "\\" + strfilename;
                     _pictureName = fileName;
 
-                    btnSendImageEmail.IsEnabled = true;
+                    BtnSendImageEmail.IsEnabled = true;
 
                     BitmapSource img = BitmapFrame.Create(new Uri(fileName, UriKind.RelativeOrAbsolute));
 
@@ -945,6 +1010,11 @@ namespace ScreenRecorder
 
         //##########################################################################################################################
         //######################################## Part for filters by name, by size or by date ascending and descending ##############################
+
+        private float GetFileSize(string path)
+        {
+            return (float) (new FileInfo(path).Length / 1000000.0);
+        }
 
         /// <summary>
         /// Event to change the selection of a filter in the combobox
@@ -981,7 +1051,6 @@ namespace ScreenRecorder
 
                     foreach (string n in sortBySizeDescending)
                     {
-                        Console.WriteLine(Path.GetFileName(n));
                         AddListLine(Path.GetFileName(n));
                     }
                     break;
@@ -989,7 +1058,6 @@ namespace ScreenRecorder
 
                     foreach (string n in sortByNameDescending)
                     {
-                        Console.WriteLine(Path.GetFileName(n));
                         AddListLine(Path.GetFileName(n));
                     }
                     break;
@@ -997,7 +1065,6 @@ namespace ScreenRecorder
 
                     foreach (string n in sortByDateDescending)
                     {
-                        Console.WriteLine(Path.GetFileName(n));
                         AddListLine(Path.GetFileName(n));
                     }
                     break;
@@ -1005,7 +1072,6 @@ namespace ScreenRecorder
 
                     foreach (string n in sortBySizeAscending)
                     {
-                        Console.WriteLine(Path.GetFileName(n));
                         AddListLine(Path.GetFileName(n));
                     }
                     break;
@@ -1013,7 +1079,6 @@ namespace ScreenRecorder
 
                     foreach (string n in sortByNameAscending)
                     {
-                        Console.WriteLine(Path.GetFileName(n));
                         AddListLine(Path.GetFileName(n));
                     }
                     break;
@@ -1021,7 +1086,6 @@ namespace ScreenRecorder
 
                     foreach (string n in sortByDateAscending)
                     {
-                        Console.WriteLine(Path.GetFileName(n));
                         AddListLine(Path.GetFileName(n));
                     }
                     break;
@@ -1158,7 +1222,7 @@ namespace ScreenRecorder
         /// <param name="e"></param>
         private void btnSendImageEmail_Click(object sender, RoutedEventArgs e)
         {
-            EmailForm emailForm = new EmailForm(_pictureName, txtEmailSave.Text);
+            EmailForm emailForm = new EmailForm(_pictureName, TxtEmailSave.Text);
             emailForm.Show();
         }
 
@@ -1177,43 +1241,43 @@ namespace ScreenRecorder
         /// <param name="e"></param>
         private void btnEmailSave_Click(object sender, RoutedEventArgs e)
         {
-            bool emailSender = Regex.IsMatch(txtEmailSave.Text.Trim(), @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+            bool emailSender = Regex.IsMatch(TxtEmailSave.Text.Trim(), @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
 
-            if (btnEmailSave.Content.Equals("Edit"))
+            if (BtnEmailSave.Content.Equals("Edit"))
             {
-                lblEmailSucced.Visibility = Visibility.Hidden;
-                txtEmailSave.IsEnabled = true;
-                btnEmailSave.Content = "Save";
+                LblEmailSucced.Visibility = Visibility.Hidden;
+                TxtEmailSave.IsEnabled = true;
+                BtnEmailSave.Content = "Save";
             }
-            else if (btnEmailSave.Content.Equals("Save"))
+            else if (BtnEmailSave.Content.Equals("Save"))
             {
-                if (txtEmailSave.Text == "")
+                if (TxtEmailSave.Text == "")
                 {
-                    lblEmailSucced.Content = "Your email is empty";
-                    lblEmailSucced.Foreground = new SolidColorBrush(Colors.Red);
-                    lblEmailSucced.Visibility = Visibility.Visible;
+                    LblEmailSucced.Content = "Your email is empty";
+                    LblEmailSucced.Foreground = new SolidColorBrush(Colors.Red);
+                    LblEmailSucced.Visibility = Visibility.Visible;
                 }
 
                 else if (!emailSender)
                 {
-                    lblEmailSucced.Content = "Your email is not a valid email : YourEmail@gmail.com";
-                    lblEmailSucced.Foreground = new SolidColorBrush(Colors.Red);
-                    lblEmailSucced.Visibility = Visibility.Visible;
+                    LblEmailSucced.Content = "Your email is not a valid email : YourEmail@gmail.com";
+                    LblEmailSucced.Foreground = new SolidColorBrush(Colors.Red);
+                    LblEmailSucced.Visibility = Visibility.Visible;
                 }
-                else if (!txtEmailSave.Text.Contains("@gmail.com"))
+                else if (!TxtEmailSave.Text.Contains("@gmail.com"))
                 {
-                    lblEmailSucced.Content = "Only Gmail account are accepted";
-                    lblEmailSucced.Foreground = new SolidColorBrush(Colors.Red);
-                    lblEmailSucced.Visibility = Visibility.Visible;
+                    LblEmailSucced.Content = "Only Gmail account are accepted";
+                    LblEmailSucced.Foreground = new SolidColorBrush(Colors.Red);
+                    LblEmailSucced.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    lblEmailSucced.Content = "Your E-mail has been saved";
-                    lblEmailSucced.Foreground = new SolidColorBrush(Colors.Green);
-                    lblEmailSucced.Visibility = Visibility.Visible;
-                    btnEmailSave.Content = "Edit";
-                    txtEmailSave.IsEnabled = false;
-                    SerializeToXML();
+                    LblEmailSucced.Content = "Your E-mail has been saved";
+                    LblEmailSucced.Foreground = new SolidColorBrush(Colors.Green);
+                    LblEmailSucced.Visibility = Visibility.Visible;
+                    BtnEmailSave.Content = "Edit";
+                    TxtEmailSave.IsEnabled = false;
+                    SerializeToXml();
                 }
             }
         }
@@ -1221,11 +1285,11 @@ namespace ScreenRecorder
         /// <summary>
         /// Serialization of the email
         /// </summary>
-        public void SerializeToXML()
+        public void SerializeToXml()
         {
             XmlSerializer serializer = new XmlSerializer(typeof(string));
             TextWriter textWriter = new StreamWriter(@"serializeEmail.xml");
-            serializer.Serialize(textWriter, txtEmailSave.Text);
+            serializer.Serialize(textWriter, TxtEmailSave.Text);
             textWriter.Close();
         }
 
@@ -1233,12 +1297,21 @@ namespace ScreenRecorder
         /// Deserialize the email
         /// </summary>
         /// <returns></returns>
-        public string DeserializeFromXML()
+        public string DeserializeFromXml()
         {
             XmlSerializer deserializer = new XmlSerializer(typeof(string));
             TextReader textReader = new StreamReader(@"serializeEmail.xml");
-            string email;
-            email = (string)deserializer.Deserialize(textReader);
+            string email = null;
+            try
+            {
+                email = (string)deserializer.Deserialize(textReader);
+            }
+            catch (Exception)
+            {
+
+            }
+
+            
             textReader.Close();
 
             return email;
@@ -1254,18 +1327,18 @@ namespace ScreenRecorder
             var textBox = sender as TextBox;
             if (textBox.Text.Length > 0)
             {
-                btnEmailSave.IsEnabled = true;
+                BtnEmailSave.IsEnabled = true;
             }
             else
             {
-                btnEmailSave.IsEnabled = false;
+                BtnEmailSave.IsEnabled = false;
             }
             
         }
 
         private void btnSendVideoEmail_Click(object sender, RoutedEventArgs e)
         {
-            EmailForm emailForm = new EmailForm(_videoName, txtEmailSave.Text);
+            EmailForm emailForm = new EmailForm(_videoName, TxtEmailSave.Text);
             emailForm.Show();
         }
 
