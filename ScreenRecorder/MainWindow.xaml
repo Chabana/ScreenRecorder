@@ -3,6 +3,7 @@
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:microsoftWindowsThemes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
         xmlns:cbox="clr-namespace:ScreenRecorder"
+        xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         x:Class="ScreenRecorder.MainWindow" 
         Title="ScreenRecorder" 
         Height="600"
@@ -173,11 +174,14 @@
             <TreeView x:Name="TrvStructure" Foreground="#ffffffff" BorderBrush="#FF3d3d3b" Width="250px" SelectedItemChanged="TrvStructure_SelectedItemChanged">
                 <Label  Margin="-8px 10px 0px 0px" >Sort folder by :</Label>
                 <ComboBox x:Name="FilterCombobox" Margin="-5px 0px 0px 15px" SelectionChanged="filterCombobox_SelectionChanged" Width="220px"></ComboBox>
-                <Label ClipToBounds="True" x:Name="FileContentCounter" Margin="-7px 0px 0px 10px" Content="" VerticalAlignment="Bottom"/>
+                <Label ClipToBounds="True" x:Name="FileContentCounter" Margin="-7px 0px 0px 10px" Content="" VerticalAlignment="Bottom" RenderTransformOrigin="4.4,0.5"/>
 
-                <TreeViewItem IsExpanded="True" x:Name="Tvi" Header="Folder" Margin="-2px 0px 0px 0px" FontSize="13" FontWeight="Normal"/>
-
-
+                <TreeViewItem IsExpanded="True" x:Name="Tvi" Header="Folder" Margin="-2px 0px 0px 0px" FontSize="13" FontWeight="Normal">
+                
+                </TreeViewItem>
+                
+                
+                
                 <TreeView.Style>
                     <Style TargetType="{x:Type TreeView}">
                         <Setter Property="FontFamily" Value="Helvetica neue" />
@@ -187,7 +191,16 @@
                         <Setter Property="Foreground" Value="White"/>
                         <Setter Property="FontStyle" Value="Normal"/>
                     </Style>
+
+                    
+                        
+
+                    
                 </TreeView.Style>
+
+                
+                    
+                
 
             </TreeView>
 
@@ -353,32 +366,46 @@
                 <TabItem Header="Properties">
                     <StackPanel Margin="10" Orientation="Vertical">
                         <Label Content="Properties" FontSize="22" FontWeight="Bold"></Label>
-                        <StackPanel Orientation="Horizontal">
-                            <StackPanel Margin="0,0,0,0" Width="450">
-                                <Label FontWeight="Bold">Image extension :</Label>
-                                <RadioButton GroupName="image" Checked="RadioButtonImageFormat" Content="Bmp"></RadioButton>
+                        <StackPanel Orientation="Vertical">
+                            <GroupBox Header="Image" FontWeight="Bold" Margin="0,0,25,0">
+                                <StackPanel Margin="0,0,0,0">
+                                    <GroupBox Header="Image extension">
+                                        <StackPanel>
+                                    <RadioButton GroupName="image" Checked="RadioButtonImageFormat" Content="Bmp"></RadioButton>
                                 <RadioButton GroupName="image" Checked="RadioButtonImageFormat" Content="Gif"></RadioButton>
                                 <RadioButton GroupName="image" Checked="RadioButtonImageFormat" Content="Jpeg"></RadioButton>
                                 <RadioButton GroupName="image" Checked="RadioButtonImageFormat" Content="Png" IsChecked="True"></RadioButton>
                                 <RadioButton GroupName="image" Checked="RadioButtonImageFormat" Content="Tiff"></RadioButton>
-                            </StackPanel>
-
-                            <StackPanel>
-                                <Label FontWeight="Bold">Video extension :</Label>
+                                        </StackPanel>
+                                    </GroupBox>
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox Header="Video" FontWeight="Bold" Margin="0,30,25,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <GroupBox Header="Video extension" FontWeight="Bold" Margin="0,0,0,0" Width="298">
+                                <StackPanel Margin="0,18,-2,19" Height="64" Orientation="Vertical">
                                 <RadioButton GroupName="video" Checked="RadioButtonVideoFormat" IsChecked="True" Content="MPEG4"></RadioButton>
                                 <RadioButton GroupName="video" Checked="RadioButtonVideoFormat" Content="WMV"></RadioButton>
                             </StackPanel>
+                                        </GroupBox>
+                                    <StackPanel Margin="0,0,0,0" Width="450">
+                                        <GroupBox Header="Frame rate" FontWeight="Bold" Margin="0,0,138,0" Height="125">
+                                            <StackPanel Margin="0,0,72,0">
+                                                <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="10"></RadioButton>
+                                                <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="15"></RadioButton>
+                                                <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="20"></RadioButton>
+                                                <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="25" IsChecked="True"></RadioButton>
+                                                <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="48"></RadioButton>
+                                                <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="60"></RadioButton>
+                                            </StackPanel>
+                                        </GroupBox>
+                                        </StackPanel>
+
+                                </StackPanel>
+                                </GroupBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <StackPanel Margin="0,0,0,0" Width="450">
-                                <Label FontWeight="Bold">Frame rate :</Label>
-                                <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="10"></RadioButton>
-                                <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="15"></RadioButton>
-                                <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="20"></RadioButton>
-                                <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="25" IsChecked="True"></RadioButton>
-                                <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="48"></RadioButton>
-                                <RadioButton GroupName="rate" Checked="RadioButtonFrameRate" Content="60"></RadioButton>
-                            </StackPanel>
+                            
                         </StackPanel>
                     </StackPanel>
                 </TabItem>
