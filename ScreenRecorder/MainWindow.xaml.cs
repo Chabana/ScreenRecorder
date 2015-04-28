@@ -962,9 +962,7 @@ namespace ScreenRecorder
                     else
                     {
                         ShowStandardBalloon("ScreenRecorder", "Your video is still being recorded !!");
-                    }
-
-                    
+                    } 
                 }
             }
 
@@ -1288,7 +1286,7 @@ namespace ScreenRecorder
         public void SerializeToXml()
         {
             XmlSerializer serializer = new XmlSerializer(typeof(string));
-            TextWriter textWriter = new StreamWriter(@"serializeEmail.xml");
+            TextWriter textWriter = new StreamWriter(_fileSerialize);
             serializer.Serialize(textWriter, TxtEmailSave.Text);
             textWriter.Close();
         }
@@ -1300,7 +1298,7 @@ namespace ScreenRecorder
         public string DeserializeFromXml()
         {
             XmlSerializer deserializer = new XmlSerializer(typeof(string));
-            TextReader textReader = new StreamReader(@"serializeEmail.xml");
+            TextReader textReader = new StreamReader(_fileSerialize);
             string email = null;
             try
             {

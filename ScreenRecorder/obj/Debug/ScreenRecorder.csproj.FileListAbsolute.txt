@@ -156,7 +156,6 @@ Y:\Documents\ScreenRecorder\ScreenRecorder\bin\Debug\AForge.Video.FFMPEG.xml
 Y:\Documents\ScreenRecorder\ScreenRecorder\bin\Debug\Hardcodet.Wpf.TaskbarNotification.pdb
 Y:\Documents\ScreenRecorder\ScreenRecorder\bin\Debug\Hardcodet.Wpf.TaskbarNotification.xml
 Y:\Documents\ScreenRecorder\ScreenRecorder\bin\Debug\AForge.xml
-Y:\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\ScreenRecorder.csprojResolveAssemblyReference.cache
 Y:\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\EmailForm.baml
 Y:\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\EmailForm.g.cs
 Y:\Documents\ScreenRecorder\ScreenRecorder\obj\Debug\MainWindow.g.cs
