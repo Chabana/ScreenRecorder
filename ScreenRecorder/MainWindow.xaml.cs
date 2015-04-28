@@ -476,10 +476,6 @@ namespace ScreenRecorder
                 // At the beginning of the application, add the files to the list
                 foreach (string fn in fns)
                 {
-                    if (IsFileLocked(new FileInfo(fn)))
-                    {
-                        Console.WriteLine("FUUUUUUUUUUU");
-                    }
                     AddListLine(new FileInfo(fn).Name);
                 }
 

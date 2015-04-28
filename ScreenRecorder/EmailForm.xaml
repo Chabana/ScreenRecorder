@@ -1,7 +1,7 @@
 ﻿<Window x:Class="ScreenRecorder.EmailForm"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Email Form" Height="597.91" MinHeight="480" Width="400" MinWidth="590" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen">
+        Title="Email Form" Height="500" BorderBrush="Black" BorderThickness="4px" Width="400" MinWidth="590" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen">
 
     <!--ON DEFINIT ICI un STYLE PAR DEFAUT pour les controles de type BOUTON-->
     <Window.Resources>
@@ -31,17 +31,16 @@
             <Label x:Name="LabelBodyEmail">Body E-mail:</Label>
 
             <TextBox x:Name="TxtBodyEmail" TextWrapping="Wrap" AcceptsReturn="True" ToolTip="Body E-mail" Height="109"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Height="49" Width="184">
+                <Button x:Name="BtnSendEmail" Content="Send" Width="85" VerticalAlignment="Center"  Click="btnSendEmail_Click" Height="42"/>
+                <Button x:Name="BtnQuitSendEmail" Content="Back" Width="85" VerticalAlignment="Center" Click="btnQuitSendEmail_Click"  Height="42"/>
+            </StackPanel>
 
             <Label x:Name="LblErrorYourEmail" FontWeight="Bold" Foreground="Red"></Label>
             <Label x:Name="LblErrorYourPassword" FontWeight="Bold" Foreground="Red"></Label>
             <Label x:Name="LblErrorEmailDestination" FontWeight="Bold" Foreground="Red"></Label>
             <Label x:Name="LblErrorEmailSubject" FontWeight="Bold" Foreground="Red"></Label>
             <Label x:Name="LblErrorEmailBody" FontWeight="Bold" Foreground="Red"></Label>
-
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Height="79" Width="184" Margin="0,0,0,0">
-                <Button x:Name="BtnSendEmail" Content="Send" Width="85" VerticalAlignment="Center" Margin="0,18,10,19" Click="btnSendEmail_Click" Height="42"/>
-                <Button x:Name="BtnQuitSendEmail" Content="Back" Width="85" VerticalAlignment="Center" Click="btnQuitSendEmail_Click" Margin="3,18,3,19" Height="42"/>
-            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

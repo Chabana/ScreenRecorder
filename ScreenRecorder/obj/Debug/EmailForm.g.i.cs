@@ -139,7 +139,7 @@ namespace ScreenRecorder {
         
         #line 35 "..\..\EmailForm.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        internal System.Windows.Controls.Label LblErrorYourEmail;
+        internal System.Windows.Controls.Button BtnSendEmail;
         
         #line default
         #line hidden
@@ -147,23 +147,7 @@ namespace ScreenRecorder {
         
         #line 36 "..\..\EmailForm.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        internal System.Windows.Controls.Label LblErrorYourPassword;
-        
-        #line default
-        #line hidden
-        
-        
-        #line 37 "..\..\EmailForm.xaml"
-        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        internal System.Windows.Controls.Label LblErrorEmailDestination;
-        
-        #line default
-        #line hidden
-        
-        
-        #line 38 "..\..\EmailForm.xaml"
-        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        internal System.Windows.Controls.Label LblErrorEmailSubject;
+        internal System.Windows.Controls.Button BtnQuitSendEmail;
         
         #line default
         #line hidden
@@ -171,7 +155,23 @@ namespace ScreenRecorder {
         
         #line 39 "..\..\EmailForm.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        internal System.Windows.Controls.Label LblErrorEmailBody;
+        internal System.Windows.Controls.Label LblErrorYourEmail;
+        
+        #line default
+        #line hidden
+        
+        
+        #line 40 "..\..\EmailForm.xaml"
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal System.Windows.Controls.Label LblErrorYourPassword;
+        
+        #line default
+        #line hidden
+        
+        
+        #line 41 "..\..\EmailForm.xaml"
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal System.Windows.Controls.Label LblErrorEmailDestination;
         
         #line default
         #line hidden
@@ -179,7 +179,7 @@ namespace ScreenRecorder {
         
         #line 42 "..\..\EmailForm.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        internal System.Windows.Controls.Button BtnSendEmail;
+        internal System.Windows.Controls.Label LblErrorEmailSubject;
         
         #line default
         #line hidden
@@ -187,7 +187,7 @@ namespace ScreenRecorder {
         
         #line 43 "..\..\EmailForm.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        internal System.Windows.Controls.Button BtnQuitSendEmail;
+        internal System.Windows.Controls.Label LblErrorEmailBody;
         
         #line default
         #line hidden
@@ -259,37 +259,37 @@ namespace ScreenRecorder {
             this.TxtBodyEmail = ((System.Windows.Controls.TextBox)(target));
             return;
             case 13:
-            this.LblErrorYourEmail = ((System.Windows.Controls.Label)(target));
-            return;
-            case 14:
-            this.LblErrorYourPassword = ((System.Windows.Controls.Label)(target));
-            return;
-            case 15:
-            this.LblErrorEmailDestination = ((System.Windows.Controls.Label)(target));
-            return;
-            case 16:
-            this.LblErrorEmailSubject = ((System.Windows.Controls.Label)(target));
-            return;
-            case 17:
-            this.LblErrorEmailBody = ((System.Windows.Controls.Label)(target));
-            return;
-            case 18:
             this.BtnSendEmail = ((System.Windows.Controls.Button)(target));
             
-            #line 42 "..\..\EmailForm.xaml"
+            #line 35 "..\..\EmailForm.xaml"
             this.BtnSendEmail.Click += new System.Windows.RoutedEventHandler(this.btnSendEmail_Click);
             
             #line default
             #line hidden
             return;
-            case 19:
+            case 14:
             this.BtnQuitSendEmail = ((System.Windows.Controls.Button)(target));
             
-            #line 43 "..\..\EmailForm.xaml"
+            #line 36 "..\..\EmailForm.xaml"
             this.BtnQuitSendEmail.Click += new System.Windows.RoutedEventHandler(this.btnQuitSendEmail_Click);
             
             #line default
             #line hidden
+            return;
+            case 15:
+            this.LblErrorYourEmail = ((System.Windows.Controls.Label)(target));
+            return;
+            case 16:
+            this.LblErrorYourPassword = ((System.Windows.Controls.Label)(target));
+            return;
+            case 17:
+            this.LblErrorEmailDestination = ((System.Windows.Controls.Label)(target));
+            return;
+            case 18:
+            this.LblErrorEmailSubject = ((System.Windows.Controls.Label)(target));
+            return;
+            case 19:
+            this.LblErrorEmailBody = ((System.Windows.Controls.Label)(target));
             return;
             }
             this._contentLoaded = true;
