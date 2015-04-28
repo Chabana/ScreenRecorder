@@ -13,6 +13,7 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -159,6 +160,8 @@ namespace ScreenRecorder
 
             // Set the button to send the e-mail to false
             btnSendImageEmail.IsEnabled = false;
+
+            lblEmailSucced.Visibility = Visibility.Hidden;
 
             Update();
         }
@@ -1089,7 +1092,44 @@ namespace ScreenRecorder
 
         private void btnEmailSave_Click(object sender, RoutedEventArgs e)
         {
+            bool emailSender = Regex.IsMatch(txtEmailSave.Text.Trim(), @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
 
+            if (btnEmailSave.Content.Equals("Edit"))
+            {
+                lblEmailSucced.Visibility = Visibility.Hidden;
+                txtEmailSave.IsEnabled = true;
+                btnEmailSave.Content = "Save";
+            }
+            else if (btnEmailSave.Content.Equals("Save"))
+            {
+                if (txtEmailSave.Text == "")
+                {
+                    lblEmailSucced.Content = "Your email is empty";
+                    lblEmailSucced.Foreground = new SolidColorBrush(Colors.Red);
+                    lblEmailSucced.Visibility = Visibility.Visible;
+                }
+
+                else if (!emailSender)
+                {
+                    lblEmailSucced.Content = "Your email is not a valid email : YourEmail@gmail.com";
+                    lblEmailSucced.Foreground = new SolidColorBrush(Colors.Red);
+                    lblEmailSucced.Visibility = Visibility.Visible;
+                }
+                else if (!txtEmailSave.Text.Contains("@gmail.com"))
+                {
+                    lblEmailSucced.Content = "Only Gmail account are accepted";
+                    lblEmailSucced.Foreground = new SolidColorBrush(Colors.Red);
+                    lblEmailSucced.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    lblEmailSucced.Content = "Your E-mail has been saved";
+                    lblEmailSucced.Foreground = new SolidColorBrush(Colors.Green);
+                    lblEmailSucced.Visibility = Visibility.Visible;
+                    btnEmailSave.Content = "Edit";
+                    txtEmailSave.IsEnabled = false;
+                }
+            }
         }
 
         private void txtEmailSave_TextChanged(object sender, TextChangedEventArgs e)

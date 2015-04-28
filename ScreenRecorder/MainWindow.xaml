@@ -409,10 +409,16 @@
                         </StackPanel>
                         <StackPanel >
                             <GroupBox Header="Email configuration" FontWeight="Bold" Margin="0,0,24,0" Height="125">
-                                <StackPanel Orientation="Horizontal" Margin="0,20,0,-35">
+                                <StackPanel Orientation="Vertical" Margin="0,10,0,2">
+                                    <StackPanel>
+                                        <Label x:Name="lblEmailSucced" Content="Your E-mail has been saved" Height="26" Foreground="Green"></Label>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Height="118">
                                     <Label>Save your e-mail address : </Label>
                                     <TextBox x:Name="txtEmailSave" Width="231" Margin="0,0,0,91" TextChanged="txtEmailSave_TextChanged"  ></TextBox>
                                     <Button x:Name="btnEmailSave" Content="Save" Margin="20,0,0,91" Width="95" Click="btnEmailSave_Click" IsEnabled="False"></Button>
+                                    </StackPanel>
+                                    
                                 </StackPanel>
                             </GroupBox>
                         </StackPanel>
