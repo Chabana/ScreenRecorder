@@ -69,7 +69,7 @@ namespace ScreenRecorder
         // List of filters (By name, by size, ...)
         private List<string> _listFilters;
         // Video extensions that the application can support
-        private readonly string[] _extensionsVideos = { ".mp4", ".wmv"};
+        private readonly string[] _extensionsVideos = { ".mp4", ".wmv" };
         // Photo extensions that the application can support
         private readonly string[] _extensionsPictures = { ".jpeg", ".png", ".bmp", ".gif", ".tiff" };
         // Set the default format of image to "png"
@@ -100,7 +100,7 @@ namespace ScreenRecorder
         /// </summary>
         public MainWindow()
         {
-   
+
             InitializeComponent();
 
             //Minimize the window and don't put in the taskbar and set it to hidden
@@ -141,12 +141,12 @@ namespace ScreenRecorder
             var observableCollection = folder.Files;
 
             if (observableCollection == null) try
-            {
-                throw new ArgumentNullException(@"observableCollection");
-            }
-            catch (ArgumentNullException argumentNullException)
-            {
-            }
+                {
+                    throw new ArgumentNullException(@"observableCollection");
+                }
+                catch (ArgumentNullException argumentNullException)
+                {
+                }
 
             // At the beginning of the application, add the files to the list
             foreach (var fileInfo in observableCollection)
@@ -304,7 +304,7 @@ namespace ScreenRecorder
                 const string text = "Video has started recording";
                 MenuCaptureVideo.Header = "Stop Video Capture";
                 ShowStandardBalloon(title, text);
-                
+
 
                 // Set the different properties to start the recording
                 if (_rec == false)
@@ -329,13 +329,13 @@ namespace ScreenRecorder
                     Console.WriteLine("ETAT:" + _writer.IsOpen);
                     try
                     {
-                        
+
                         // Write the video with the name, frame rate, extension, ...
                         _writer.Open(fullName + _videoExtension,
                             _width,
                             _height,
                             _frameRate,
-                            _videoFormat, 
+                            _videoFormat,
                             _bitRate);
                     }
                     catch (Exception exception)
@@ -355,7 +355,7 @@ namespace ScreenRecorder
                 const string title = "ScreenRecorder";
                 const string text = "Video has been saved (C:\\ScreenRecorder)";
                 ShowStandardBalloon(title, text);
-                
+
                 StopVideoRecording();
                 MenuCaptureVideo.Header = "Start Video Capture";
                 Console.WriteLine(@"Recording has stopped");
@@ -402,20 +402,21 @@ namespace ScreenRecorder
                     if (_rec)
                     {
                         Bitmap bitmap = eventArgs.Frame;
-           
 
-                         _thPos = new Thread(
-                         delegate()
-                         {
-                             this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => this.GetPosition()));
-                         });
+
+                        _thPos = new Thread(
+                        delegate()
+                        {
+                            this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => this.GetPosition()));
+                        });
                         _thPos.Start();
 
                         _thdraw = new Thread(
                         delegate()
                         {
                             this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(
-                                () => {
+                                () =>
+                                {
 
                                     SolidBrush myBrush = new SolidBrush(System.Drawing.Color.Red);
 
@@ -435,10 +436,12 @@ namespace ScreenRecorder
                         }
                             );
 
-                            _thdraw.Start();
+                        _thdraw.Start();
 
 
-                    }else {
+                    }
+                    else
+                    {
                         _thdraw.Abort();
                         _thPos.Abort();
                         _stopwatch.Reset();
@@ -461,23 +464,12 @@ namespace ScreenRecorder
         private void StopVideoRecording()
         {
             // Set to true for next recording
-            _rec = true;
-
+            _rec = false;
             try
             {
-                Thread.Sleep(800);
+                _rec = false;
+                Console.WriteLine(@"FILE SAVED !!!!");
 
-                string[] fns = Directory.GetFiles(_mainFolderPath);
-                foreach (string fn in fns)
-                {
-                    DeleteListLine(new FileInfo(fn).Name);
-                }
-
-                // At the beginning of the application, add the files to the list
-                foreach (string fn in fns)
-                {
-                    AddListLine(new FileInfo(fn).Name);
-                }
 
                 FileContentCounter.Content = "You have : " + CountVideoInFolder() + (CountVideoInFolder() < 2 ? " video " : " videos ") + " and " + CountImageInFolder() +
                                          (CountImageInFolder() < 2 ? " image" : " images");
@@ -568,7 +560,7 @@ namespace ScreenRecorder
 
                 var time = DateTime.Now.ToString("dd-MM-yy HH.mm.ss");
                 var fullName = "image " + time + _imageExtension;
-                
+
 
                 fullName = Path.Combine(_mainFolderPath, fullName);
                 img.Save(fullName, _imageFormat);
@@ -656,13 +648,13 @@ namespace ScreenRecorder
                 const string title = "ScreenRecorder";
                 const string text = "The application has been minimized";
                 ShowStandardBalloon(title, text);
-                
+
             }
         }
 
         //##########################################################################################################################
         //######################################## Show balloons to warn the user ##############################
-        
+
         /// <summary>
         /// Function to show the different balloons of the application, to warn the user
         /// </summary>
@@ -695,7 +687,7 @@ namespace ScreenRecorder
             watcher.Path = _mainFolderPath;
 
             // Filter the watcher
-            watcher.NotifyFilter = NotifyFilters.LastAccess |  NotifyFilters.FileName | NotifyFilters.DirectoryName;
+            watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.Size | NotifyFilters.DirectoryName;
 
             // All the extensions
             string[] extensions = { "*.jpeg", "*.mp4", "*.wmv", "*.png", "*.bmp", "*.gif", "*.tiff", "*.mpeg" };
@@ -704,13 +696,13 @@ namespace ScreenRecorder
 
             foreach (String extension in extensions)
             {
-                FileSystemWatcher w = new FileSystemWatcher {Filter = extension};
+                FileSystemWatcher w = new FileSystemWatcher { Filter = extension };
                 w.Changed += fileSystemWatcher_Changed;
                 watchersExtension.Add(w);
             }
 
             //Watcher for the CRUD
-            watcher.Created += fileSystemWatcher_Created;
+            //watcher.Created += fileSystemWatcher_Created;
             watcher.Changed += fileSystemWatcher_Changed;
             watcher.Deleted += fileSystemWatcher_Deleted;
             watcher.Renamed += fileSystemWatcher_Renamed;
@@ -790,9 +782,9 @@ namespace ScreenRecorder
         /// <param name="text"></param>
         public void DeleteListLine(string text)
         {
-            Tvi.Items.Remove(text + " - " + GetFileSize(_mainFolderPath + "\\" + text).ToString("0.0") +" Mo");
+            Tvi.Items.Remove(text + " - " + GetFileSize(_mainFolderPath + "\\" + text).ToString("0.0") + " Mo");
         }
- 
+
         /// <summary>
         /// Add all the files to the list
         /// </summary>
@@ -803,7 +795,7 @@ namespace ScreenRecorder
             {
                 if (!IsFileLocked(new FileInfo(_mainFolderPath + "\\" + text)))
                 {
-                Console.WriteLine("add"+text);
+                    Console.WriteLine("add" + text);
                     Tvi.Items.Add(text + " - " + GetFileSize(_mainFolderPath + "\\" + text).ToString("0.0") + " Mo");
                 }
             }
@@ -980,7 +972,7 @@ namespace ScreenRecorder
                     if (!IsFileLocked(new FileInfo(fileName)))
                     {
                         VideoFileReader reader = new VideoFileReader();
-                        
+
                         // open video file
                         try
                         {
@@ -1004,7 +996,7 @@ namespace ScreenRecorder
                     else
                     {
                         ShowStandardBalloon("ScreenRecorder", "Your video is still being recorded !!");
-                    } 
+                    }
                 }
             }
 
@@ -1016,12 +1008,12 @@ namespace ScreenRecorder
                     Tabcontroler.SelectedIndex = 1;
 
                     // Récupération du filename (sans la taille du fichier)
-                    string strfilename = (string) e.NewValue;
+                    string strfilename = (string)e.NewValue;
                     int foundS1 = strfilename.IndexOf(" ");
                     int foundS2 = strfilename.IndexOf(" ", foundS1 + 1);
                     int foundS3 = strfilename.IndexOf(" ", foundS2 + 1);
 
-                    strfilename = strfilename.Remove(foundS3, (strfilename.Length) -  foundS3);
+                    strfilename = strfilename.Remove(foundS3, (strfilename.Length) - foundS3);
 
                     var fileName = _mainFolderPath + "\\" + strfilename;
                     _pictureName = fileName;
@@ -1031,7 +1023,7 @@ namespace ScreenRecorder
                     BitmapSource img = BitmapFrame.Create(new Uri(fileName, UriKind.RelativeOrAbsolute));
 
                     BitmapMetadata mdata = (BitmapMetadata)img.Metadata;
-                    
+
                     DateTime fileCreatedDate = File.GetCreationTime(fileName);
 
                     if (mdata != null)
@@ -1053,7 +1045,7 @@ namespace ScreenRecorder
 
         private float GetFileSize(string path)
         {
-            return (float) (new FileInfo(path).Length / 1000000.0);
+            return (float)(new FileInfo(path).Length / 1000000.0);
         }
 
         /// <summary>
@@ -1073,7 +1065,7 @@ namespace ScreenRecorder
             {
                 DeleteListLine(fileInfo.Name);
             }
-      
+
             Console.WriteLine("sadasdadasdsadssadasdasdasdda");
             string[] fns = Directory.GetFiles(_mainFolderPath);
 
@@ -1154,7 +1146,7 @@ namespace ScreenRecorder
                 Console.WriteLine(button.Content.ToString());
 
             switch (button.Content.ToString())
-            { 
+            {
                 case "Bmp":
                     _imageFormat = ImageFormat.Bmp;
                     _imageExtension = ".bmp";
@@ -1229,7 +1221,7 @@ namespace ScreenRecorder
         private void RadioButtonVideoFormat(object sender, RoutedEventArgs e)
         {
             var button = sender as RadioButton;
-      
+
             if (button == null || button.Content == null)
                 return;
             if (button.IsChecked != null && button.IsChecked.Value)
@@ -1352,7 +1344,7 @@ namespace ScreenRecorder
 
             }
 
-            
+
             textReader.Close();
 
             return email;
@@ -1374,7 +1366,7 @@ namespace ScreenRecorder
             {
                 BtnEmailSave.IsEnabled = false;
             }
-            
+
         }
 
         private void btnSendVideoEmail_Click(object sender, RoutedEventArgs e)
@@ -1385,7 +1377,7 @@ namespace ScreenRecorder
 
         private void RadioBitRate(object sender, RoutedEventArgs e)
         {
-        var button = sender as RadioButton;
+            var button = sender as RadioButton;
             if (button == null || button.Content == null)
                 return;
 
