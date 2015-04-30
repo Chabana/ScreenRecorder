@@ -292,7 +292,7 @@
 
                 <TabItem Header="Image">
                     <StackPanel>
-                        <Expander Header="Video informations" IsExpanded="True" ExpandDirection="Down" Margin="0,0,0,0">
+                        <Expander Header="Image informations" IsExpanded="True" ExpandDirection="Down" Margin="0,0,0,0">
                             <Grid>
                                 <Button x:Name="BtnSendImageEmail" FontSize="15px" Padding="5px 2px 5px 2px"  Content="Send by e-mail" Margin="500,-22,0,118" Click="btnSendImageEmail_Click" FontFamily="Helvetica neue"/>
                                 <TextBlock FontSize="20px" Margin="0,9,0,0"><Run Text=""/></TextBlock>
