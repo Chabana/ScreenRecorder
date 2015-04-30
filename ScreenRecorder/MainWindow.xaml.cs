@@ -13,6 +13,7 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -91,6 +92,9 @@ namespace ScreenRecorder
 
         private string _fileSerialize = "serializeEmail.xml";
 
+        private bool isSystem = false;
+        private bool isTreeView = true;
+
         //##########################################################################################################################
         //######################################## Constructor -> Initialize the application ##############################
 
@@ -111,7 +115,7 @@ namespace ScreenRecorder
             // Set the shortcuts for the different functionalities
             HotkeyManager.Current.AddOrReplace("Screenshots", Key.S, ModifierKeys.Control | ModifierKeys.Alt, OnStartScreenshots);
             HotkeyManager.Current.AddOrReplace("VideoCapture", Key.V, ModifierKeys.Control | ModifierKeys.Alt, OnStartVideocapture);
-            HotkeyManager.Current.AddOrReplace("ExitApplication", Key.E, ModifierKeys.Control | ModifierKeys.Alt, OnExitApplication);
+            HotkeyManager.Current.AddOrReplace("ExitApplication", Key.Q, ModifierKeys.Control | ModifierKeys.Alt, OnExitApplication);
             HotkeyManager.Current.AddOrReplace("OpenApplication", Key.O, ModifierKeys.Control | ModifierKeys.Alt, OnOpenApplication);
 
             // Set the list of filters (by name, by date and by size)
@@ -252,16 +256,11 @@ namespace ScreenRecorder
         /// <param name="e"></param>
         private void OnStartVideocapture(object sender, HotkeyEventArgs e)
         {
-            Console.WriteLine("VAL DE REC : " + _rec);
             if (_rec)
             {
                 _rec = false;
             }
-            else
-            {
-                _rec = true;
-            }
-            Console.WriteLine("VAL DE REC 1: " + _rec);
+            
             StartVideocapture();
         }
 
@@ -305,7 +304,6 @@ namespace ScreenRecorder
                 MenuCaptureVideo.Header = "Stop Video Capture";
                 ShowStandardBalloon(title, text);
 
-
                 // Set the different properties to start the recording
                 if (_rec == false)
                 {
@@ -317,16 +315,13 @@ namespace ScreenRecorder
                     var time = DateTime.Now.ToString("dd-MM-yy HH.mm.ss");
                     var fullName = _mainFolderPath + "\\" + "video " + time;
 
-                    Console.WriteLine(fullName);
-                    Console.WriteLine("ETAT1:" + _writer.IsOpen);
-                    if (_writer.IsOpen)
+                    /*if (_writer.IsOpen)
                     {
                         //_writer.Dispose();
                         _writer.Close();
                         //_stopwatch.Reset();
                         //_streamVideo.SignalToStop();
-                    }
-                    Console.WriteLine("ETAT:" + _writer.IsOpen);
+                    }*/
                     try
                     {
 
@@ -340,8 +335,6 @@ namespace ScreenRecorder
                     }
                     catch (Exception exception)
                     {
-                        Console.WriteLine("CEST LE MERDE");
-
                         Console.WriteLine(exception.Message);
                     }
                     //Start the main process to capture
@@ -355,7 +348,7 @@ namespace ScreenRecorder
                 const string title = "ScreenRecorder";
                 const string text = "Video has been saved (C:\\ScreenRecorder)";
                 ShowStandardBalloon(title, text);
-
+                isTreeView = true;
                 StopVideoRecording();
                 MenuCaptureVideo.Header = "Start Video Capture";
                 Console.WriteLine(@"Recording has stopped");
@@ -527,6 +520,7 @@ namespace ScreenRecorder
 
             const string title = "ScreenRecorder";
             const string text = "Screenshot has been saved (C:\\ScreenRecorder)";
+            isTreeView = true;
             ShowStandardBalloon(title, text);
 
             // File counter of images
@@ -677,6 +671,7 @@ namespace ScreenRecorder
         /// </summary>
         private void Update()
         {
+            isTreeView = false;
 
             if (string.IsNullOrWhiteSpace(_mainFolderPath))
                 return;
@@ -687,7 +682,7 @@ namespace ScreenRecorder
             watcher.Path = _mainFolderPath;
 
             // Filter the watcher
-            watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.Size | NotifyFilters.DirectoryName;
+            watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.Size | NotifyFilters.DirectoryName | NotifyFilters.FileName;
 
             // All the extensions
             string[] extensions = { "*.jpeg", "*.mp4", "*.wmv", "*.png", "*.bmp", "*.gif", "*.tiff", "*.mpeg" };
@@ -782,7 +777,10 @@ namespace ScreenRecorder
         /// <param name="text"></param>
         public void DeleteListLine(string text)
         {
-            Tvi.Items.Remove(text + " - " + GetFileSize(_mainFolderPath + "\\" + text).ToString("0.0") + " Mo");
+            if (!IsFileLocked(new FileInfo(_mainFolderPath + "\\" + text)))
+            {
+                Tvi.Items.Remove(text + " - " + GetFileSize(_mainFolderPath + "\\" + text).ToString("0.0") + " Mo");
+            }
         }
 
         /// <summary>
@@ -795,9 +793,9 @@ namespace ScreenRecorder
             {
                 if (!IsFileLocked(new FileInfo(_mainFolderPath + "\\" + text)))
                 {
-                    Console.WriteLine("add" + text);
                     Tvi.Items.Add(text + " - " + GetFileSize(_mainFolderPath + "\\" + text).ToString("0.0") + " Mo");
                 }
+               
             }
             catch (SecurityException securityException)
             {
@@ -969,8 +967,7 @@ namespace ScreenRecorder
 
                     _videoName = fileName;
 
-                    if (!IsFileLocked(new FileInfo(fileName)))
-                    {
+                    
                         VideoFileReader reader = new VideoFileReader();
 
                         // open video file
@@ -983,6 +980,8 @@ namespace ScreenRecorder
                             Console.WriteLine(exp.Message);
                         }
 
+                    try
+                    {
                         DateTime fileCreatedDate = File.GetCreationTime(fileName);
 
                         VideoFilename.Text = Path.GetFileName(fileName);
@@ -993,10 +992,13 @@ namespace ScreenRecorder
 
                         reader.Close();
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        ShowStandardBalloon("ScreenRecorder", "Your video is still being recorded !!");
+                        ShowStandardBalloon("Bad File Format", "You have created, deleted or renamed this file in your file system !");
                     }
+                        
+                    
+                    
                 }
             }
 
@@ -1020,22 +1022,33 @@ namespace ScreenRecorder
 
                     BtnSendImageEmail.IsEnabled = true;
 
-                    BitmapSource img = BitmapFrame.Create(new Uri(fileName, UriKind.RelativeOrAbsolute));
 
-                    BitmapMetadata mdata = (BitmapMetadata)img.Metadata;
-
-                    DateTime fileCreatedDate = File.GetCreationTime(fileName);
-
-                    if (mdata != null)
+                    try
                     {
-                        ImageFilename.Text = Path.GetFileName(fileName);
-                        ImageHeight.Text = img.PixelHeight.ToString();
-                        ImageWidth.Text = img.PixelWidth.ToString();
-                        ImageExtension.Text = mdata.Format;
-                        ImageCreated.Text = fileCreatedDate.ToString(CultureInfo.CurrentCulture);
+                        BitmapSource img = BitmapFrame.Create(new Uri(fileName, UriKind.RelativeOrAbsolute));
+
+                        BitmapMetadata mdata = (BitmapMetadata) img.Metadata;
+
+                        DateTime fileCreatedDate = File.GetCreationTime(fileName);
+
+                        if (mdata != null)
+                        {
+                            ImageFilename.Text = Path.GetFileName(fileName);
+                            ImageHeight.Text = img.PixelHeight.ToString();
+                            ImageWidth.Text = img.PixelWidth.ToString();
+                            ImageExtension.Text = mdata.Format;
+                            ImageCreated.Text = fileCreatedDate.ToString(CultureInfo.CurrentCulture);
+                        }
+
+                        TabImage.Source = new BitmapImage(new Uri(fileName, UriKind.RelativeOrAbsolute));
+                    }
+                    catch (Exception ex)
+                    {
+                        ShowStandardBalloon("Bad File Format", "You have created, deleted or renamed this file in your file system !");
+
                     }
 
-                    TabImage.Source = new BitmapImage(new Uri(fileName, UriKind.RelativeOrAbsolute));
+
                 }
             }
         }
@@ -1066,7 +1079,6 @@ namespace ScreenRecorder
                 DeleteListLine(fileInfo.Name);
             }
 
-            Console.WriteLine("sadasdadasdsadssadasdasdasdda");
             string[] fns = Directory.GetFiles(_mainFolderPath);
 
             //The different filters
@@ -1142,8 +1154,6 @@ namespace ScreenRecorder
             if (button == null || button.Content == null)
                 return;
 
-            if (button.IsChecked != null && button.IsChecked.Value)
-                Console.WriteLine(button.Content.ToString());
 
             switch (button.Content.ToString())
             {
